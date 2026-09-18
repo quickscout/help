@@ -5,3 +5,8 @@
 # Draft content
 drafts/
 *.draft.mdx
+
+# Screenshot tooling, not pages
+screenshots/
+package.json
+package-lock.json

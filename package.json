@@ -1,0 +1,15 @@
+{
+  "name": "quickscout-help",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "mint dev",
+    "check": "mint broken-links",
+    "shots:login": "node screenshots/login.mjs",
+    "shots": "node screenshots/shots.mjs"
+  },
+  "devDependencies": {
+    "mint": "^4.0.0",
+    "playwright": "^1.63.0"
+  }
+}
