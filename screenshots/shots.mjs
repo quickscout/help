@@ -4,10 +4,8 @@
 //   npm run shots -- data-panel       only the shots whose name contains "data-panel"
 //   BASE_URL=http://localhost:3004 npm run shots
 //
-// Signed-in shots reuse the session saved by `npm run shots:login`. Use a DEMO account: the
-// app saves your map position, open panels and project to the account, and these shots move
-// the map. (Map-state writes are blocked below as a second guard, but a demo account is the
-// real protection.)
+// Signed-in shots reuse the session saved by `npm run shots:login` (your own account is fine:
+// the saved map workspace is blocked, so shots start clean and never write back to it).
 //
 // Each shot writes images/<name>.png. When a page has a `{/* screenshot: <name> … */}` marker,
 // the marker is swapped for a <Frame> showing the image. Re-running a shot overwrites the image
@@ -38,16 +36,48 @@ async function mapSettled(page) {
 
 async function openTables(page) {
     await page.getByRole('button', { name: 'Show data tables' }).click();
-    await firstRow(page).waitFor({ timeout: 60_000 });
-    await page.waitForTimeout(1_500);
+    await rowsSteady(page);
 }
 
-const firstRow = (page) =>
-    page.locator('[class*="_row__"]:not([class*="_rowSkeleton__"])').first();
+/** Rows on screen and the footer done "Updating…" — held for 3 s, because the table swaps
+ *  back to skeletons when its source changes (network read → the copy on this device). */
+async function rowsSteady(page) {
+    const deadline = Date.now() + 120_000;
+    let steadySince = 0;
+    while (Date.now() < deadline) {
+        const ready = await page.evaluate(
+            (find) => !!new Function(`return (${find})`)()() && !/Updating for this view/.test(document.body.innerText),
+            findFirstRow.toString(),
+        );
+        if (!ready) steadySince = 0;
+        else if (!steadySince) steadySince = Date.now();
+        else if (Date.now() - steadySince > 3_000) return;
+        await page.waitForTimeout(500);
+    }
+    throw new Error('table rows never settled');
+}
+
+/** A loaded table row (not a skeleton). CSS-module names differ between `next dev`
+ *  (`data-table-module__x__row`) and the prod build (`data-table_row__x`), so match both. */
+function findFirstRow() {
+    // Only the data table's stylesheet: other modules (the top bar) have a `row` class too.
+    const isRow = (c) => /^data-table-module__\w+__row$|^data-table_row__/.test(c);
+    const isSkeleton = (c) => /^data-table-module__\w+__rowSkeleton$|^data-table_rowSkeleton__/.test(c);
+    return [...document.querySelectorAll('[class]')].find(
+        (el) => [...el.classList].some(isRow) && ![...el.classList].some(isSkeleton),
+    ) ?? null;
+}
+
+async function clickFirstRow(page) {
+    await rowsSteady(page);
+    const row = (await page.evaluateHandle(findFirstRow)).asElement();
+    if (!row) throw new Error('no table row to click');
+    await row.click();
+}
 
 /** The right-side map controls are hover cards without labels: Layers, Basemap, Filters, Settings. */
 async function hoverMapControl(page, index) {
-    await page.locator('[class*="_controlCapsule__"] > *').nth(index).hover();
+    await page.locator('[class*="controlCapsule"] > *').nth(index).hover();
     await page.waitForTimeout(1_000);
 }
 
@@ -92,7 +122,7 @@ const SHOTS = [
         path: `/maps?api=${SAMPLE_API}`,
         run: async (page) => {
             await mapSettled(page);
-            await page.getByRole('button', { name: 'Report' }).first().waitFor({ timeout: 30_000 });
+            await page.getByText('Report', { exact: true }).first().waitFor({ timeout: 30_000 });
             await page.waitForTimeout(2_000);
         },
     },
@@ -126,7 +156,7 @@ const SHOTS = [
         run: async (page) => {
             await mapSettled(page);
             await openTables(page);
-            await firstRow(page).click();
+            await clickFirstRow(page);
             await page.waitForTimeout(4_000);
         },
     },
@@ -219,14 +249,30 @@ for (const shot of todo) {
         colorScheme: 'light',
         storageState: shot.auth ? AUTH_FILE : undefined,
     });
-    // Don't let a screenshot run rewrite the account's saved map workspace, or report to Sentry.
-    await context.route('**/api/v1/core/map-state**', (route) =>
-        route.request().method() === 'GET' ? route.continue() : route.abort(),
-    );
+    // The account's saved map workspace (camera, open panels, tabs) is neither loaded nor
+    // written: shots start from a clean map framed by their URL, and the account is untouched.
+    await context.route('**/api/v1/core/map-state**', (route) => route.abort());
     await context.route(/sentry\.io|ingest\.sentry/, (route) => route.abort());
+
+    // `next dev` puts its dev-tools badge in the corner; it isn't part of the app.
+    await context.addInitScript(() => {
+        const hide = () => {
+            const style = document.createElement('style');
+            style.textContent = 'nextjs-portal { display: none !important; }';
+            document.head.appendChild(style);
+        };
+        if (document.head) hide();
+        else document.addEventListener('DOMContentLoaded', hide);
+    });
 
     const page = await context.newPage();
     try {
+        if (shot.auth) {
+            // The saved __session cookie lives about a minute; a client page refreshes it before
+            // a server-gated page (the well report) checks it.
+            await page.goto(BASE_URL + '/dashboard', { waitUntil: 'domcontentloaded', timeout: 60_000 });
+            await page.waitForTimeout(3_000);
+        }
         await page.goto(BASE_URL + shot.path, { waitUntil: 'domcontentloaded', timeout: 60_000 });
         if (shot.auth && /\/sign-in/.test(page.url())) {
             throw new Error('redirected to sign-in — the saved session has expired; run npm run shots:login');
