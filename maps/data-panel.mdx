@@ -1,0 +1,55 @@
+---
+title: "Data tables"
+sidebarTitle: "Data tables"
+description: "Browse every well, lease, P-4, frac job, satellite pad and rig site in Texas as a table."
+---
+
+The data tables sit beside the map. Click the **Tables** handle on the map's right edge to open them, and drag the handle to resize. **Fill the window** in the top-right maximizes the tables; **Show the map again** or <kbd>Esc</kbd> brings the map back. The **×** hides them.
+
+{/* screenshot: data-panel — Wells tab, Midland, panel ~55% */}
+
+## Tabs
+
+| Tab | One row is |
+|---|---|
+| **Wells** | A well. Historic wells can share an API number, so an API may appear more than once. |
+| **Leases** | A lease (district + lease number). For gas, one row is one well. |
+| **P-4** | An operator transfer. Switch **Rows** to see one row per **Transfers** or per **Filings**. |
+| **Frac** | A FracFocus treatment. |
+| **Pads** | New ground detected from satellite imagery. |
+| **Rigs** | A site watched by radar for rigs and frac spreads. |
+| **Deals** | Your deals (Enterprise). See [Deals](/enterprise/deals). |
+
+The number on a tab is its statewide row count. A dot on a tab means it has filters on.
+
+## The toolbar
+
+From left to right:
+
+- **Filters**: narrow the rows. See [Filters & the map](/maps/filters).
+- **Scope**: **In view** shows only rows inside the map's visible area. **Statewide** shows everything the filters match across Texas.
+- **Sort**: order rows by any column, or by **Nearest the map centre**.
+- **Columns**: pick a **View** (a ready-made column set, like *Screening* or *Production*) or tick columns yourself. Each column shows how filled-in it is. **Row height** switches between **Compact** and **Roomy**.
+- **Charts** and **Export**, on the right. See [Charts](/maps/charts) and [Exports](/maps/exports).
+
+Each tab has its own search box above the rows. For example, Wells searches API, well, operator, lease and field.
+
+## The footer
+
+The footer tells you which rows you're seeing (for example *1–50 of 12,345 wells*) and which filters are on. Click the filter summary to edit them. On the right, the **Snapshot** stamp shows how current the data is. Click it to [keep a copy on your device](/maps/offline).
+
+## Open a row
+
+Click a row to open its [row card](/maps/row-cards) beside the table. With a card open, <kbd>↑</kbd> / <kbd>↓</kbd> (or <kbd>k</kbd> / <kbd>j</kbd>) step through rows and <kbd>Esc</kbd> closes the card.
+
+## Select rows
+
+Tick the checkboxes to select rows, or **Select all N wells in this view**. What you can do with the selection depends on the tab:
+
+| Tab | Actions |
+|---|---|
+| **Wells** | **Show N on map**, **Export CSV**, **Add to watchlist**, **Copy APIs** |
+| **Leases** | **Export CSV**, **Export production**, **Compare production**, **Add to watchlist**, **Add to project scope**, **New project from these**, **Add to deal draft**, **Copy lease keys** |
+| Other tabs | **Export CSV** and a copy of the row IDs |
+
+If you pan away from the rows you selected, **Fly back to them** takes you back.

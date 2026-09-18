@@ -1,0 +1,93 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "QuickScout Help",
+  "colors": {
+    "primary": "#3f6883",
+    "light": "#96b3c8",
+    "dark": "#2b5670"
+  },
+  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://quickscout.io"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get started",
+        "pages": ["index", "get-started/sign-in", "get-started/plans"]
+      },
+      {
+        "group": "Maps",
+        "pages": [
+          "maps/tour",
+          "maps/search",
+          "maps/layers",
+          "maps/records",
+          "maps/ask-the-map",
+          "maps/my-data"
+        ]
+      },
+      {
+        "group": "Data tables",
+        "pages": [
+          "maps/data-panel",
+          "maps/filters",
+          "maps/row-cards",
+          "maps/charts",
+          "maps/exports",
+          "maps/offline"
+        ]
+      },
+      {
+        "group": "Tools",
+        "pages": [
+          "tools/alerts",
+          "tools/well-report",
+          "tools/wellbore-builder",
+          "tools/dashboard",
+          "tools/ask"
+        ]
+      },
+      {
+        "group": "Enterprise",
+        "pages": [
+          "enterprise/overview",
+          "enterprise/projects",
+          "enterprise/areas",
+          "enterprise/home",
+          "enterprise/activity",
+          "enterprise/watchlist",
+          "enterprise/economics",
+          "enterprise/charts",
+          "enterprise/deals",
+          "enterprise/well-logs",
+          "enterprise/alerts",
+          "enterprise/credits"
+        ]
+      },
+      {
+        "group": "Mineral owners",
+        "pages": ["owners/overview"]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Contact support",
+        "href": "mailto:craig@quickscout.io"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Open Maps",
+      "href": "https://quickscout.io/maps"
+    }
+  },
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude"]
+  }
+}
