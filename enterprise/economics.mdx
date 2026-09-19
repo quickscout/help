@@ -5,15 +5,26 @@ description: "Net asset value of your project's leases, what drives it, and a fu
 
 Open **Economics** in the rail. It values the leases in your project: **net asset value** is PV-10 less plugging liability.
 
+<Frame>
+  <img src="/images/enterprise-economics.webp" alt="The Economics page: net asset value, the discount ladder, and where the value sits" />
+</Frame>
+
 ## Read the page
 
-- **Net asset value** at the top of the summary.
+The summary rail:
+
+- **Net asset value** at the top.
 - **Discount ladder**: the value at other discount rates. Click a rate to re-rate the page.
 - **PDP reserves**, and any **Warnings** about the data.
-- **Where the value sits**: the value broken down several ways.
+- **Qualification**: how many leases were valued as PDP and how many *need review*, and why.
+- **Provenance**: the RRC cycle, the date valued, the scope and the deck rate.
+
+The main page:
+
+- **Where the value sits**: the value cut **By area**, **By operator** and **By well type**.
 - **What moves the number**: a tornado chart of how oil price, gas price, opex, NRI and discount rate change the value.
 - **Type curves** and **Produced to date, by operator**.
-- The **Leases** table, filterable to **Valued** or **Needs review**, and to horizontal or vertical.
+- The **Leases** table. Search it, filter it to **Valued** or **Needs review**, to one area, or to horizontal or vertical wells, and choose its **Columns**. **CSV** on the table exports just the filtered rows.
 
 ## Change the assumptions
 
@@ -26,18 +37,22 @@ Click **Assumptions** to edit:
 - **Discount** rate
 - **Escalation** for oil price, gas price and opex (%/yr), with a cap in years
 
-**Recompute** reruns the valuation.
+Click **Save** and the valuation recomputes by itself. **Reset to defaults** clears your changes. **Recompute**, on the page, reruns the valuation at any time.
 
 ## Try a what-if
 
-**Narrow scope** values just some of your areas. Click **Run valuation**, and **Reset** to go back.
+With two or more areas, **Narrow scope** values just some of them. Click **Run valuation**, which can take about a minute, and **Reset** to go back.
 
 ## Lease reports
 
-Click a lease in the table to see its production and cash flow stream and its NPV profile. **Export** downloads a **Report (PDF)**, the **Cash flow stream (CSV)**, or the **NPV profile (CSV)**.
+Click a lease in the table to see its production and cash flow stream and its NPV profile.
+
+- **Export** downloads a **Report (PDF)**, the **Cash flow stream (CSV)**, or the **NPV profile (CSV)**. The CSVs are greyed out when the lease has no production forecast.
+- **Discuss valuation** opens a chat about the lease's numbers. It uses [credits](/enterprise/credits).
+- **Add to deal** → **New deal from this…** starts a [deal](/enterprise/deals) from the lease. The rows under **Where the value sits** have it too.
 
 **Export CSV** at the top of the page downloads the whole leases table.
 
 <Note>
-  Projects scoped only by county, district, basin or field show *Nothing to value yet*. Add operators, leases or drawn areas to value them.
+  You'll see *Nothing to value yet* when a project has no areas, or is scoped only by county, district, basin, field or abstract. Add an area of interest or an operator to value it.
 </Note>

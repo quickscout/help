@@ -4,9 +4,11 @@ sidebarTitle: "Layers & heatmaps"
 description: "Turn map layers on and off, read heatmaps, and change the background map."
 ---
 
-Hover the **Layers** icon on the right side of the map to open the layer list. **Permits**, **Completions**, **Texas Counties** and **Texas Basemap** (survey lines) are on from the start.
+Hover the top icon on the right side of the map (the small map thumbnail) to open the layer list. **Permits**, **Completions**, **Texas Counties** and **Texas Basemap** (survey lines) are on from the start.
 
-{/* screenshot: maps-layers — Layers panel open */}
+<Frame>
+  <img src="/images/maps-layers.webp" alt="The layer list, grouped into Wells, Analytics and Reference" />
+</Frame>
 
 ## Wells
 
@@ -19,20 +21,32 @@ Hover the **Layers** icon on the right side of the map to open the layer list. *
 | **Satellite Pads** | New ground cleared, detected from satellite imagery. Colors show whether there is a permit, a spud, older wells only, or nothing on record. |
 | **Rig Watch** | Watched sites, tagged by what the radar sees: rig on site, frac spread, equipment, facility, or nothing on site. |
 
+**Satellite Pads** and **Rig Watch** cover only the counties being watched. The list of counties is under each switch.
+
 ## Analytics
 
 | Layer | Shows |
 |---|---|
 | **Production Spikes** | Leases whose production jumped. |
-| **Producing Zones** | Producing formations. Switch on **Producing wells only** to hide the rest. |
-| **Lease Footprints** | Lease outlines drawn on the survey grid. Label them by net asset value, PV-10, production, wells or acres, and choose a bench. |
-| **Well Heatmap** | Hexagon heatmap of well metrics: infill opportunity, well density, lateral spacing, production, IP, completion intensity or vintage. |
-| **Injection Heatmap** | Injection volumes, pressures, EOR share, permit density and capacity. |
-| **Lease Valuation** | PV-10, net asset value, PDP reserves, production, producing wells and lease counts. |
-| **Well Tests** | 26 metrics from well test filings, grouped by oil, gas, trend, fluid quality, shut-in and allowables. |
-| **Frac Disclosures** | Proppant intensity, job size, water and chemistry from FracFocus. |
+| **Producing Zones** | Producing formations. **Producing wells only** is on; switch it off to show every well. |
+| **Well Heatmap** | 12 well metrics, including infill opportunity, well density, lateral spacing, production, IP, completion intensity and vintage. |
+| **Injection Heatmap** | 11 injection metrics: volumes, pressures, EOR share, permit density and capacity. |
+| **Lease Valuation** | 9 lease metrics, including PV-10, net asset value, PDP reserves, production, producing wells and lease counts. |
+| **Lease Footprints** | Lease outlines drawn on the survey grid. **Label** them by net asset value, PV-10, production, wells or footprint acres, and pick a **Bench**, or leave it on **All benches (stacked)**. |
+| **Well Tests** | 26 metrics from well test filings, grouped into screening, oil, gas & BOE, trend, fluid quality, shut-in, allowable and coverage. |
+| **Frac Disclosures** | 24 metrics from FracFocus, such as proppant intensity, job size, water and chemistry. |
 
-Only one heatmap shows at a time. Turning one on turns the others off. Each heatmap has a **metric picker** and a **color legend** once it's on. Click a hexagon to open its wells (or leases) and totals.
+Valuation metrics (net asset value, PV-10 and PDP reserves) appear only when your account includes lease valuation.
+
+### Reading a heatmap
+
+<Frame>
+  <img src="/images/maps-heatmap.webp" alt="The Well Heatmap over the Midland Basin, with its metric menu and color legend" />
+</Frame>
+
+- Only one heatmap shows at a time. Turning one on turns the others off.
+- Once a heatmap is on, a menu under its switch picks the metric, and a legend shows what the colors mean. Long metric lists have a search box.
+- Click a hexagon to open what's inside it: the **Wells** (or **Leases**) and their **Aggregates**. On **Frac Disclosures**, a hexagon opens **Jobs**, **Chemistry** and **Aggregates**.
 
 <Note>
   Lease footprints are drawn on the survey grid. They are an approximation, **not a title opinion**. The legend shows how exact each outline is: real survey lines, an inferred interior split, or an approximate outline.
@@ -42,17 +56,17 @@ Only one heatmap shows at a time. Turning one on turns the others off. Each heat
 
 - **Texas Counties**
 - **Texas Basemap**: survey lines and abstracts
-- **RRC Districts**: switch on **Fill by district** to color each district
+- **RRC Districts**: each district is filled with its own color. Switch **Fill by district** off for outlines only.
 - **Pipelines**
 - **Surface Tracts**
 
 ## Basemaps
 
-Hover the **Basemap** icon (the stack) to choose a background: **Default**, **Dark**, **Light**, **Streets**, **Satellite**, **Topo**, and several plain grays.
+Hover the second icon (the stack) to choose a background: **Default**, **Dark**, **Light**, **Streets**, **Satellite** or **Topo**. There are also six plain backgrounds, from **White** to **Charcoal**, for a map with nothing but your data on it.
 
 ## Well filters
 
-Hover the **Filters** icon (the pin) to show only some **well types** (Permit, Oil Well, Gas Well, Dry, Injection, Shut-in Oil…) or a **wellbore** (**Vertical** or **Horizontal**). These apply at every zoom level. **Clear all filters** turns them off.
+Hover the third icon (the funnel) to open **Filters**. Show only some **well types** (Permit, Oil Well, Gas Well, Dry, Injection, Shut-in Oil…) or a **wellbore**: **All**, **Vertical** or **Horizontal**. These apply at every zoom level. The icon lights up while a filter is on, and **Clear all filters** turns them off.
 
 <Tip>
   For richer filters, like operator, dates, production or depth, use the [data tables](/maps/filters). The map follows those filters too.
@@ -60,4 +74,4 @@ Hover the **Filters** icon (the pin) to show only some **well types** (Permit, O
 
 ## Well labels and icon size
 
-Under **Settings** (the gear), choose **Well Labels** (operators, lease names, completion dates, total depth, well numbers) and **Well Icon Size**.
+Under **Settings** (the gear), choose **Well Labels** (operators, lease names, completion dates, total depth, well numbers) and **Well Icon Size**, from 0.5x to 2x.

@@ -4,44 +4,61 @@ sidebarTitle: "Home & daily brief"
 description: "Your project's overview board, daily brief and event feed."
 ---
 
-**Home** is a board of panels about your project: **Overview**, **Daily brief**, **Activity feed**, **Map**, **Production** and **Activity by type**.
+**Home** is a board of panels about your project: **OVERVIEW**, **DAILY BRIEF**, **ACTIVITY MAP**, **EVENT FEED**, the production chart, and **ACTIVITY BY TYPE**.
 
-{/* screenshot: enterprise-home — home board */}
+<Frame>
+  <img src="/images/enterprise-home.webp" alt="A project's Home board: overview totals, the daily brief, the activity map and the event feed" />
+</Frame>
 
 ## Arrange the board
 
-- Drag a panel by the grip in its header. Drag its edge to resize it.
-- **Pin panel in place** (the lock) stops it moving.
-- **Maximize panel** fills the screen with it. <kbd>Esc</kbd> restores it.
-- **Reset layout** puts the panels back where a new project starts. It only affects this board.
+- Drag a panel by the grip in its header. Drag its bottom-right corner to resize it.
+- **Pin panel in place** (the lock) stops it moving. Click it again to **Unpin panel**.
+- **Maximize panel** enlarges it over the board. **Restore panel**, <kbd>Esc</kbd>, or a click outside puts it back.
+- **Reset layout** appears once you've moved or pinned something. It puts the panels back where a new project starts, and asks first. It only affects this board.
 
 ## Overview
 
-Totals for the project: well records, leases, operators, daily oil and gas, and areas.
+Totals for the project: a headline BOE per day, **WELL RECORDS**, **LEASES**, **OPERATORS**, **DAILY OIL**, **DAILY GAS** and **AREAS**. **CYCLE** is the month the rates were reported for.
 
 ## Daily brief
 
-Each day, QuickScout writes a short brief on new activity in your project: permits, completions and other filings. The panel shows how many events are new.
+Each day, QuickScout writes a short brief on new activity in your project: permits, completions and other filings. The panel shows the headline, and the events it cites under **WHAT IT CITES**. Click one to select that event on the board.
 
-Click it to read the full brief. From there:
+Click **Read the full brief** at the bottom of the panel to open it. The full brief has counts by type, **Events in this brief**, **Recent briefs**, **Show these on the map**, and a chat about the brief. The chat uses [credits](/enterprise/credits).
+
+Editors also see:
 
 - **Email me** sends the brief to the project owner each day it's ready.
-- **Re-run** refreshes a brief that's out of date.
+- **Re-run** refreshes a brief that's out of date, for example after you change the project's areas.
 - **Manage brief** can regenerate the summary or re-run it from scratch.
 
 | If you see | Do this |
 |---|---|
-| **Manage areas** | The project has no areas yet. [Add one](/enterprise/areas). |
+| *…hasn't been briefed yet* and **Manage areas** | The first brief lands after tonight's run. Check the project has [areas](/enterprise/areas). |
 | **Generate brief** | Events were found but not written up yet. Click it. |
 | **Retry now** | The last run failed. Try again. |
+| *Couldn't load the brief.* | Click **Retry**. |
 | *No nearby activity in this window.* | Nothing new happened in your areas. |
 
-## Activity feed
+## Event feed
 
-The latest events in your project. Sort by **Newest first**, **Highest IP oil**, **Longest lateral**, **Closest to my wells** or **Operator A–Z**. **Add this lease to a deal** on any row sends it to a deal.
+The latest events in your project. Sort by **Newest first**, **Highest IP oil**, **Longest lateral**, **Closest to my wells** or **Operator A–Z**.
+
+Click a row to select it. **Open well** (or **Open record**) opens it. For an event on a lease, **Add to deal** → **New deal from this…** starts a new [deal](/enterprise/deals) from that lease.
 
 For the full list, filters and exports, open [Activity](/enterprise/activity).
 
+## Activity map
+
+The events on a map. After you pan or zoom, **Search this area** filters the whole board to what's in view. **Open in full Maps** opens the same place in Maps.
+
 ## Production
 
-Your project's oil and gas over time, on a log or linear scale. **Add a comparison** charts a watchlist item alongside it.
+Your project's oil and gas over time, on a log or linear scale.
+
+**+ Compare**, beside the page title, charts up to five [watchlist](/enterprise/watchlist) items alongside it.
+
+## Activity by type
+
+A count of each event type. Click a type to see its events.

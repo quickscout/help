@@ -1,21 +1,39 @@
 ---
 title: "Charts"
-description: "Build a board of charts about your project."
+description: "Build a board of charts about your project, and plot production with decline fits."
 ---
 
-Open **Charts** in the rail. Charts live on a **Board**, and **Series & decline** is next to it.
+Open **Charts** in the rail. It has two parts: the **Board**, where your charts live, and **Series & decline**. Switch between them with **Board** / **Series** at the top of the page.
+
+<Frame>
+  <img src="/images/enterprise-charts.webp" alt="An empty chart board, with starter questions and Build one from scratch" />
+</Frame>
 
 ## Build a chart
 
-Click **New chart** to open the chart builder. Choose a mode:
+An empty board offers starter questions, such as *How do my 2024 wells compare to 2021?*, and **Build one from scratch**. After that, click **New chart**. Either way you get the chart builder. Choose a mode:
 
 - **Guided** asks three questions: *What are you looking at?*, *What do you want to compare?*, and *How should it be cut?* Then pick a chart type: **Auto**, **Line**, **Scatter**, **Bar**, or **P10/P50/P90**.
-- **All at once** shows every option together: the data to start from, joins, grouping, metrics, filters (**Keep only**), top N series, sorting and row limits.
+- **All at once** shows every option together: the dataset to start from (and **Add dataset** / **Join on** to bring in another), **Filters** on each dataset, **Group by**, **Metrics**, **Keep only** (a filter on the grouped result), **Top N series**, **Sort by** and **Row limit**.
+
+<Frame>
+  <img src="/images/enterprise-chart-builder.webp" alt="The chart builder in Guided mode: the three steps, the chart described in words, and a live preview" />
+</Frame>
+
+Finish with **Add to board**.
 
 ## Work with a chart
 
 Each chart's menu has **Edit query**, **Rename**, **Duplicate**, **Colors…**, **View data**, **Export CSV** and **Remove**. Quick edits change ranges, the legend and series without reopening the builder.
 
+**Targets**, in the bar above the board, narrows every chart to the operators or leases you pick.
+
 ## Series & decline
 
-Plot oil, gas or water over time for your project's wells or leases. Pick a range (**All**, **15y**, **10y**, **5y**, **3y**) and use **Filter targets** to focus on some of them.
+Plot oil and gas over time for your project. The **Water** panel is greyed out, because Texas lease production doesn't report water.
+
+- **Lines** draws one line per **Scope rule**, **Operator**, **County** or **Lease**. **Filter targets** focuses on some of them.
+- Pick a range: **All**, **15y**, **10y**, **5y** or **3y**.
+- **Decline fit** overlays the fitted decline as a dashed line. **Log** switches to a log axis.
+- Choose **Line**, **Bar**, **Area** or **Scatter**.
+- **Totals by target**, below the chart, shows **Cumulative** or **Latest month** for each line, and exports as CSV.

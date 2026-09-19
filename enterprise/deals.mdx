@@ -3,48 +3,68 @@ title: "Deals"
 description: "Turn a screen into a priced package: pick what you're buying, curate the leases, and export a report."
 ---
 
-Deals are in the workspace rail and in the **Deals** tab of the Maps [data tables](/maps/data-panel).
+Deals are in the workspace rail and in the **Deals** tab of the Maps [data tables](/maps/data-panel). New deals are filed under the project you have open. Filter the list by **Project**, **Unfiled** or **All**, and by **Active** or **Archived**.
 
 ## Start a deal
 
 Click **New deal** and answer **What are you buying?**:
 
+<Frame>
+  <img src="/images/enterprise-deal-new.webp" alt="Starting a deal: What are you buying? An operator, a lease collection, or an area of interest" />
+</Frame>
+
 - **An operator**: everything an operator holds. The **Who might sell** screener ranks operators by their recent divestitures.
 - **A lease collection**: a list of leases you pick.
-- **An area of interest**: the leases in an area.
+- **An area of interest**: the leases in an area, up to 600.
 
 ### From the map
 
 You can build a lease collection while you browse:
 
-1. In the Leases table, tick leases and choose **Add to deal draft**. On a lease card, click **Deal draft**.
-2. Open the **Deals** tab. Your leases are in the **Draft** card, which holds up to 600.
+1. In the Leases table, tick leases and choose **Add to deal draft**. On a lease or P-4 [row card](/maps/row-cards), click **Deal draft**.
+2. Open the **Deals** tab. Your leases are in the **Draft** card, which holds up to 600. Remove a lease with its **×**, or **Clear** the draft.
 3. Click **Create deal…**, give it a **Name** and **Description**, and **Create deal**.
+
+<Warning>
+  Add everything you want to the draft first. Leases can't be added to a deal after it's created.
+</Warning>
+
+You can also start a deal from [Economics](/enterprise/economics#lease-reports) or the [event feed](/enterprise/home#event-feed) with **Add to deal** → **New deal from this…**. It always makes a new deal; existing deals are listed but greyed out.
 
 ## Curate the leases
 
+{/* screenshot: enterprise-deal-curate — a deal on its Curate tab (needs a demo deal) */}
+
 On the **Curate** tab, mark each lease:
 
-| Button | Means |
-|---|---|
-| **A** | Accepted: in the package |
-| **R** | Rejected: not buying |
-| **X** | Excluded: out of scope |
-| **·** | Undecided |
+| Button | Key | Means |
+|---|---|---|
+| **A** | <kbd>A</kbd> | Accepted: in the package |
+| **R** | <kbd>R</kbd> | Rejected: not buying |
+| **X** | <kbd>X</kbd> | Excluded: out of scope |
+| **·** | <kbd>P</kbd> | Undecided |
 
-Filter the list by status, or use **Reject all**. On the map, click a lease to accept it; click an accepted lease to put it back.
+Each key marks the lease and moves to the next one. <kbd>↑</kbd> / <kbd>↓</kbd> (or <kbd>J</kbd> / <kbd>K</kbd>) move, <kbd>U</kbd> undoes, and <kbd>Enter</kbd> opens the lease.
 
-The other tabs are **Areas** (how the leases cluster), **Package** (the value of what you've accepted) and **Assumptions** (prices, costs and interests for this deal).
+To work in bulk:
+
+- Filter the list with the status chips: **All**, **Undecided**, **Accepted**, **Rejected**, **Excluded**.
+- Open **Criteria** to narrow by value, then **Accept all matching** or **Reject all**. Bulk actions only touch undecided leases.
+- On the **Map** tab (or on the map itself, in Maps), click a lease to accept it. Click an accepted lease to put it back.
+
+The other tabs are **Areas** (how the leases cluster), **Package** (the value of what you've accepted) and **Assumptions** (prices, costs and interests for this deal). The **NRI** chip in the deal's header sets the ownership interest.
 
 ## Reports and exports
 
-From the deal's actions menu:
+Click **Refresh valuation** after changing leases or assumptions. In Maps it's the refresh icon.
 
-- **Refresh valuation** after changing leases or assumptions.
-- **Deal report & workbook** opens **Deal documents**. Set a **Project codename** and **Effective date**, pick pages, and click **Open CIM** for a printable offering memorandum. The **Appendix workbook** is an Excel file of the first 250 leases, or every lease.
+The rest are under **Export** (the **⋮** menu in Maps):
+
+- **Deal report & workbook** opens **Deal documents**. Set a **Project codename** and **Effective date**, pick pages, and click **Open CIM** for the Confidential Information Memorandum. On the CIM page, click **Print** and save as a PDF: it's laid out for letter paper, landscape.
+- In the same dialog, **Workbook** downloads an Excel file of every lease in the package. **First 250** / **Every lease** sets how many leases the printed report lists.
 - **Lease table (current filter)** downloads the leases as they're filtered.
-- **Cash flow** downloads the package cash flow, monthly, quarterly or annual.
+- **Package cash flow** → **Monthly**, **Quarterly** or **Annual**.
 
 ## Archive or delete
 
-**Archive this deal** moves it to **Archived**. You can restore it later. **Delete permanently** can't be undone.
+**Archive this deal** moves it to **Archived**. **Restore to active** brings it back. **Delete permanently** can't be undone, and only the deal's owner sees it.

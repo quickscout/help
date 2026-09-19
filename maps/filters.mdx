@@ -10,21 +10,43 @@ description: "Filter the tables, and have the map show only what matches."
   <Step title="Click Filters">
     It's the first button above the table. A badge shows how many filters are on.
 
-    {/* screenshot: data-filters — Filters popover */}
+    <Frame>
+      <img src="/images/data-filters.webp" alt="The Filters popover on the Wells tab, with quick filter pills and their counts" />
+    </Frame>
   </Step>
   <Step title="Use a quick filter, or build your own">
-    **Quick** pills are one-click filters, with a count of how many rows each would match. For example, on Wells: *horizontal*, *vertical*, *producing*, *has survey*.
+    **Quick** pills are one-click filters, with a count of how many rows each would match. For example, on Wells: *horizontal*, *vertical*, *producing*, *has W-10*, *has survey*.
 
-    For anything else, click **+ Add filter** and choose a **Column**, an **Operator** (is, between, contains…) and a **Value**. Common values appear as chips you can click.
+    For anything else, click **+ Add filter**. Choose a **Column**, then an operator (is, between, contains…) and a value. Common values appear as chips you can click. While you edit, the popover shows how many rows would match.
   </Step>
   <Step title="Edit or remove">
     Every filter stays in the list, where you can change it or remove it with **×**. **Clear all** removes them all.
   </Step>
 </Steps>
 
+The tab's search box counts as a filter too. It lights the dot on the tab, and the map follows it.
+
+### Rows that are hidden until you ask
+
+Some rows are left out by default. A pill with a **+** count brings them back:
+
+| Tab | Pill |
+|---|---|
+| **Wells** | **Include historic wells** |
+| **P-4** | **Renames** |
+| **Frac** | **Include flagged rows** |
+| **Pads** | **Include ponds and roads** |
+
+### Wells inside your own areas
+
+On Wells, **Inside a My Data layer** keeps only wells inside one of your [uploaded or drawn areas](/maps/my-data). Choose **Wellbore** to match any part of the well path, or **Surface hole** to match the surface location. It appears once you have an area layer in My Data.
+
+{/* enterprise-hold:
+With an Enterprise [project](/enterprise/projects) active, the project pill in the top bar has **Only this project's wells**. While that's on, the Filters list has a *project is ‹name›* row. Remove it with **×**, or choose **Show all wells again** on the pill.
+*/}
+
 <Tip>
-  On Wells, **Include historic wells** adds old wells that are hidden by default.
-  **Inside a My Data layer** keeps only wells inside one of your [uploaded areas](/maps/my-data), by wellbore or by surface hole.
+  Once the table lists what you want, **Export** downloads exactly those rows. See [Export data](/maps/exports#export-many-wells-or-leases).
 </Tip>
 
 ## The map follows your filters
@@ -34,14 +56,25 @@ On **Wells** and **Leases**, once a filter is on, **Filtered set** sets where it
 - **Table + map**: the map shows only matching wells or leases. This stays on even after you close the tables.
 - **Table only**: the map is left alone.
 
-A **Map filtered** badge at the bottom of the map reminds you. Click **Edit filters** on it to change them.
+When the tables are narrow, these read **Both** and **Table**.
+
+A badge at the bottom of the map tells you what's happening:
+
+| Badge | Meaning |
+|---|---|
+| **Map filtered** | The map is showing only what matches. Click **Edit filters** to change them. |
+| **Map filtered · off screen** | Everything that matches is outside your view. Click to fly there. |
+| **Map filtered · zoom in** | Too many rows match to filter the map at this zoom. |
+| **Filters not on the map** | You chose **Table only**. |
 
 ### When the map can't follow
 
 The map can filter up to **100,000** matches at once. If more match, you'll see **too many to filter the map here**. Zoom in, or narrow the filter. When you're zoomed in, the map filters just the area around your view.
 
-To filter leases on the map, the **Lease Footprints** layer must be on. If it's off, the footer offers **Turn on**.
+To filter leases on the map, the **Lease Footprints** layer must be on. If it's off, the footer offers **Turn on**. Footprints draw from zoom 10, so zoom in to see them.
 
 ## Show only your selection
 
-Tick rows on the Wells tab and click **Show N on map** to see only those wells. **Back to filters** returns to your filtered set, and **Show all wells** clears it.
+Tick rows on the Wells tab and click **Show N on map** to see only those wells, up to 30,000.
+
+The button then reads **Back to filters** (if the map was following your filters) or **Show all wells**. Click it to stop showing only your selection.

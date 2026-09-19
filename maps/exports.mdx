@@ -1,35 +1,307 @@
 ---
-title: "Exports"
-description: "Download table rows as CSV, or wells and production in industry formats."
+title: "Export data"
+sidebarTitle: "Export data"
+description: "Get wells, leases and production out of QuickScout as CSV, or as GeoGraphix, OpenWorks and DRI files."
 ---
 
-Click **Export** at the top right of the data tables. Exports use the rows in the table: your current filters and scope.
+Almost everything you can see in Maps, you can download. Pick by what you want:
 
-## Wells
+<CardGroup cols={3}>
+  <Card title="One lease" icon="file-arrow-down" href="#export-one-lease">
+    Open the lease and use **Production** or **Wells**, under its name.
+  </Card>
+  <Card title="Many wells or leases" icon="table" href="#export-many-wells-or-leases">
+    Open the data tables, narrow them down, and click **Export**.
+  </Card>
+  <Card title="An operator, field or county" icon="building" href="#export-an-operator-a-field-or-a-county">
+    Open it and use the gear on its production chart.
+  </Card>
+</CardGroup>
 
-| Format | Limit |
-|---|---|
-| **Table CSV**: the rows and columns on screen | None |
-| **GeoGraphix ASCII4 (.WB4)** | 50,000 wells |
-| **OpenWorks OWX (.ASC)** | 5,000 wells |
-| **DRI v2.4 production (.dri)** | 1,000 leases |
+A lease and the data tables make the same files. Exports are part of the [paid plans](/get-started/plans), and you need to be signed in.
 
-If you're over a limit, the option tells you. Narrow the view or select rows.
+## Find your export
 
-## Leases
+| I want… | Go to | Choose |
+|---|---|---|
+| Monthly production for **one lease** | The lease → **Production** | **Production CSV — a row per month** |
+| Monthly production for **many leases** | Data tables → **Leases** → **Export** | **Production CSV — a row per lease-month** |
+| Production for decline or economics software | Either of the two above | **DRI v2.4 production (.dri)** |
+| The wells on one lease, as a spreadsheet | The lease → **Wells** | **Wells CSV — a row per bore** |
+| A list of wells I've filtered | Data tables → **Wells** → **Export** | **Table CSV — the rows on screen** |
+| Well headers for GeoGraphix | The lease → **Wells**, or Data tables → **Wells** → **Export** | **GeoGraphix ASCII4 (.WB4)** |
+| Wells with tops, tests, casing, perfs and surveys, for OpenWorks | The same two places | **OpenWorks OWX (.ASC)** |
+| Production for an **operator**, a **field** or a **county** | Open it → the gear on its production chart | **Download CSV** |
+| All of an operator's wells | The operator → **Wells** tab | **Export CSV** |
+| A lease's valuation, cash flow or NPV profile | The lease → **↗** beside its name → **Export** | **Report (PDF)**, **Cash flow stream (CSV)** or **NPV profile (CSV)** |
+| A picture of a production chart | The gear on the chart | **Download Image** |
+| A well's permits, plats, completions and surveys | The well → ***N* files** | The document |
+| Just the API numbers | The lease → **Wells**, or tick rows in the Wells table | **Copy API numbers**, or **Copy APIs** |
+| Operator transfers, frac jobs, satellite pads or rig sites | Data tables → **P-4**, **Frac**, **Pads** or **Rigs** → **Export** | **Table CSV — the rows on screen** |
+| A printable report on one well | The well → **Report** | See [Well report](/tools/well-report) |
+
+Looking for something else, like search results, your own layers or your own properties? See [More places to export](#more-places-to-export).
+
+## Export one lease
+
+<Steps>
+  <Step title="Open the lease">
+    Click a lease footprint on the map, or search for the lease by name. From a well's record, click the lease name under the operator. From the Leases table, open the row and click **Open full lease record**.
+  </Step>
+  <Step title="Click Production or Wells">
+    The two buttons sit under the lease's name and field. They stay in reach on every tab of the lease.
+
+    <Frame>
+      <img src="/images/lease-export-production.webp" alt="A lease's Production export menu: the production window, Production CSV and DRI" />
+    </Frame>
+  </Step>
+  <Step title="Pick a format">
+    The line under each format says what this lease would give you, such as *40 wells — well headers*.
+  </Step>
+  <Step title="Check what was written">
+    The file downloads. A line at the bottom of the menu confirms it, for example *Production CSV written — 247 months, every reported month*.
+  </Step>
+</Steps>
+
+### Production
 
 | Format | What you get |
 |---|---|
-| **Table CSV** | The rows and columns on screen |
-| **Production CSV** | One row per lease per month |
-| **DRI v2.4 production (.dri)** | Up to 1,000 leases |
+| **Production CSV — a row per month** | Monthly oil, gas and well count for the lease. |
+| **DRI v2.4 production (.dri)** | The same months as a DRI file, with the lease's wells and header. |
 
-For production exports, pick a **Production window**: **All history**, **Last 12 months**, **Last 5 years**, or a range of months.
+Set the [Production window](#choose-the-months) at the top of the menu first, if you don't want every month.
 
-## Other tabs
+### Wells
 
-P-4, Frac, Pads and Rigs export **Table CSV**.
+<Frame>
+  <img src="/images/lease-export-wells.webp" alt="A lease's Wells export menu: Wells CSV, GeoGraphix ASCII4, OpenWorks OWX and Copy API numbers" />
+</Frame>
+
+| Format | What you get |
+|---|---|
+| **Wells CSV — a row per bore** | Every wellbore on the lease, with status, W-10 and G-10 tests, allowables, geometry and its allocated share of the lease's production. |
+| **GeoGraphix ASCII4 (.WB4)** | Well headers. |
+| **OpenWorks OWX (.ASC)** | Wells with tops, tests, casing, perfs and surveys. |
+| **Copy API numbers** | The lease's API numbers on your clipboard, one per line. |
+
+The first time you open **Wells**, QuickScout reads the lease's wells. On a big lease the options stay greyed out for a moment, and show how far along it is.
+
+Historic wells are left out of ASCII4, OWX and **Copy API numbers**, because their API codes are shared between wells. The confirmation line tells you how many were left out. **Wells CSV** includes every bore.
+
+The gear at the top right of the lease's chart has two more downloads, **Download CSV** and **Download Image**. See [The production chart](#the-production-chart).
+
+### Valuation and cash flow
+
+When a lease has a valuation, the **↗** beside its name opens it in full. **Export**, at the top, has:
+
+| Format | What you get |
+|---|---|
+| **Report (PDF)** | A one-page summary of the lease's economics. |
+| **Cash flow stream (CSV)** | The lease's forecast cash flow, by year. |
+| **NPV profile (CSV)** | The lease's value at each discount rate. |
+
+The two CSVs are greyed out when the lease has no production forecast. The PDF still works.
+
+Further down, under the wells, **Download all *N* wells (CSV)** has every wellbore on the lease. The list on screen stops at 500; the file doesn't.
+
+## Export many wells or leases
+
+<Steps>
+  <Step title="Open the data tables and pick a tab">
+    Click the **Tables** handle on the map's right edge, then **Wells**, **Leases** or another tab. See [Data tables](/maps/data-panel).
+  </Step>
+  <Step title="Narrow the rows to what you want">
+    Use [Filters](/maps/filters), the tab's search box, and **Scope**. **In view** lists only what's on the map. **Statewide** lists everything your filters match across Texas.
+
+    The footer tells you how many rows you have, for example *1–39 of 578 leases*. That's what an export will carry.
+  </Step>
+  <Step title="Optional: tick just the rows you want">
+    With rows ticked, every export carries only those rows.
+  </Step>
+  <Step title="Click Export and pick a format">
+    **Export** is at the top right of the tables. When the tables are narrow it's a download icon. Each option says what it will export: *578 leases × 19 columns — this view*, or *3 selected* when rows are ticked.
+
+    <Frame>
+      <img src="/images/data-export-leases.webp" alt="The Export menu on the Leases tab: the production window, then Table CSV, Production CSV and DRI" />
+    </Frame>
+  </Step>
+</Steps>
 
 <Tip>
-  To export only certain rows, tick them first and use **Export CSV** on the selection bar.
+  **Table CSV** carries the columns you have showing, in the order they're in. Missing a column? Add it under **Columns**, then export again.
 </Tip>
+
+Whichever format you pick, the file matches what the table lists. If a filter can't be passed along to an industry format, QuickScout sends the exact list of wells instead, so you never get more than the table showed.
+
+### Wells tab
+
+<Frame>
+  <img src="/images/data-export.webp" alt="The Export menu on the Wells tab, listing Table CSV, GeoGraphix ASCII4, OpenWorks OWX and DRI" />
+</Frame>
+
+| Format | What you get | Limit |
+|---|---|---|
+| **Table CSV — the rows on screen** | The rows, and the columns you have showing | None |
+| **GeoGraphix ASCII4 (.WB4)** | Well headers | 50,000 wells |
+| **OpenWorks OWX (.ASC)** | Wells with tops, tests, casing, perfs and surveys | 5,000 wells |
+| **DRI v2.4 production (.dri)** | Production, by lease | 1,000 leases, or 1,000 ticked wells |
+
+Historic wells are left out of the ASCII4, OWX and DRI exports.
+
+### Leases tab
+
+| Format | What you get | Limit |
+|---|---|---|
+| **Table CSV — the rows on screen** | The rows, and the columns you have showing | None |
+| **Production CSV — a row per lease-month** | Monthly oil and gas for each lease | 1,000 leases |
+| **DRI v2.4 production (.dri)** | The same months as a DRI file, with each lease's wells and header | 1,000 leases |
+
+### P-4, Frac, Pads and Rigs
+
+These tabs export **Table CSV — the rows on screen**.
+
+### Shortcuts for ticked rows
+
+Tick rows and a bar appears above the table. It has the exports you'll use most, and copies the rows' IDs:
+
+<Frame>
+  <img src="/images/data-selection.webp" alt="Three leases ticked, and the bar above the table: Export CSV, Export production, Compare production and Copy lease keys, with the Enterprise actions greyed out" />
+</Frame>
+
+| Tab | Export | Copy |
+|---|---|---|
+| **Wells** | **Export CSV** | **Copy APIs** |
+| **Leases** | **Export CSV**, **Export production** (the Production CSV) | **Copy lease keys** |
+| **P-4** | **Export CSV** | **Copy filing ids** |
+| **Frac** | **Export CSV** | **Copy disclosure ids** |
+| **Pads** | **Export CSV** | **Copy detection ids** |
+| **Rigs** | **Export CSV** | **Copy site ids**, **Copy APIs** |
+
+You can also tick rows [from a chart](/maps/charts#select-from-the-chart): drag across a scatter, or click a bar.
+
+## Export an operator, a field or a county
+
+### The production chart
+
+Leases, operators, fields and counties each open with a production chart. To open a county, click the place name in the top bar, then **Open ‹County› County**.
+
+Click the gear at the top right of the chart. **Download CSV** and **Download Image** are at the bottom of the menu.
+
+<Frame>
+  <img src="/images/chart-download.webp" alt="The gear menu on a lease's production chart, ending in Download Image and Download CSV" />
+</Frame>
+
+- **Download CSV** has a row per month: `Date`, `Oil`, `Gas` and `Water`. With decline curves showing, it adds `Oil Decline` and `Gas Decline`.
+- It follows the chart. Switch the chart to **Daily** or **Cumulative** first, and the file carries those figures.
+- **Download Image** saves the chart as a PNG, drawn the way you have it set.
+
+### Wells by operator
+
+Open the operator and click the **Wells** tab. **Export CSV** downloads every well the tab lists, not just the page you're on.
+
+<Frame>
+  <img src="/images/operator-wells-export.webp" alt="An operator's Wells tab: Export CSV beside the well count, above Plugging Liability Only" />
+</Frame>
+
+Two things narrow the file, so set them first:
+
+- The county menu under the operator's name. It starts on **ALL COUNTIES**.
+- **Plugging Liability Only**.
+
+For more control, or for an operator's leases and their production, use the [data tables](#export-many-wells-or-leases) instead. Type the operator's name into the tab's search box, then export.
+
+## Well documents
+
+Open a well and click ***N* files**, under its name. Filter the list with **All**, **W1**, **Plat**, **Permit**, **Completion** or **Survey**, and click a document to open or download it. The button only appears when the well has documents.
+
+You can also right-click a well on the map for its **Regulatory Files**, and load the documents for every well in a [comparison](/maps/records#compare-wells).
+
+## Choose the months
+
+The production exports have a **Production window** at the top of the menu:
+
+- **All history**, **Last 12 months** or **Last 5 years**.
+- Or set your own range with **From** and **To**.
+
+In a DRI file, months before the start aren't lost. They're rolled into each lease's prior-production totals, so the lease's cumulative still adds up. A Production CSV carries only the months in the window.
+
+<Note>
+  Operators report production to the RRC two to four months behind. The last few months of any window are usually empty.
+</Note>
+
+## What the files contain
+
+**CSV files** are made to open cleanly in Excel, a database or a GIS:
+
+- The header row uses column keys, such as `cum_oil_bbl`, not the on-screen labels. Under [**Columns**](/maps/data-panel#the-toolbar), each column's key is shown beside its label.
+- Numbers are plain: `1234`, not `1,234`. A blank cell means there's no value.
+- When a Wells CSV has a cumulative in it, `cum_basis` comes with it, even if you've hidden that column. It says how the per-well figure was worked out. The RRC reports oil by lease, so many per-well cumulatives are allocated.
+- The file name says what's inside: the table, the place in the top bar, the date, and the row count. For example, `wells-midland-county-2026-09-19-3885-rows.csv`.
+
+**Production CSV** has these columns: `district_name`, `lease_no`, `lease_name`, `month`, `oil_bbl`, `gas_mcf`, `wells`, `lateral_ft` and `months_online`.
+
+**GeoGraphix ASCII4 (.WB4)**, **OpenWorks OWX (.ASC)** and **DRI v2.4 (.dri)** are import files for other software. Load them with that program's own import tool.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="I can't find the Export button">
+    In the data tables it's at the top right, beside **Charts**. When the tables are narrow it's only a download icon. Drag the **Tables** handle to widen them, or click **Fill the window**.
+
+    On a lease, **Production** and **Wells** are small grey buttons under the lease's name and field, above **Claim Your Interest**.
+
+    On a production chart, the downloads are under the gear, the last of the three small icons at the chart's top right. Scroll to the bottom of its menu.
+  </Accordion>
+  <Accordion title="An option is greyed out">
+    The line under the option says why:
+
+    - **You're over a limit**, for example *1,204 leases is over the 1,000-lease limit*: narrow the view, or tick fewer rows. The limits are in the tables above.
+    - ***Nothing to export***: the table has no rows. Loosen your filters, or switch **Scope** to **Statewide**.
+    - ***The production window runs backwards***: the **From** month is after the **To** month.
+    - ***Reading the lease's wells…***: wait a moment. A big lease takes a few seconds.
+    - ***No wells on record for this lease***: there's nothing to put in a wells file. The production exports still work.
+  </Accordion>
+  <Accordion title="The file has fewer wells than I expected">
+    - Historic wells are left out of ASCII4, OWX and DRI files.
+    - Check **Scope**. **In view** exports only what's on the map; **Statewide** exports everything your filters match.
+    - Check whether rows are ticked. With rows ticked, exports carry only those rows. **Clear** unticks them.
+  </Accordion>
+  <Accordion title="A column is missing from my CSV">
+    **Table CSV** exports the columns you have showing. Open **Columns**, tick what you need (or pick one of the **Views**), and export again.
+  </Accordion>
+  <Accordion title="It says no production is reported">
+    The lease reported nothing in the window you chose. Widen the **Production window**, or choose **All history**.
+  </Accordion>
+  <Accordion title="It says Sign in to export">
+    Your session has ended. [Sign in](/get-started/sign-in) again, then export.
+  </Accordion>
+</AccordionGroup>
+
+## More places to export
+
+| What | Where |
+|---|---|
+| Search results | In the [results list](/maps/search#search-by-name), on the **LEASES** and **WELLS** tabs: **Export CSV**, and **Copy lease keys** or **Copy APIs** |
+| A printable well report | [Well report](/tools/well-report): **Print** → **Save as PDF** |
+| A wellbore diagram | [Wellbore Builder](/tools/wellbore-builder#save-and-export): **File** → **PNG image** or **PDF** |
+| Your own layers | [My Data](/maps/my-data#work-with-a-layer): in the library, a layer's **⋯** menu has **Export GeoJSON** and **Export CSV**. Tick several layers and click **Export** for a GeoJSON of each |
+| What an alert matched | In the [Alerts](/tools/alerts#manage-alerts-on-the-map) drawer, expand an alert and click **view all** → **Export CSV** |
+| Your properties (mineral owners) | [Owner Portal](/owners/overview#download-a-copy): **Download Report** and **Download CSV** on **Properties**, and **Download CSV** on **Valuation** |
+
+{/* enterprise-hold: a second table for this section.
+In the [Enterprise workspace](/enterprise/overview):
+
+| What | Where |
+|---|---|
+| A project's watchlist | [Watchlist](/enterprise/watchlist#see-your-watchlist) in Maps: **Export CSV** |
+| A project's events | [Activity](/enterprise/activity#arrange-the-list): **View** → **Export this list as CSV**, or tick rows → **Export CSV** |
+| One well's timeline | **Wells** → pick a well → **Timeline** → **CSV** |
+| Lease valuations and cash flows | [Economics](/enterprise/economics#lease-reports): **Export CSV** for the project, **CSV** on the table for just the filtered rows, and each lease's **Report (PDF)**, **Cash flow stream (CSV)** and **NPV profile (CSV)** |
+| Chart data | [Charts](/enterprise/charts#work-with-a-chart): a chart's **⋯** menu → **Export CSV**, and the download icon on **Totals by target** |
+| A deal | [Deals](/enterprise/deals#reports-and-exports): the CIM, the Excel **Workbook**, **Lease table (current filter)** and **Package cash flow** |
+| What an alert matched | [Project alerts](/enterprise/alerts#manage-alerts): **Replay** → **Export CSV** |
+| A log report, and charts from a log discussion | [Well logs](/enterprise/well-logs#analyze-a-log): **Report** → **Generate PDF**. On a chart in **Discuss**, the download icon has **PNG image** and **CSV data** |
+| Files you've uploaded | **Files**: the download icon on a document |
+| A dataset | **Datasets** → **Local datasets**: **Export as CSV**, **Export as JSON** or **Export as Parquet** |
+*/}

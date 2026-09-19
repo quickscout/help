@@ -3,34 +3,45 @@ title: "My Data"
 description: "Add your own shapefiles, spreadsheets and drawings to the map."
 ---
 
-Open **My Data** on the left rail.
+Open **My Data** on the left rail. My Data is part of the [paid plans](/get-started/plans).
 
 ## Upload a file
 
-Drop files on **Drop files, or draw on the map**. QuickScout reads the file in your browser.
+Drop files anywhere on the drawer, or on **Drop files, or draw on the map**. You can drop a whole folder. QuickScout reads the file in your browser.
 
-**Accepted:** Shapefile (.zip, or .shp with its sidecar files), GeoJSON, TopoJSON, KML/KMZ, GeoPackage, FlatGeobuf, GML, GPX, MapInfo (.tab/.mif), DXF, DWG, SQLite, and spreadsheets (CSV, TSV, TXT, XLSX, ODS).
+**Accepted:** Shapefile (.zip, or .shp with its sidecar files), GeoJSON (including newline-delimited), TopoJSON, KML/KMZ, GeoPackage, FlatGeobuf, GML, GPX, MapInfo (.tab/.mif), DXF, DWG, SQLite, and spreadsheets (CSV, TSV, TXT, XLSX, ODS).
 
 **Not yet accepted:** file geodatabases (.gdb), old Excel (.xls), Access (.mdb) and GeoParquet.
 
-### Spreadsheets
+### Place it on the map
 
-A spreadsheet can be placed on the map in several ways. Pick one under **PLACED FROM**:
+Each file gets a card. Under **PLACED FROM**, the card shows how QuickScout located the rows. A spatial file uses **Geometry in the file**. A spreadsheet can be placed several ways, so pick one:
 
-- **Lat/long columns**
-- A **WKT** column
-- An **API number** column, as **well surface holes** or as **wellbore paths**
+- **Lat/long columns**. If the values look swapped, the card says so.
+- A **WKT column**.
+- An API number column, as **well surface holes** or as **wellbore paths**.
 
-Choose which columns to keep under **COLUMNS KEPT**. The card then shows **ON MAP** when it's done, or **NOTHING PLACED** if no rows could be located.
+Choose which columns to keep under **COLUMNS KEPT**, then click **Done**.
+
+The card then shows **ON MAP**, or **NOTHING PLACED** if no rows could be located. If only some rows couldn't be placed, the card says how many *matched no well* or *have no coordinates*, and **REVIEW** lists them.
 
 ## Draw on the map
 
-Choose **Point**, **Line** or **Area**, draw it, then save it to **A new layer** or an existing one.
+Click **draw on the map** in the drop card. Choose **Point**, **Line** or **Area**, draw it, then save it to **A new layer** or an existing one.
+
+- **Point** keeps dropping points until you click **Point** again.
+- Nothing is saved until you press **Save**.
 
 ## Work with a layer
 
-Open a layer to see its **Attributes**, change its **Style**, link it to **Projects**, or check its **Source**. From the library, **Export GeoJSON** or **Export CSV** downloads a layer.
+Open a layer to see its **Attributes**, change its **Style**, or check its **Source**. Drag layers in the list to change which draws on top.
+
+The expand button (**Manage the library**) opens the full library. Each row's menu has **Open**, **Zoom to**, **Export GeoJSON**, **Export CSV** and **Delete**.
+
+{/* enterprise-hold: the layer's tabs are Attributes, Style, Projects and Source ("link it to **Projects**"), and:
+With an Enterprise [project](/enterprise/projects) active, a **Lens** line tells you the list is showing only the layers linked to that project. **SHOW ALL** lists everything, and **LENS ON** goes back.
+*/}
 
 <Tip>
-  Filter the Wells table to **Inside a My Data layer** to list every well inside one of your areas. See [Filters](/maps/filters).
+  Filter the Wells table to **Inside a My Data layer** to list every well inside one of your areas. See [Filters](/maps/filters#wells-inside-your-own-areas).
 </Tip>

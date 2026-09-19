@@ -3,21 +3,40 @@ title: "Wellbore Builder"
 description: "Draw a wellbore diagram, starting from the RRC record."
 ---
 
-Open a well on the map and click **Builder**.
+Open a well on the map and click **Builder**. The builder opens in a new tab with the well's RRC record already loaded. On a [row card](/maps/row-cards), it's **More** → **Open in the wellbore builder**.
+
+<Frame>
+  <img src="/images/wellbore-builder.webp" alt="The Wellbore Builder with a horizontal well loaded from the RRC record" />
+</Frame>
 
 ## Start from the RRC record
 
-Enter an **API number** and click **Load from RRC** to fill in the casing, tubing and depths on record. RRC data may be incomplete, so check it against your own files.
+To load a different well, enter its **API number** and click **Load from RRC**. This fills in the casing, tubing, perforations, formations and header details on record.
+
+<Warning>
+  **Load from RRC** replaces everything in the builder. Save your diagram first.
+</Warning>
+
+RRC data may be incomplete, so check it against your own files.
 
 ## Edit the diagram
 
-- **Add component** adds casing, tubing, perforations and other parts. Click a component to **Edit component**.
-- **Well info** holds the well's header details.
-- **Undo**, **Redo** and **Clear** are in the toolbar.
+- **Add component** adds a part: casing, tubing, perforations, a cement plug, a plug (CIBP or bridge), a formation, or a depth break.
+- To change a part, click its label in the drawing, or its pencil under **Components**. This opens **Edit component**. Finish with **Save changes**.
+- **Well info** holds the well's header details. **Well history** holds dated notes.
+- **Undo**, **Redo** and **Clear** are in the toolbar. <kbd>⌘</kbd> <kbd>Z</kbd> and <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>Z</kbd> work too.
+
+## Change the view
+
+- For a horizontal well, switch between **Along the path** (or **Along the survey**, when a survey is on file) and **Vertical**.
+- Use the zoom buttons to zoom in and out, move shallower or deeper, or fit the whole well. When zoomed in, drag to pan.
 
 ## Save and export
 
 From the **File** menu:
 
-- **Save** / **Save as…** saves the diagram. **Open…** opens a saved one.
-- **Export** → **PNG image** or **PDF**.
+- **Save as…** names and saves a new diagram. After that, the item reads **Save**.
+- **Open…** lists your saved diagrams. You can delete them there too.
+- Under **Export**, choose **PNG image** or **PDF**.
+
+A saved diagram has its own link, so you can bookmark it and come straight back.

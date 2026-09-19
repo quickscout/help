@@ -1,36 +1,69 @@
 ---
 title: "Alerts"
-description: "Get an email when a new permit or completion lands in an area you care about."
+description: "Get an email or text when a new permit or completion lands in an area you care about."
 ---
 
-Alerts watch an area and email you when something new shows up there. They need a paid plan, and are turned on per organization. If you see **Alerts isn't enabled**, click **Request access**.
+Alerts watch an area and tell you when something new shows up there. They're included with any [paid plan](/get-started/plans).
+
+If you see **Alerts isn't enabled for you yet**, click **Request access**. Once it's granted, click **I've been granted access — refresh**.
 
 ## Create an alert on the map
 
 <Steps>
   <Step title="Open Alerts">
-    Click **Alerts** at the bottom of the left rail, then **New alert**.
+    Click **Alerts** at the bottom of the left rail, then **New**. If you have no alerts yet, the button reads **New alert**.
   </Step>
-  <Step title="Area">
-    Draw the area to watch on the map, or pick a county or one of your project's areas.
+  <Step title="Area: where should this alert watch?">
+    Choose one:
+
+    - **Draw on map**: click each corner, and double-click to close the shape.
+    - **Use current map view**.
+    - **Or whole counties**: search for counties and pick them.
+
+    You can add several areas. They're watched together as one.
   </Step>
-  <Step title="Source">
-    Choose what to watch for, such as new permits or completions.
+  <Step title="Source: what should it watch for?">
+    Pick what to watch for, such as new permits or completions. Add filters if you only want some filings, like one operator's. A line under the filters tells you whether they match any existing filings.
   </Step>
-  <Step title="Review">
-    Check the details and click **Create alert**. Alerts check for new matches every hour.
+  <Step title="Review: name it and choose where it goes">
+    Enter an **Alert name**. Under **Deliver to**, pick **Email**, **SMS** or both. SMS goes to the phone number on your account.
+
+    Click **Create alert**. Alerts check for new matches every hour.
   </Step>
 </Steps>
 
-## Manage alerts
+## Manage alerts on the map
 
-The Alerts drawer lists your alerts. **Pause all** stops every alert without deleting it; **Resume all** turns them back on.
+The Alerts drawer lists your alerts.
 
-For more delivery options, go to the **Alerts** page (from **Our Products** → **Alerts** in the header). There you can:
+- Click an alert to expand it. The map outlines its area and zooms to it.
+- An expanded alert has **Edit alert** (the pencil), **Zoom to area**, and a **⋯** menu with **Duplicate** and **Delete**.
+- The switch on each alert pauses just that one.
+- **Pause all** stops every alert without deleting it. **Resume all** turns them back on.
 
-- See matches, runs and failures over the last 24 hours.
-- Create an alert with **New alert** and set its **Frequency** (every hour, daily, weekly or monthly), **Minimum results**, **Message format** and **Max items**, and whether to **Include charts**.
-- Deliver by **Email** or **SMS**. SMS goes to the phone number on your account.
-- **Edit**, **Duplicate** or **Delete** an alert from its menu.
+## The Alerts page
 
-You can have up to 50 alerts.
+The Alerts page shows everything your alerts have found. To open it, press <kbd>⌘</kbd> <kbd>K</kbd> (or click **Search** in the header) and choose **Alerts**. Some pages list it as **Notifications**. It's also under **Products** in the home page footer.
+
+<Frame>
+  <img src="/images/alerts-page.webp" alt="The Alerts page in Table view: every match across your alerts, newest first" />
+</Frame>
+
+Across the top you'll see how many alerts you have, and the matches, runs and failures over the last 24 hours. Then pick a view:
+
+- **Table** lists every match from all your alerts, newest first, over the last **7d**, **30d** or **90d**. Click a row to open that run.
+- **Cards** shows each alert with its **Run history**. Click a bar to see what that run matched. Each card has a pause switch, **Edit alert** (the pencil), and a **⋯** menu with **Duplicate** and **Delete**.
+
+**New alert** uses the same three steps as the map: **Area**, **Source**, **Review**. Here you can also **Add from library** to watch a county, basin or district.
+
+Deleting an alert asks first, then gives you a few seconds to **Undo**. Its run history is kept.
+
+You can have up to 50 active alerts.
+
+{/* enterprise-hold: the intro ends "…with any paid plan, and for members of an Enterprise organization."; the Area step has a third choice; and the Note closes the page.
+    - **Use a project area** (Enterprise, when the open project has areas).
+
+<Note>
+  Working in an Enterprise project? [Project alerts](/enterprise/alerts) watch your project's areas.
+</Note>
+*/}

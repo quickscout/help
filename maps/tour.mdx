@@ -4,7 +4,9 @@ sidebarTitle: "Tour of the map"
 description: "What each part of the Maps screen does."
 ---
 
-{/* screenshot: maps-overview — full /maps screen, panel closed, Midland County */}
+<Frame>
+  <img src="/images/maps-overview.webp" alt="The Maps screen over Midland County: the rail on the left, search and the place name at the top, map controls on the right" />
+</Frame>
 
 ## Left rail
 
@@ -12,44 +14,79 @@ The rail on the left opens drawers over the map:
 
 | Button | Opens |
 |---|---|
-| QuickScout logo | The **start drawer**: jump to a place or an RRC record, see what's on the map, and use saved and recent destinations. |
+| QuickScout logo | The [start drawer](#the-start-drawer): jump to a place or an RRC record. |
 | **Recents** | Items you've opened recently. |
 | **My Data** | Your own uploaded and drawn layers. See [My Data](/maps/my-data). |
 | **Owner Portal** | Properties you own. See [Owner Portal](/owners/overview). |
-| **Projects** | Find and switch projects (Enterprise). |
-| **Watchlist** | The active project's watchlist (Enterprise). |
-| **Production** | Look up production for a lease, operator or field. |
+| **Projects** / **Watchlist** | Part of Enterprise, which is invite-only for now. |
+| **Production** | Production for the leases in the current map view. Search the list by lease, operator or field name. |
 | **Operators** / **Fields** | Put operator or field outlines on the map. |
 | **Alerts** | Your alerts. See [Alerts](/tools/alerts). |
-| **Profile** | Your account. See [Sign in](/get-started/sign-in#your-account-menu). |
+| **Profile** | Your account, and a link to this help site. See [Sign in](/get-started/sign-in#your-account-menu). |
+
+## The start drawer
+
+The start drawer opens by itself the first time you load Maps in a session. Click the QuickScout logo to bring it back.
+
+<Frame>
+  <img src="/images/maps-start-drawer.webp" alt="The start drawer, with Go to place, Go to RRC record, Basins and Saved scopes" />
+</Frame>
+
+- **GO TO — PLACE**: a county, an abstract within it, or a latitude and longitude.
+- **GO TO — RRC RECORD**: an API, lease, field or operator number. This needs a [plan](/get-started/plans).
+- **BASINS**: click a basin to frame it. **Show counties** lists the counties in each one.
+- **SAVED SCOPES**: destinations you've bookmarked on this device.
+- At the bottom: **New leases** lists leases that recently started producing, **Surface tracts** turns that layer on or off, and **Alerts** opens your alerts.
+- At the top: links to the **Homepage**, the **Dashboard** and **Maps (previous)**, the earlier version of Maps.
+
+See [Search](/maps/search#advanced-search) for more on looking things up here.
 
 ## Top bar
 
 - **Search**: find wells, leases, operators, fields and places. See [Search](/maps/search).
-- **Place name**: the county you're looking at. Hover it for a summary of what's in view, and to [ask about the view](/maps/ask-the-map).
+- **Place name**: the county you're looking at, or the play or basin when you're zoomed out. Hover it for a summary of what's in view, and to [ask about the view](/maps/ask-the-map).
 - **Production counter**: oil (bbl/d) and gas (mcf/d) produced by the wells in view. Hover it to see the top operators and fields.
-- **Project pill**: appears when a project is active (Enterprise).
+- **Search pills**: one for each search you've run. See [Search pills](/maps/search#search-pills).
+
+On a narrow window, the top row folds into a single chip. Click it to see the rest.
+
+{/* enterprise-hold: two rows for the Left rail table, in place of its "Projects / Watchlist" row, and a bullet for the Top bar list, after Search.
+| **Projects** | Find and switch projects (Enterprise). |
+| **Watchlist** | The active project's watchlist (Enterprise). |
+
+- **Project pill**: appears when a project is active (Enterprise). Its menu has **Only this project's wells**.
+*/}
 
 ## Right side controls
 
-Hover each icon to open its panel:
+Hover each icon to open its panel. From the top:
 
-- **Layers**: turn map layers and heatmaps on and off. See [Layers & heatmaps](/maps/layers).
-- **Basemap**: choose the background map, including Satellite and Topo.
-- **Filters**: show only certain well types (Oil Well, Gas Well, Permit…) or wellbores (**Vertical** / **Horizontal**). The icon lights up while a filter is on.
-- **Settings**: color theme, well popups, well icon size, well labels, and [offline copies](/maps/offline).
+- **Layers** (the small map thumbnail): turn map layers and heatmaps on and off. See [Layers & heatmaps](/maps/layers).
+- **Basemap** (the stack): choose the background map, including Satellite and Topo.
+- **Filters** (the funnel): show only certain well types (Oil Well, Gas Well, Permit…) or wellbores (**Vertical** / **Horizontal**). The icon lights up while a filter is on.
+- **Settings** (the gear): color theme, well popups, well icon size, well labels, and [offline copies](/maps/offline).
 
-Bottom right are zoom buttons and a **ruler** for measuring distance. Click to add points, double-click to finish, and press **Esc** to stop.
+## Bottom right tools
+
+- **The ruler** measures distance. Click to add points, double-click to finish, and press <kbd>Esc</kbd> to stop.
+- **The point, line and area buttons** sketch notes on the map. A line shows its length, and an area shows its acres. To delete a shape, select it and click the trash button. These sketches aren't saved; to keep a shape, draw it in [My Data](/maps/my-data).
+- **+** and **−** zoom.
+
+Along the bottom of the map are a scale bar and the latitude and longitude under your pointer.
 
 ## Data tables
 
 The handle on the map's right edge, labeled **Tables**, opens the data tables beside the map. Drag it to resize. See [Data tables](/maps/data-panel).
 
+The tables are also where you export wells, leases and production in bulk. To export a single lease, open it and use **Production** or **Wells** under its name. See [Export data](/maps/exports).
+
 ## Clicking and hovering
 
-- **Hover a well** to see its operator, lease, field, daily volumes and status. Click the API to copy it.
+- **Hover a well** to see its operator, lease, field, daily volumes and status. Click the operator, lease or field to open it. Click the API to copy it.
 - **Click a well** to open its record. See [Wells, leases & operators](/maps/records).
-- **Shift + drag** a box to compare up to 1,000 wells side by side.
+- **Shift + drag** a box to compare the wells inside it side by side. Keep the box small: a box holding more than about 1,000 wells is refused.
+
+Zoomed out over a crowd of wells, hovering shows how many wells are there and which operators they belong to, instead of a single well. Zoom in to pick one.
 
 <Tip>
   Prefer popups on click instead of hover? Change **Settings** → **Well Popup** to **On Click**.

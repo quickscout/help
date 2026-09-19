@@ -3,21 +3,41 @@ title: "Charts"
 description: "Chart the rows in your table, then select from the chart."
 ---
 
-Click **Charts** at the top right of the data tables.
+Click **Charts** at the top right of the data tables. The chart opens above the rows, and charts whatever the table is listing: your filters and scope.
 
-## Build a chart
+<Frame>
+  <img src="/images/data-chart.webp" alt="A scatter of lateral length against cumulative oil above the Wells table" />
+</Frame>
 
-1. Pick a **Chart** type: **Scatter**, **Histogram**, **Bar by category**, **Box by category**, or **12-month production trend** (Leases only).
-2. Choose the axes, or the group and measure. Optionally, pick **Colour by** and an **Aggregate** (median, average, sum or count).
-3. Turn on **Log Y** for wide ranges, or **Selection only** to chart just your ticked rows.
+<Tip>
+  If you only see **Recipes** and the plot, the tables are too narrow for the chart controls. Widen the tables or click **Fill the window**.
+</Tip>
 
-**Recipes** are ready-made charts, like *Lateral × cum oil*, *Cum oil by operator* and *TD distribution* on Wells.
+## Start from a recipe
+
+**Recipes** are ready-made charts. On Wells they include *Lateral × cum oil*, *Cum oil by operator*, *TD distribution*, *GOR × W-10 gas* and *IP oil by profile*. Click one to draw it.
+
+## Build your own
+
+1. Pick a chart type with the icon buttons under **Chart**: **Scatter**, **Histogram**, **Bar by category**, **Box by category**, or **12-month production trend** (Leases only). Hover a button to see its name.
+2. Choose what to plot. A scatter has an **X axis** and a **Y axis**. A histogram has **Distribution of**. Bar and box charts have **Group by** and **Measure**.
+3. On a scatter, pick **Colour by** to color the points. On a bar chart, pick an **Aggregate**: median, avg, sum or count.
+4. Turn on **Log Y** for wide ranges (**Log X** on bar charts), or **Selection only** to chart just your ticked rows. **Selection only** stays greyed out until you tick some.
+
+When more than 30,000 rows match, a scatter plots a random sample of 30,000 and says so under its title.
 
 ## Select from the chart
 
 - On a scatter, **drag** to select points, or click a point to open that row.
-- On a bar chart, click a bar to select its rows.
+- On a histogram, bar or box chart, click a bar or box to select its rows.
+- Hover a point or a bar to highlight those rows on the map.
 
-Selections from a chart work like ticked rows. You can **Show N on map** or export them. A chart selects at most 10,000 rows; narrow the view first if more match.
+Selections from a chart work like ticked rows, so you can [export](/maps/exports#shortcuts-for-ticked-rows) them from any tab. On Wells, **Show N on map** shows only the selected wells. **Clear N selected** drops the selection.
+
+A chart selects at most 10,000 rows. If more match, the first 10,000 are selected; narrow the view first.
 
 **Hide the chart** closes it.
+
+<Note>
+  On Leases, **Charts** and **Compare production** share the same space. Opening one closes the other.
+</Note>

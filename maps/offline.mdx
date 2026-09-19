@@ -1,35 +1,50 @@
 ---
 title: "Keep a copy on this device"
 sidebarTitle: "Offline copies"
-description: "Store the statewide tables in your browser so they open instantly."
+description: "QuickScout stores the statewide tables in your browser so they open and filter instantly."
 ---
 
-The data tables can keep a copy of each statewide dataset in your browser. With a copy stored, tables open and filter instantly. Without one, QuickScout reads over the network, which is slower.
+The data tables keep a copy of each statewide dataset in your browser. With a copy stored, tables open and filter instantly. Without one, QuickScout reads over the network, which is slower.
+
+You don't need to set anything up. **Keep a copy** is on from the start, copies download in the background when you open Maps, and a newer snapshot replaces the old one by itself.
 
 ## Manage copies
 
-Click the **Snapshot** stamp at the bottom right of the data tables (for example *Snapshot 2026-09-06 · 1,378,276 wells statewide*). You can also go to **Settings** → **Keep on This Device**.
+Click the **Snapshot** stamp at the bottom right of the data tables (for example *Snapshot 2026-09-06 · 1,378,276 wells statewide*). This opens **Local data**.
 
-For each dataset:
+<Frame>
+  <img src="/images/offline-copies.webp" alt="The Local data panel listing each dataset, its size and whether it is stored on this device" />
+</Frame>
+
+There's a row for the **Lease search index** and for each table: **Leases**, **Wells**, **P-4**, **Frac**, **Pads** and **Rigs**. For each one:
 
 - **Keep a copy** turns storing on or off.
-- **Download now** / **Download again** fetches the latest copy. **Stop** pauses it.
+- **Download now** / **Download again** fetches the latest copy. **Stop** pauses it; the next download picks up where it left off.
 - **Remove** deletes the copy.
 
 **Remove everything stored on this device** clears them all.
+
+The same controls are under **Settings** (the gear) → **Keep on This Device**, as a checkbox and icon buttons for each dataset.
 
 ## What the status means
 
 | Status | Meaning |
 |---|---|
 | **On this device** | A current copy is stored. |
-| **On this device · newer published** | A newer snapshot is available. |
-| **Downloading N%** | A download is in progress. |
+| **On this device · newer published** | A newer snapshot is available, and will replace this one. |
+| **Downloading N%** | A download is in progress. **· stalled** means it has stopped making progress. |
+| **Checking…** | QuickScout is looking at what's stored. |
 | **Not stored** / **Partly stored** | No copy, or an incomplete one. |
 | **No room** | Your browser doesn't have space for a copy. |
+| **Could not open** | The stored copy couldn't be read. Click **Try again**. |
 
-A dot on the Snapshot stamp means something needs your attention.
+A dot on the Snapshot stamp means a copy couldn't be opened, or storage is full.
+
+While a copy downloads, the table footer reads *Saving a copy to this device · N%*, with **Stop**. Until it lands, the table reads over the network, so you can keep working.
 
 <Note>
-  Copies are tens of megabytes each. They're stored per browser, so each computer keeps its own.
+  - Copies run from under a megabyte to about 55 MB each, around 160 MB in all. The panel shows the exact sizes. They're stored per browser, so each computer keeps its own.
+  - Private or incognito windows can't store copies.
+  - Your browser may clear copies if it needs the space. Nothing is lost: they download again.
+  - On a data-saver connection, copies don't download by themselves.
 </Note>

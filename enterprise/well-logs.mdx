@@ -8,17 +8,24 @@ description: "Upload LAS files and scans, pick tops and intervals, discuss a log
 Open **Uploads** in the rail, or **+** → **Upload logs**. Drag files onto the drop zone.
 
 - **Accepted**: LAS 2.0 and 3.0, and raster scans (TIFF, PNG, PDF), up to 200 MB each.
-- Filter the list by **Needs attention**, **Needs review**, **Processing** or **Failed**.
-- **Retry failed** tries failed files again. **Clear done** tidies the list.
+- Filter the list with **All files**, **Needs attention**, **Needs review**, **Processing** or **Failed**, and by kind: **LAS** or **Raster**.
+- While an upload runs, **Retry failed** retries failed files, and **Clear done** clears finished ones from the progress bar.
+- Each file's **⋮** menu has **Open in workspace**, **Resolve (add API)**, **Retry**, **Re-run digitization…** and **Delete**.
+
+<Tip>
+  A file marked *Needs review* usually needs an API number. Choose **Resolve (add API)** from its menu.
+</Tip>
 
 ## Analyze a log
 
-Open **Well Logs** → **Log Analysis** and **Choose a log**.
+Open **Well Logs** → **Log Analysis**. It reopens the last log you worked on. If there isn't one, **Choose a log** or **Upload a log**. **Change log**, in the log's header, switches to another.
 
-- Use the depth controls to **Pick tops** or **Pick interval**, or **Add top** / **Add interval** by typing depths.
+{/* screenshot: enterprise-log — a log open in Log Analysis (needs a demo log) */}
+
+- Open **Tool** and choose **Pick interval** (<kbd>I</kbd>), **Pick tops** (<kbd>T</kbd>), **Add top** (<kbd>A</kbd>) or **Add interval**. The Add options let you type depths instead of clicking.
 - Drag on the log strip to focus a depth interval, then **Analyze**.
-- **Discuss** is a chat about the log. Ask *What can I ask?* to get started. **Past discussions** keeps earlier chats. Chats use [credits](/enterprise/credits).
-- **Report** creates a printable summary of the log.
+- **Discuss** is a chat about the log. Ask *What can I ask?* to get started. **History** keeps earlier chats, and **New chat** starts another. Chats use [credits](/enterprise/credits).
+- **Report** opens **Generate report**. Set a title, who it's prepared by and for, the interval, the sections and any notes, then click **Generate PDF**.
 
 ## Cross sections
 
@@ -26,10 +33,16 @@ Open **Well Logs** → **Cross Sections** and click **Add logs**. You need two o
 
 - Tools: **Cursor** (<kbd>C</kbd>), **Zoom** (<kbd>Z</kbd>), **Top pick** (<kbd>T</kbd>), **Interval** (<kbd>I</kbd>).
 - **Section type**: **Structural** or **Strat**.
-- Right-click a top to **Flatten on this**.
-- Display options: **Fill formations**, **Intervals**, **Data points**.
-- **Save section** keeps it. **New section** starts another.
+- Right-click a top to **Flatten on this** or **Delete top**.
+- Display options: **Fill formations**, **Intervals**, **Data points** and **Lithology**.
+- <kbd>⌘</kbd> <kbd>Z</kbd> undoes and <kbd>⇧</kbd> <kbd>⌘</kbd> <kbd>Z</kbd> redoes.
+- **Discuss** is a chat about the section. It uses [credits](/enterprise/credits).
+- **Save section** keeps it; after that the button reads **Save**. The **Saved** menu lists your sections, and has **New section** and **Delete section**.
 
 ## Formation tops
 
-**Well Logs** → **Formation Tops** is your formation dictionary. Edits here apply to every well. **Browse defaults** shows the standard list, and **New top** adds your own.
+**Well Logs** → **Formation Tops** is your formation dictionary. Edits here apply to every well.
+
+- Search the list, or filter it by basin.
+- **Browse defaults** shows the standard list. **Add** copies a default into your dictionary.
+- **New top** adds your own.

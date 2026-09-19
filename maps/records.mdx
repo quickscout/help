@@ -4,28 +4,44 @@ sidebarTitle: "Record drawers"
 description: "What opens when you click something on the map, and what's in each record."
 ---
 
-Click a feature on the map, or a search result, to open its record in a drawer on the left. Use the back and forward arrows in the search box (<kbd>⌘</kbd> <kbd>[</kbd> and <kbd>⌘</kbd> <kbd>]</kbd>) to move between records you've opened.
+Click a feature on the map, or a search result, to open its record in a drawer on the left. Record drawers need a [plan](/get-started/plans).
+
+<Tip>
+  Leases, operators and fields each open with a production chart. The gear at the chart's top right has **Download CSV** and **Download Image**. For everything else you can download, see [Export data](/maps/exports).
+</Tip>
+
+While a drawer is open, the back and forward arrows in the search box (<kbd>⌘</kbd> <kbd>[</kbd> and <kbd>⌘</kbd> <kbd>]</kbd>) move between the records you've opened.
 
 ## Wells
 
 Click a well, permit or completion.
 
-{/* screenshot: well-drawer — well drawer open */}
+<Frame>
+  <img src="/images/well-drawer.webp" alt="A well record: satellite view, operator and lease, the Builder and Report buttons, and the Wellbore tab" />
+</Frame>
 
 - **Tabs**: **Wellbore**, **Tests**, **Frac**, plus whatever the RRC has on record for that well, such as **Completion**, **Details**, **Permits**, **Production** and **Lease**.
-- **Report**: opens a printable [well report](/tools/well-report) in a new tab.
 - **Builder**: opens the well in the [Wellbore Builder](/tools/wellbore-builder).
+- **Report**: opens a printable [well report](/tools/well-report) in a new tab.
 - **N files**: shows the regulatory documents on file for the well, when there are any.
+- Click the lease name, under the operator, to open the well's lease.
+- **Timelapse**, above the satellite picture, plays the site's imagery over time.
 
 ## Leases
 
 Click a lease footprint or a production spike, or open a lease from a well.
 
+<Frame>
+  <img src="/images/lease-drawer.webp" alt="A lease record: its production chart, the Production and Wells export buttons under its name, Claim Your Interest, and the Overview tab" />
+</Frame>
+
 - **Tabs**: **Overview** (production and valuation), **Wells**, **Owners**.
+- **↗**, beside the lease's name, opens the lease's full valuation when it has one. Its **Export** menu has a PDF report, the cash flow and the NPV profile.
+- **Production** and **Wells**, under the lease's name, export the lease. **Production** downloads its monthly production as a CSV or a DRI file. **Wells** downloads its wells as a CSV, or for GeoGraphix or OpenWorks, and copies their API numbers. See [Export data](/maps/exports#export-one-lease).
 - **Claim Your Interest**: if you own an interest in the lease, add it to your [Owner Portal](/owners/overview).
 
 <Note>
-  Per-well oil on a lease is an **estimate**. The RRC reports oil by lease, so QuickScout allocates it across the lease's wells.
+  Per-well oil on a lease is an **estimate**. The RRC reports oil by lease, so QuickScout allocates it across the lease's wells. On the **Wells** tab these figures are marked **Oil estimated**.
 </Note>
 
 ## Operators
@@ -34,18 +50,19 @@ Open an operator from a well popup, a search result, or **Operators** on the lef
 
 - **Tabs**: **Overview**, **Leases**, **Wells**, **Deals**.
 - **Show on map** puts the operator's leasehold and wells on the map. Once on, toggle **Leasehold** and **Wells** separately.
-- **Filter by County** narrows the record to the counties you pick.
+- **Filter by County** narrows the record to the counties you pick. **Select All** and **Clear** are at the top of its list.
+- On the **Wells** tab, **Export CSV** downloads every well the operator has, or just the counties you've picked. See [Export data](/maps/exports#wells-by-operator).
 
 ## Fields
 
-Open a field from a well popup, a search result, a producing zone, or **Fields** on the left rail.
+Open a field from a well popup, a search result or a producing zone. You can also add its outline with **Fields** on the left rail, then click the outline on the map.
 
 - **Tabs**: **Overview**, **Operators**, **Wells**.
 
 ## Heatmap cells
 
-Click a hexagon on any heatmap to see the **Wells** (or **Leases**) inside it and its **Aggregates**.
+Click a hexagon on any [heatmap](/maps/layers#reading-a-heatmap) to see what's inside it: the **Wells** (or **Leases**, or injection permits) and their **Aggregates**. Frac Disclosures cells have **Jobs**, **Chemistry** and **Aggregates**.
 
 ## Compare wells
 
-Hold <kbd>Shift</kbd> and drag a box on the map to compare the wells inside it, up to 1,000. Press <kbd>Esc</kbd> to cancel.
+Hold <kbd>Shift</kbd> and drag a box on the map to compare the wells inside it. Keep the box small: a box holding more than about 1,000 wells is refused. Press <kbd>Esc</kbd> to cancel.

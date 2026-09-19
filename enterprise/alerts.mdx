@@ -3,7 +3,7 @@ title: "Project alerts"
 description: "Watch your project's areas and get an email or text when something matches."
 ---
 
-Open **Alerts** in the rail. Switch between **This project** and **All projects**.
+Open **Alerts** in the rail, or **+** → **Alert** in the top bar. Switch between **This project** and **All projects**.
 
 <Note>
   Alerts watch your areas, so a project needs at least one [area](/enterprise/areas) before you can create one.
@@ -11,18 +11,30 @@ Open **Alerts** in the rail. Switch between **This project** and **All projects*
 
 ## Create an alert
 
-Click **New alert**, then:
+Click **New alert**. One panel holds four numbered sections:
 
 1. **Data source**: what to watch, and a **Name**.
 2. **Match criteria**: which records count.
 3. **Areas**: which of the project's areas to watch.
-4. **Delivery**: **Email** and/or **SMS**. SMS goes to the phone on your account.
+4. **Delivery**: **Email** and/or **SMS**. SMS goes to the phone on your account. You'll get at most one email a day.
 
-Click **Create alert**.
+Click **Create alert**. When you edit an alert later, the button reads **Save changes**.
+
+You can have up to 50 active alerts.
 
 ## Manage alerts
 
-- Each alert has **Enable/Disable alert** and **Edit alert**. Its menu has **Duplicate** and **Delete**.
-- **Pause all** / **Resume all** switch every alert at once.
-- **Run history** lists each check. Turn on **Only runs with matches** to skip the quiet ones.
-- **Replay** shows an alert's matches by operator, field or county, and exports them as CSV.
+The page has two tabs: **Alerts** and **Run history**.
+
+On **Alerts**:
+
+- Each alert has **Enable/Disable alert** and **Edit alert**. Its menu has **Duplicate** and **Delete**. A paused alert shows a **Paused** badge.
+- **Pause all** switches every alert off, and then reads **Resume all**. In **All projects** it asks first, because it reaches every project.
+- Deleting an alert gives you a moment to **Undo**. Its run history is kept.
+
+On **Run history**:
+
+- Each row is one check. **Only runs with matches** is on from the start; turn it off to see every check.
+- **Replay** opens one run's matches, broken down **By operator**, **By field** or **By county**, with **Export CSV**.
+
+The bell in the top bar shows recent matches across all your projects. The count beside **Alerts** in the rail covers just the open project.
