@@ -227,6 +227,27 @@ async function topOf(page, text) {
     return Math.floor(at.y);
 }
 
+
+/** The Alerts drawer, from the rail button just above Profile. */
+async function openAlerts(page) {
+    await mapSettled(page);
+    await page.getByRole('button', { name: /^Alerts/ }).last().click();
+    await page.getByRole('button', { name: /^New( alert)?$/ }).first().waitFor({ timeout: 60_000 });
+    await page.waitForTimeout(3_000);
+}
+
+/** The new-alert editor, on its Area step with the map view added. Nothing is saved: the shots
+ *  never press Create alert. */
+async function newAlertWithMapView(page) {
+    await openAlerts(page);
+    await page.getByRole('button', { name: /^New( alert)?$/ }).first().click();
+    await page.getByText('Where should this alert watch?').waitFor({ timeout: 30_000 });
+    await page.getByRole('button', { name: 'Use current map view' }).click();
+    await page.waitForTimeout(4_000);
+}
+
+const ALERT_CLIP = { x: 0, y: 0, width: 1000, height: 900 };
+
 // ─── helpers: Enterprise ─────────────────────────────────────────────────────
 
 async function settle(page, ms = 4_000) {
@@ -710,6 +731,63 @@ const SHOTS = [
             // The Spraberry, first in the list, has thousands of leases in view and charts slowly.
             await page.getByText('PARKS (CONSOLIDATED)', { exact: true }).first().click();
             await cardSettled(page, 'RRC field file');
+        },
+    },
+
+    // Alerts in Maps
+    {
+        name: 'alerts-drawer',
+        alt: 'The Alerts drawer: each alert with its source, recent matches and pause switch, one expanded with its run history and matches',
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await openAlerts(page);
+            // Expand the first alert: its run history, matches, and its area outlined on the map.
+            await page.getByRole('button', { name: /^Pause alert|^Resume alert/ }).first().waitFor({ timeout: 30_000 }).catch(() => {});
+            // A row's second line ("198 matches · 2h ago") expands it; the name pill up top is the place panel.
+            await page.getByText(/^\d[\d,]* matches$/).first().click();
+            await page.waitForTimeout(8_000);
+            return ALERT_CLIP;
+        },
+    },
+    {
+        name: 'alert-area',
+        alt: 'The Area step: Draw on map, Use current map view and whole counties, with the map view added',
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await newAlertWithMapView(page);
+            return ALERT_CLIP;
+        },
+    },
+    {
+        name: 'alert-source',
+        alt: 'The Source step: the four sources, and the Purpose of Filing, Completion Type and Wellbore Profile filters for completions',
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await newAlertWithMapView(page);
+            await page.getByRole('button', { name: 'Continue' }).click();
+            await page.getByText('What should it watch for?').waitFor({ timeout: 30_000 });
+            await page.waitForFunction(() => !/Loading (templates|filters|options)/.test(document.body.innerText), null, { timeout: 60_000 }).catch(() => {});
+            await page.waitForTimeout(4_000);
+            return ALERT_CLIP;
+        },
+    },
+    {
+        name: 'alert-review',
+        alt: 'The Review step: the alert name, Email and SMS, and the summary ending in Checks: Hourly',
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await newAlertWithMapView(page);
+            await page.getByRole('button', { name: 'Continue' }).click();
+            await page.getByText('What should it watch for?').waitFor({ timeout: 30_000 });
+            await page.waitForTimeout(3_000);
+            await page.getByRole('button', { name: 'Continue' }).click();
+            await page.getByText('Name it and choose where it goes').waitFor({ timeout: 30_000 });
+            await page.waitForTimeout(3_000);
+            return ALERT_CLIP;
         },
     },
 

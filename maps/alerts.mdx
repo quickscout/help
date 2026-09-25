@@ -1,0 +1,152 @@
+---
+title: "Alerts in Maps"
+sidebarTitle: "Alerts"
+description: "Watch an area for new permits, completions or rig activity, get an email or text when one lands, and see what each alert found on the map."
+---
+
+An alert watches an area and tells you when something new happens inside it: a permit is filed or approved, a well is completed, or a rig shows up. It checks every hour, and sends you an email, a text, or both.
+
+Alerts are part of the [paid plans](/get-started/plans). Click **Alerts** at the bottom of the left rail, just above **Profile**, to open the Alerts drawer. Without a plan, the drawer offers **View Plans** instead.
+
+<Frame>
+  <img src="/images/alerts-drawer.webp" alt="The Alerts drawer: each alert with its source, recent matches and pause switch, one expanded with its run history and matches" />
+</Frame>
+
+## Create an alert
+
+Click **New** at the top of the drawer. If you have no alerts yet, click **New alert**.
+
+The editor takes three steps: **Area**, **Source** and **Review**. **Continue** moves on once a step is complete, and **Back** goes back.
+
+<Steps>
+  <Step title="Area: where should this alert watch?">
+    Add one or more areas. They're watched together as one.
+
+    - **Draw on map**: click to place each corner, then double-click to close the shape. To change a shape afterwards, click it on the map and drag its corners.
+    - **Use current map view**: adds the part of the map you can see, a little inside its edges, as an area named *Map view*. Frame the map first.
+    - **Or whole counties**: search for counties and pick them. Use this instead of drawing to watch a county line exactly.
+
+    Each area is listed with its name (*Area 1*, *Map view*) and its corners. The trash icon removes it. Underneath, QuickScout estimates how many active wells the area holds.
+
+    <Frame>
+      <img src="/images/alert-area.webp" alt="The Area step: Draw on map, Use current map view and whole counties, with the map view added" />
+    </Frame>
+  </Step>
+  <Step title="Source: what should it watch for?">
+    Pick one source:
+
+    | Source | Watches for | Filters |
+    |---|---|---|
+    | **TX Permit Reports** | New drilling permits, once the RRC approves them. | **Well Type** (Oil Well, Gas Well, Injection…) and **Completion Type** (Drill, Recompletion, Re-enter…) |
+    | **TX Pending Permit Reports** | Permit applications that have been filed but not yet approved: the earliest sign of a new well. | **Well Type** (Horizontal, Vertical, Directional, and their sidetracks) |
+    | **TX Completion Reports** | New well completions, including initial potential tests. | **Purpose of Filing** (Initial Potential, Retest, reclassifications…), **Completion Type** (New Well, Deepening, Sidetrack…) and **Wellbore Profile** (Horizontal, Vertical…) |
+    | **TX Rig Watch** | What satellite radar sees at permitted sites: equipment arriving, drilling reported, equipment gone. Covers the counties [Rig Watch](/maps/layers#wells) watches. | **Event** (`arrived`, `drilling_reported`, `gone`), **Only when the records back it** (`drilling`, `drilling_likely`, `frac`) and **Minimum new metal (pixels)** |
+
+    Click the chips under a filter to choose values. A filter with nothing chosen *matches all*; **Clear** empties it.
+
+    Below the filters, a line checks your choices against filings already on record: *These filters match existing filings*, or *No filings match these filters yet*. The second isn't an error; it means nothing like that has been filed in the past, so the alert may be quiet.
+
+    <Frame>
+      <img src="/images/alert-source.webp" alt="The Source step: the four sources, and the Purpose of Filing, Completion Type and Wellbore Profile filters for completions" />
+    </Frame>
+  </Step>
+  <Step title="Review: name it and choose where it goes">
+    - **Alert name**: starts as the source's name, such as *Completions*. Give it a name you'll recognize in your inbox, like *Martin County horizontal permits*.
+    - **Deliver to**: **Email** (on at first), **SMS**, or both. Texts go to the phone number on your QuickScout account.
+
+    The summary shows the **Source**, **Where** (for example *1 area · 3 counties*), how many **Filters** are set, and **Checks**: **Hourly**.
+
+    Click **Create alert**. The alert starts checking right away, and its first run lands within the hour.
+
+    <Frame>
+      <img src="/images/alert-review.webp" alt="The Review step: the alert name, Email and SMS, and the summary ending in Checks: Hourly" />
+    </Frame>
+  </Step>
+</Steps>
+
+<Tip>
+  One alert watches one source. To follow a well from application to completion, create an alert for each source over the same area: **TX Pending Permit Reports**, **TX Permit Reports**, **TX Rig Watch** and **TX Completion Reports**.
+</Tip>
+
+## Your alerts
+
+The drawer lists every alert, most recently active first. Each row shows:
+
+- Its name, and a tag for its source, such as **Permits** or **Completions**.
+- A 14-day chart of matches, how many it has found in the last 30 days, and when it last found something.
+- A switch to pause it (**Pause alert**) or turn it back on (**Resume alert**). A paused alert is dimmed and marked **PAUSED**.
+
+**Pause all**, at the top, pauses every alert without deleting any. When all of them are paused, it reads **Resume all**.
+
+A number on the **Alerts** button in the rail counts the alerts that have found something since you last opened the drawer.
+
+### See what an alert found
+
+Click an alert to expand it. The map outlines its area in blue and flies there.
+
+- **Run history** has a bar for each of the last 30 runs, sized by how many matches it found. Click a bar to see that run. A run is **Delivered**, found **No matches**, or **Failed**.
+- The run's matches are listed underneath: the lease and well number, API, operator and county. **Click a match** to open the well's record.
+- **Plot N** puts the run's matches on the map as blue pins and frames them. Hover a pin for the well, or click it to open the record. **Re-frame** frames them again after you've moved the map.
+- When a run found more than eight wells, click **view all**.
+
+### View all, and export
+
+**view all** opens the run's full results in **Replay**:
+
+- **MATCHES**, **EXECUTION** time and **STATUS** across the top.
+- Breakdowns **By operator**, **By field** and **By county**, and the average **Lateral length**.
+- Every result in a table. **Filter results…** narrows it, and **Export CSV** downloads the rows you're looking at.
+
+Replay shows the results stored when the alert ran. It doesn't run the search again.
+
+### Edit, duplicate and delete
+
+On an expanded alert:
+
+- The pencil (**Edit alert**) reopens the three steps. You can change the name, areas, counties, filters and where it's delivered. The **source** can't be changed; create a new alert for that.
+- The crosshair zooms to the alert's area.
+- **⋯** has **Duplicate** and **Delete**.
+
+**Duplicate** makes an active copy named *‹name› (copy)*. Change its area or filters: two identical alerts aren't allowed.
+
+**Delete** asks first, then gives you about six seconds to **Undo**. The alert's run history is kept.
+
+## Limits
+
+- Up to **50** active alerts. Pause or delete one to make room.
+- Alerts check **hourly**. That can't be changed.
+- Operator transfers (P-4s), frac jobs and satellite pads aren't sources yet.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Continue is greyed out">
+    Each step needs something before you can move on:
+
+    - **Area**: at least one area or county.
+    - **Source**: a source.
+    - **Review**: a name (*Give this alert a name*) and at least one of **Email** or **SMS** (*Pick at least one way to be notified*).
+  </Accordion>
+  <Accordion title="Use current map view did nothing">
+    The visible part of the map is too narrow, usually because the data tables are wide open. Close or narrow the tables, then try again.
+  </Accordion>
+  <Accordion title="An identical alert already exists">
+    You already have an alert with the same source, area and filters. Change a filter or the area.
+  </Accordion>
+  <Accordion title="Active-alert limit reached (50)">
+    Pause or delete an alert you no longer need, then save again.
+  </Accordion>
+  <Accordion title="My alert hasn't sent anything">
+    - Expand it and look at **Run history**. *No runs yet* means the first run is still due, within the hour.
+    - Runs marked **No matches** mean nothing new was filed in the area. Widen the area, or clear a filter.
+    - Check it isn't **PAUSED**.
+    - Texts go to the phone number on your QuickScout account. If none is on file, choose **Email**.
+  </Accordion>
+  <Accordion title="Editing an old alert shows no area">
+    Some older alerts were saved in a format the editor can't redraw. Draw the area again, then **Save changes**.
+  </Accordion>
+</AccordionGroup>
+
+## The Alerts page
+
+Every alert you create in Maps also appears on the separate [Alerts page](/tools/alerts), which lists all their matches together, and the other way round.

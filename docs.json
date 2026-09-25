@@ -31,6 +31,7 @@
           "maps/layers",
           "maps/records",
           "maps/ask-the-map",
+          "maps/alerts",
           "maps/my-data"
         ]
       },
