@@ -142,17 +142,66 @@ async function clickFirstRow(page) {
     await row.click();
 }
 
-/** The Leases tab, rows loaded, with a button the app has not released left out of the picture. */
-async function openLeasesTab(page) {
-    await page.getByRole('tab', { name: /^Leases/ }).click();
+/** A table tab, rows loaded. */
+async function openTab(page, name) {
+    await page.getByRole('tab', { name: new RegExp(`^${name}`) }).click();
     await page.waitForTimeout(3_000);
     await rowsSteady(page);
-    // "Midstream" is held back from the deploy; a local build may still draw its button.
-    await page.evaluate(() => {
-        for (const label of document.querySelectorAll('button span')) {
-            if (label.textContent.trim() === 'Midstream') label.closest('button').style.display = 'none';
-        }
-    });
+}
+
+const openLeasesTab = (page) => openTab(page, 'Leases');
+
+/** Opens the analysis panel (Analyze, at the end of the toolbar) on its Charts tab. */
+async function openAnalyze(page) {
+    await page.getByRole('button', { name: 'Analyze', exact: true }).click();
+    await page.waitForTimeout(2_000);
+    const charts = page.getByRole('tab', { name: 'Charts', exact: true });
+    if (await charts.isVisible().catch(() => false)) await charts.click();
+    await page.waitForTimeout(1_000);
+}
+
+/** A card has painted once its stamp line is there and its blocks have swapped their skeletons
+ *  for rows — a big field's production takes a while. */
+async function cardSettled(page, text) {
+    await page.getByText(text).first().waitFor({ timeout: 90_000 });
+    await page
+        .waitForFunction(() => !document.querySelector('[class*="keleton"]'), null, { timeout: 180_000 })
+        .catch(() => {});
+    await page.waitForTimeout(4_000);
+}
+
+/** The tables filling the window, so a card opened from them is wide enough to read. */
+async function fillWindow(page) {
+    await page.getByRole('button', { name: 'Fill the window' }).click();
+    await page.mouse.move(720, 870);
+    await rowsSteady(page);
+}
+
+/** The tables alone, right of the map, once the footer has finished saving a copy to this device. */
+async function tablesOnly(page) {
+    await page
+        .waitForFunction(() => !/Saving a copy to this device|Totalling every lease/.test(document.body.innerText), null, { timeout: 240_000 })
+        .catch(() => {});
+    // Once the copy lands the table reads it afresh (and Operators re-totals Texas).
+    await rowsSteady(page);
+    await page.mouse.move(720, 870);
+    await page.waitForTimeout(1_500);
+    return { x: 600, y: 0, width: VIEWPORT.width - 600, height: VIEWPORT.height };
+}
+
+/** A fresh browser has no copies on this device: the field card's lease chart and the field hover
+ *  read the Leases and Wells copies, so wait for the footer to stop saving them. */
+async function copiesSaved(page) {
+    await page.waitForTimeout(5_000);
+    await page
+        .waitForFunction(() => !/Saving a copy to this device|Waiting for the wells snapshot/.test(document.body.innerText), null, { timeout: 300_000 })
+        .catch(() => {});
+    await rowsSteady(page);
+}
+
+/** Hovers the table row whose first cell reads `name`. */
+async function hoverRow(page, name) {
+    await page.getByText(name, { exact: true }).first().hover();
 }
 
 /** The sample well's lease, open in its drawer. */
@@ -271,7 +320,7 @@ const SHOTS = [
     },
     {
         name: 'maps-layers',
-        alt: 'The layer list, grouped into Wells, Analytics and Reference',
+        alt: 'The Layers card, grouped into Wells, Analytics and Reference',
         auth: true,
         path: `/maps?${MIDLAND}`,
         run: async (page) => {
@@ -288,7 +337,8 @@ const SHOTS = [
         run: async (page) => {
             await mapSettled(page);
             await hoverMapControl(page, 0);
-            await layerSwitch(page, 'Well Heatmap').click();
+            // The heatmaps are radios in the Analytics group's SURFACE box, not switches.
+            await page.getByText('Well Heatmap', { exact: true }).first().click();
             await page.waitForTimeout(8_000);
         },
     },
@@ -510,7 +560,7 @@ const SHOTS = [
             await mapSettled(page);
             await openTables(page);
             await wellsInViewByCumOil(page);
-            await page.getByRole('button', { name: 'Charts', exact: true }).click();
+            await openAnalyze(page);
             await page.getByRole('button', { name: 'Lateral × cum oil' }).click();
             await page.waitForTimeout(6_000);
         },
@@ -588,6 +638,78 @@ const SHOTS = [
                 .catch(() => {});
             await page.waitForTimeout(2_000);
             return { x: 560, y: 0, width: VIEWPORT.width - 560, height: VIEWPORT.height };
+        },
+    },
+
+    // Operators & Fields
+    {
+        name: 'operators-table',
+        alt: 'The Operators tab over Midland County: each operator totalled over its leases in view, biggest BOE/d first',
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await mapSettled(page);
+            await openTables(page);
+            await openTab(page, 'Operators');
+            return tablesOnly(page);
+        },
+    },
+    {
+        name: 'operator-card',
+        alt: "An operator's card beside the Operators table: Show leases, Show on map, and its production and footprint",
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await mapSettled(page);
+            await openTables(page);
+            await openTab(page, 'Operators');
+            await fillWindow(page);
+            await clickFirstRow(page);
+            await cardSettled(page, 'rolled up by operator');
+        },
+    },
+    {
+        name: 'fields-table',
+        alt: 'The Fields tab over Midland County: RRC lifetime totals, the share the map can place, and the gap',
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await mapSettled(page);
+            await openTables(page);
+            await openTab(page, 'Fields');
+            return tablesOnly(page);
+        },
+    },
+    {
+        name: 'fields-hover',
+        alt: 'Hovering the Parks field: each of its leases a bubble sized by lifetime oil, the biggest labelled, and a chip summing up the field',
+        auth: true,
+        // South-west Midland County, where the Parks field's leases are.
+        path: `/maps?${box(-102.2, 31.84, -102.02, 31.95)}`,
+        run: async (page) => {
+            await mapSettled(page);
+            await openTables(page, { wide: false });
+            await openTab(page, 'Fields');
+            await copiesSaved(page);
+            // Not the Spraberry, first in the list: it covers the whole view.
+            await hoverRow(page, 'PARKS (CONSOLIDATED)');
+            await page.waitForTimeout(15_000);
+        },
+    },
+    {
+        name: 'field-card',
+        alt: "A field's card: production by lease In view or Whole field, what the map holds, and its coverage",
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await mapSettled(page);
+            await openTables(page);
+            await openTab(page, 'Fields');
+            await copiesSaved(page);
+            await fillWindow(page);
+            // The Spraberry, first in the list, has thousands of leases in view and charts slowly.
+            await page.getByText('PARKS (CONSOLIDATED)', { exact: true }).first().click();
+            await cardSettled(page, 'RRC field file');
         },
     },
 
