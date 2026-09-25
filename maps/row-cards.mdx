@@ -1,7 +1,7 @@
 ---
 title: "Row cards"
 sidebarTitle: "Row cards"
-description: "Open a row to see its details, and arrange the card the way you work."
+description: "Open a row to see its details, follow it to its lease, field or operator, and arrange the card the way you work."
 ---
 
 Click any row in the data tables to open its card beside the table.
@@ -10,48 +10,91 @@ Click any row in the data tables to open its card beside the table.
   <img src="/images/row-card.webp" alt="A well's row card open beside the Wells table, showing totals and production blocks" />
 </Frame>
 
-- The arrows at the top of the card step to the previous and next row. <kbd>↑</kbd> / <kbd>↓</kbd> do the same. The card shows where you are, such as *Row 3 of 2,798*.
+- The arrows at the top of the card step to the previous and next row. <kbd>↑</kbd> / <kbd>↓</kbd> do the same. Beside them, the card shows where you are, such as *3 / 2,798*.
 - Up to four cards stay open at once, as tabs along the top. Opening a fifth closes the oldest one you aren't looking at.
 - <kbd>Esc</kbd> closes the card. So does the **Detail** handle on the map's edge.
 
+## Kinds of card
+
+Every table has its own card. Wells get one of three, depending on the well:
+
+| Well | Card | Starts on |
+|---|---|---|
+| Producing, or produced | The well card | **Overview** |
+| Permitted or spudded, not yet producing | The permit card: the permit, its filings and documents, progress to date, and the other wells at the same surface location. A permit more than two years old without a spud is marked **Permit lapsed**. | **Permit** |
+| Injection or disposal | The injection card: injected volumes, what's authorised against what's reported, the injection permit, mechanical integrity tests, enforcement, and the disposal facility or flood unit. | **Injection** |
+
+A lease that stopped producing before 1993 opens with its **Historic production**, its **Archive record** and the **Bores on record**.
+
+The **Operators** and **Fields** cards are described in [Operators & Fields](/maps/operators-fields).
+
+## Follow a thread
+
+Cards open other cards:
+
+- On a **lease** card, click the operator's name to open the operator's card, or the field's name to open the field's card.
+- On a **field** card, click a lease in the **Production** list to open that lease's card. <kbd>↑</kbd> / <kbd>↓</kbd> then step through the field's leases.
+
+The card you came from shows as a crumb at the top (**‹ name**). Click it, or press <kbd>Esc</kbd>, to go back.
+
 ## Layouts
 
-A card is made of **blocks**, such as *Totals*, *Production*, *Wellbore* or *Frac & stimulation*. The layout button picks which blocks show and where. It shows the current layout's name, which is **Overview** at first.
+A card is made of **blocks**, such as *Totals*, *Production*, *Wellbore* or *Frac & stimulation*. The layout button picks which blocks show and where. It shows the current layout's name.
 
-- **Presets**: every card has **Overview**. Wells also have **Engineering**, **Production**, **Land & title** and **Acquisition**. Leases have **Production**, **Acquisition** and **Land & title**. Frac has **Design** and **Production**.
+- **Presets**:
+  - Producing wells: **Overview**, **Engineering**, **Production**, **Land & title** and **Acquisition**.
+  - Permits: **Permit**, **Engineering** and **Land & title**.
+  - Injection wells: **Injection**, **Compliance**, **Facility & field** and **Engineering**.
+  - Leases: **Overview**, **Production**, **Acquisition** and **Land & title**.
+  - Frac: **Overview**, **Design** and **Production**.
+  - Every other card: **Overview**.
 - **Save layout as…** keeps your arrangement under a name. You'll find it under **Saved**, where you can also **Rename…** or delete it.
 - **Reset to preset** undoes your changes.
 
 ## Arrange blocks
 
 - Drag a block's header to move it. Drag its edge to resize it.
-- **Blocks** lists every block for this card, including ones hidden by default, such as *Monthly volumes*, *Casing & cement*, *Formation tops* and *Survey stations*.
-- Each block's **⋯** menu has **Expand**, to fill the card, and **Fit to content**. Blocks with a choice of fields also have **Fields…**, to choose and reorder them. Your choices are saved with the layout.
+- **Blocks** lists every block for this card, including ones hidden at first, such as *Monthly volumes*, *Casing & cement*, *Formation tops*, *Survey stations* and *Filings & documents*.
+- Each block's **⋯** menu has **Expand**, to fill the card, **Fit to content** and **Reset view**. Blocks with a choice of fields also have **Fields…**, to choose and reorder them. Your choices are saved with the layout.
 - Double-click a block's header to expand it. **Restore** or <kbd>Esc</kbd> puts it back.
 - **Remove from card** hides a block.
 
+## The Production block
+
+The **Production** block charts the row's monthly oil, gas and water.
+
+- Pick the series at the top, then **Month**, **Day** or **Cum**, and **Log** or **Lin**. The **Oil**, **Gas** and **Water** chips turn each line on and off.
+- **Layers** adds **Events**, **Operator eras** (shading for who operated when; on at first), **Unreported months** and the **Valuation decline & forecast**.
+- On a lease's series, **Forecast** draws the valuation's decline curve ahead of the history. **Decline** then lets you adjust it: pick **Oil** or **Gas**, and set the **b-factor** and **Initial decline**. The lease is re-valued as you change them. **Reset to auto** goes back. Your adjustment lasts until you leave the page.
+- The block's **⋯** menu has **Download CSV** and **Save chart as PNG**. See [Export data](/maps/exports#from-a-row-card).
+
 ## Card actions
 
-Every card starts with **Zoom to**, which flies the map to the row.
+| Card | Actions | **⋮** menu | At the bottom |
+|---|---|---|---|
+| Wells | **Zoom to**, **Well Report** | **Copy API-10**, **Copy lease key**, **Open in the drawer**, **Open in the wellbore builder** | **Open full well record** |
+| Leases | **Zoom to** | **Copy lease key**, **Open in the drawer** | **Open full lease record** |
+| P-4 transfer | **Zoom to** | **Show the whole filing in the table**, **Copy lease key**, **Copy filing id**, **Open the lease in the drawer** | **Open full lease record** |
+| P-4 filing | **Show leases in table** | **Copy filing id** | |
+| Frac | **Zoom to** | **Copy API-10**, **Copy disclosure id**, **Open in the drawer** | **Open treatment record**, **Well record** |
+| Pads | **Zoom to**, **Full picture** | **Copy detection id**, **Copy permit API**, **Open the permit's well record** | **Permit well record** |
+| Rigs | **Zoom to**, **Full picture** | **Copy site id**, **Copy APIs**, **Open the well record** | **Well record** |
+| Operators | **Show leases**, **Show on map** | **Copy operator number**, **Copy operator name** | |
+| Fields | **Show leases**, **Show on map** | **Open field record**, **Copy field number**, **Copy field name** | |
 
-| Action | On | Does |
-|---|---|---|
-| **Well Report** | Wells | Opens the printable [well report](/tools/well-report) in a new tab. |
-| **Full picture** | Pads, Rigs | Opens the site's imagery, full size, in a new tab. For a pad, that's the before and after. |
-
-On well cards, the **⋮** menu has **Copy API-10**, **Copy lease key**, **Open in the drawer** and **Open in the wellbore builder**.
-
-At the bottom of the card, **Open full well record** opens the well's [record drawer](/maps/records). Lease and P-4 cards have **Open full lease record**, and Frac cards have **Open treatment record**.
+- **Zoom to** flies the map to the row.
+- **Well Report** opens the printable [well report](/tools/well-report) in a new tab.
+- **Full picture** opens the site's imagery, full size, in a new tab. For a pad, that's the before and after.
+- **Show leases** switches to the Leases tab, filtered to that operator or field.
 
 To export a lease's production or wells, click **Open full lease record** and use **Production** or **Wells** under the lease's name. To export many rows at once, tick them in the table. See [Export data](/maps/exports).
 
 <Note>
-  **Watch** and **Deal draft** are greyed out. They belong to Enterprise, which is invite-only for now.
+  **Watch** and **Deal draft**, on well, lease, P-4 and frac cards, are greyed out. They belong to Enterprise, which is invite-only for now.
 </Note>
 
-{/* enterprise-hold: two rows for the Card actions table, after Well Report, and the Note above.
-| **Watch** | Wells, Leases, P-4 transfers, Frac | Adds the row to your project's [watchlist](/enterprise/watchlist). |
-| **Deal draft** | Leases, P-4 transfers | Adds the lease to your [deal draft](/enterprise/deals). |
+{/* enterprise-hold: replacement for the Note above.
+**Watch** (Wells, Leases, P-4 transfers, Frac) adds the row to your project's [watchlist](/enterprise/watchlist). **Deal draft** (Leases, P-4 transfers) adds the lease to your [deal draft](/enterprise/deals).
 
 <Note>
   **Watch** and **Deal draft** are part of the [Enterprise workspace](/enterprise/overview). Without it they're greyed out.

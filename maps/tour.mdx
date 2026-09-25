@@ -61,10 +61,10 @@ On a narrow window, the top row folds into a single chip. Click it to see the re
 
 Hover each icon to open its panel. From the top:
 
-- **Layers** (the small map thumbnail): turn map layers and heatmaps on and off. See [Layers & heatmaps](/maps/layers).
+- **Layers**: turn map layers and heatmaps on and off. See [Layers & heatmaps](/maps/layers).
 - **Basemap** (the stack): choose the background map, including Satellite and Topo.
 - **Filters** (the funnel): show only certain well types (Oil Well, Gas Well, Permit…) or wellbores (**Vertical** / **Horizontal**). The icon lights up while a filter is on.
-- **Settings** (the gear): color theme, well popups, well icon size, well labels, and [offline copies](/maps/offline).
+- **Settings** (the gear): appearance (light or dark), well popups, well marks and colors, well labels, and [offline copies](/maps/offline). See [Settings](/maps/layers#settings).
 
 ## Bottom right tools
 
@@ -76,18 +76,19 @@ Along the bottom of the map are a scale bar and the latitude and longitude under
 
 ## Data tables
 
-The handle on the map's right edge, labeled **Tables**, opens the data tables beside the map. Drag it to resize. See [Data tables](/maps/data-panel).
+The handle on the map's right edge, labeled **Tables**, opens the data tables beside the map: **Wells**, **Leases**, **Operators**, **Fields**, **P-4** and more. Drag it to resize. See [Data tables](/maps/data-panel).
 
 The tables are also where you export wells, leases and production in bulk. To export a single lease, open it and use **Production** or **Wells** under its name. See [Export data](/maps/exports).
 
 ## Clicking and hovering
 
 - **Hover a well** to see its operator, lease, field, daily volumes and status. Click the operator, lease or field to open it. Click the API to copy it.
-- **Click a well** to open its record. See [Wells, leases & operators](/maps/records).
+- **Click a well** to open its record. See [Record drawers](/maps/records). While it's open, the well is marked in amber on the map, and a chip at the map's edge points to it when it's out of sight.
+- **Right-click** anywhere for the survey abstract and surface owner at that spot. See [Land and owners](/maps/records#land-and-owners).
 - **Shift + drag** a box to compare the wells inside it side by side. Keep the box small: a box holding more than about 1,000 wells is refused.
 
 Zoomed out over a crowd of wells, hovering shows how many wells are there and which operators they belong to, instead of a single well. Zoom in to pick one.
 
 <Tip>
-  Prefer popups on click instead of hover? Change **Settings** → **Well Popup** to **On Click**.
+  Prefer popups on click instead of hover? Change **Settings** → **WELL POPUP** to **On click**. Clicking a well then shows its popup first, and you open the record from there.
 </Tip>

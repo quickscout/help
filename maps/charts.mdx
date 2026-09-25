@@ -1,23 +1,49 @@
 ---
-title: "Charts"
-description: "Chart the rows in your table, then select from the chart."
+title: "Analyze: charts, type curves & more"
+sidebarTitle: "Analyze"
+description: "Chart the rows in your table, build type curves, see who takes the oil and gas, and compare leases."
 ---
 
-Click **Charts** at the top right of the data tables. The chart opens above the rows, and charts whatever the table is listing: your filters and scope.
+Click **Analyze** at the right end of the data tables' toolbar. The analysis panel opens above the rows, and works on whatever the table is listing: your filters and scope.
+
+The panel has tabs. Which ones you see depends on the table:
+
+| Tab | On | What it does |
+|---|---|---|
+| [**Charts**](#charts) | Every table | Scatter, histogram, bar and box charts of the rows. |
+| [**Type curves**](#type-curves) | Wells, Leases | How the wells in the map's area perform over their first months. |
+| [**Midstream**](#midstream) | Leases | Who gathers the oil and who takes the gas, over the leases in view. |
+| [**Compare**](#compare-production) | Leases | Production of the leases you ticked, side by side. |
+| [**Production**](#operator-production) | Operators | Monthly production of the operators you ticked. |
+
+The panel and the tab you chose stay open when you switch tables. Close the panel with its **×** (**Hide the analysis panel**), or click **Analyze** again.
+
+<Tip>
+  If you only see a plot and no controls, the tables are too narrow. Widen the tables or click **Fill the window**.
+</Tip>
+
+## Charts
 
 <Frame>
   <img src="/images/data-chart.webp" alt="A scatter of lateral length against cumulative oil above the Wells table" />
 </Frame>
 
-<Tip>
-  If you only see **Recipes** and the plot, the tables are too narrow for the chart controls. Widen the tables or click **Fill the window**.
-</Tip>
+### Start from a recipe
 
-## Start from a recipe
+**Recipes** are ready-made charts. Click one to draw it.
 
-**Recipes** are ready-made charts. On Wells they include *Lateral × cum oil*, *Cum oil by operator*, *TD distribution*, *GOR × W-10 gas* and *IP oil by profile*. Click one to draw it.
+| Table | Recipes |
+|---|---|
+| **Wells** | *Lateral × cum oil*, *Cum oil by operator*, *TD distribution*, *GOR × W-10 gas*, *IP oil by profile*, *Alloc share × cum* |
+| **Leases** | *12-month trend*, *T12 oil × PV-10*, *NAV by operator*, *Decline distribution*, *Acres × NAV*, *Wells by district*, *Daily oil by reservoir* |
+| **Operators** | *BOE/d by operator*, *PV-10 by operator*, *Leases × BOE/d*, *Here vs Texas*, *Share of TX oil in view* |
+| **Fields** | *RRC lifetime oil by field*, *Oil this year by field*, *RRC lifetime gas by field*, *Gas this year by field*, *How much the map can place*, *Lost oil by field*, *Older than the archive, by field*, *RRC lifetime × placed* |
+| **P-4** | *Leases acquired by buyer*, *Leases divested by seller*, *Transfer size distribution*, *Held months by era*, *Transfer size × oil today* (on **Filings**, the recipes look at whole filings) |
+| **Frac** | *Proppant intensity × 12-mo BOE/kft*, *Same-bench spacing × 12-mo BOE/kft*, *Proppant intensity by unit*, *Treatments through time*, *Treatments by pumper (inferred)*, *Treatments by operator*, *Lateral length distribution*, *Water × proppant intensity* |
+| **Pads** | *Detections by what was on record*, *Detections by county*, *The model's readings*, *Area distribution*, *Area by what was on record*, *Area × score* |
+| **Rigs** | *Sites by what we read*, *Sites by operator*, *Sites by county*, *Against the record*, *Peak signal distribution*, *Peak signal × wells on the pad* |
 
-## Build your own
+### Build your own
 
 1. Pick a chart type with the icon buttons under **Chart**: **Scatter**, **Histogram**, **Bar by category**, **Box by category**, or **12-month production trend** (Leases only). Hover a button to see its name.
 2. Choose what to plot. A scatter has an **X axis** and a **Y axis**. A histogram has **Distribution of**. Bar and box charts have **Group by** and **Measure**.
@@ -26,18 +52,58 @@ Click **Charts** at the top right of the data tables. The chart opens above the 
 
 When more than 30,000 rows match, a scatter plots a random sample of 30,000 and says so under its title.
 
-## Select from the chart
+### Select from the chart
 
 - On a scatter, **drag** to select points, or click a point to open that row.
 - On a histogram, bar or box chart, click a bar or box to select its rows.
 - Hover a point or a bar to highlight those rows on the map.
 
-Selections from a chart work like ticked rows, so you can [export](/maps/exports#shortcuts-for-ticked-rows) them from any tab. On Wells, **Show N on map** shows only the selected wells. **Clear N selected** drops the selection.
+Selections from a chart work like ticked rows, so you can [export](/maps/exports#shortcuts-for-ticked-rows) them from any tab. **Show on map**, at the top of the chart, puts the selection on the map. **Clear N selected** drops the selection.
 
 A chart selects at most 10,000 rows. If more match, the first 10,000 are selected; narrow the view first.
 
-**Hide the chart** closes it.
+## Type curves
 
-<Note>
-  On Leases, **Charts** and **Compare production** share the same space. Opening one closes the other.
-</Note>
+**Type curves** shows how the wells in the map's area perform: cumulative production (or rate) against months online. Pan the map to change the area.
+
+The controls down the side:
+
+- **Wells**: **Horizontal** or **Vertical**.
+- **Stream · curve**: **Oil**, **Gas** or **BOE**, as **Cumulative** or **Rate**.
+- **Normalize** (horizontal wells): **Per 1,000 ft** of lateral, or **Per well**.
+- **Leases**: **Single-well**, **Steady** or **All**. Because the RRC reports oil by lease, single-well leases give the cleanest per-well curve.
+- **Split by**: **Operator**, **Vintage**, **Reservoir**, **Lateral length**, **Landing depth**, or **No split**.
+- **Tighten the cohort**: narrow by **First production** year, **Lateral per well**, **Landing depth (TVD)** (click a bar on the histogram; <kbd>Shift</kbd>-click to widen), **Reservoir** or **Operator**.
+- **Compare**: tick up to 8 wells or leases in the table, then **Lay over N ticked** to draw them over the curve. Each says how it ranks, for example *beats 72% of 310 comparable leases at 12 months*. **Reset every setting** starts over.
+
+The headline tiles give the P50 (with the mean underneath) at 6, 12, 24 and 36 months, and an Arps **EUR** with its b-factor and initial decline. **By ‹split›** lists each group's 12-month P50; click a row to draw its line. The footer says what was **Left out** and why.
+
+## Midstream
+
+**Midstream** (Leases) shows who hauls the liquids and who takes the gas from the leases in view, from the RRC's gatherer and purchaser filings.
+
+- **Role**: **Crude gatherer**, **Gas gatherer** or **Gas purchaser**.
+- **Group by**: **Brand** (companies grouped under one name) or **As filed**.
+
+Each company shows its share, its volume and how many leases it serves. The header sums it up, for example *18 companies · 42,000 bopd · top 4 hold 71%*. Click **Map** on a row to show only that company's leases on the map.
+
+## Compare production
+
+On Leases, tick up to 12 leases and click **Compare production** in the selection bar. A **Compare** tab opens with their production on one chart.
+
+- **Measure**: **Oil** or **Gas**.
+- **Normalise**: **Total**, **Per well**, or **Per 1,000 ft** of lateral.
+- **X axis**: **From first month**, **Producing months** or **Calendar**.
+- **Log Y**.
+
+With more than 12 ticked, the first 12 in your sort are charted. Close the tab with its **×**.
+
+## Operator production
+
+On Operators, tick operators and click **Chart production**. The **Production** tab draws a small chart for each one, over its leases in view.
+
+- **Lines**: **Total**, or **By lease**.
+- **Measure**: **BOE**, **Oil** or **Gas**.
+- **Log Y**.
+
+Over 60 operators, it asks before charting them all.

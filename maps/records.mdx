@@ -1,16 +1,20 @@
 ---
-title: "Wells, leases, operators & fields"
+title: "Wells, leases, operators, fields & land"
 sidebarTitle: "Record drawers"
-description: "What opens when you click something on the map, and what's in each record."
+description: "What opens when you click or right-click the map, and what's in each record."
 ---
 
 Click a feature on the map, or a search result, to open its record in a drawer on the left. Record drawers need a [plan](/get-started/plans).
 
 <Tip>
-  Leases, operators and fields each open with a production chart. The gear at the chart's top right has **Download CSV** and **Download Image**. For everything else you can download, see [Export data](/maps/exports).
+  Leases, operators, fields and counties each open with a production chart. The gear at the chart's top right has **Download CSV** and **Download Image**. For everything else you can download, see [Export data](/maps/exports).
 </Tip>
 
 While a drawer is open, the back and forward arrows in the search box (<kbd>⌘</kbd> <kbd>[</kbd> and <kbd>⌘</kbd> <kbd>]</kbd>) move between the records you've opened.
+
+<Note>
+  With **Settings** → **WELL POPUP** set to **On click**, clicking a well, permit or completion shows its popup first. Open the record from there.
+</Note>
 
 ## Wells
 
@@ -20,16 +24,30 @@ Click a well, permit or completion.
   <img src="/images/well-drawer.webp" alt="A well record: satellite view, operator and lease, the Builder and Report buttons, and the Wellbore tab" />
 </Frame>
 
-- **Tabs**: **Wellbore**, **Tests**, **Frac**, plus whatever the RRC has on record for that well, such as **Completion**, **Details**, **Permits**, **Production** and **Lease**.
+- **Tabs**: **Wellbore**, **Tests**, **Frac**, **Site**, plus whatever the RRC has on record for that well, such as **Completion**, **Details**, **Permits**, **Production** and **Lease**.
 - **Builder**: opens the well in the [Wellbore Builder](/tools/wellbore-builder).
 - **Report**: opens a printable [well report](/tools/well-report) in a new tab.
-- **N files**: shows the regulatory documents on file for the well, when there are any.
+- **N files**: the regulatory documents on file for the well, when there are any. See [Well documents](/maps/exports#well-documents).
 - Click the lease name, under the operator, to open the well's lease.
 - **Timelapse**, above the satellite picture, plays the site's imagery over time.
 
+### Where the well is
+
+While a well's drawer is open, the well is marked in amber on the map at every zoom, with a pin naming it. If the well is off screen or behind the drawer, a chip at the edge of the map points to it and says how far away it is. Click the pin or the chip to fly to the well.
+
+### The Site tab
+
+**Site** tells the story of the well's pad from satellite imagery, dated beside the RRC record. The first look at a site takes 10 to 40 seconds.
+
+- A date window with a **High**, **Medium** or **Low** confidence badge, and an activity strip showing **Drilling**, **Frac** and what's **Not on record**.
+- **Timeline**: events from the RRC, FracFocus and the imagery, such as *Permit issued*, *Spud reported*, *Ground cleared for the pad* and *Equipment arrived*.
+- **Equipment on site**, **Pictures**, and **Also on this pad**: the pad's other wells.
+
+The imagery begins in October 2014, so older wells have no site history.
+
 ## Leases
 
-Click a lease footprint or a production spike, or open a lease from a well.
+Click a production spike, open a lease from a well, a search result, or a lease card's **Open full lease record**. Where lease footprints are drawn on the map, click one.
 
 <Frame>
   <img src="/images/lease-drawer.webp" alt="A lease record: its production chart, the Production and Wells export buttons under its name, Claim Your Interest, and the Overview tab" />
@@ -53,11 +71,56 @@ Open an operator from a well popup, a search result, or **Operators** on the lef
 - **Filter by County** narrows the record to the counties you pick. **Select All** and **Clear** are at the top of its list.
 - On the **Wells** tab, **Export CSV** downloads every well the operator has, or just the counties you've picked. See [Export data](/maps/exports#wells-by-operator).
 
+To rank every operator in an area side by side, use the [Operators tab](/maps/operators-fields#operators) in the data tables.
+
 ## Fields
 
-Open a field from a well popup, a search result or a producing zone. You can also add its outline with **Fields** on the left rail, then click the outline on the map.
+Open a field from a well popup, a search result, or a field card's **⋯** → **Open field record**. You can also add its outline with **Fields** on the left rail, then click the outline on the map.
 
 - **Tabs**: **Overview**, **Operators**, **Wells**.
+
+To compare fields, and see how much of each the map can place, use the [Fields tab](/maps/operators-fields#fields).
+
+## Counties
+
+Click the place name in the top bar, then **Open ‹County› County**. The county's drawer has its production chart, its oil and gas per day, its cumulative oil, the plays at the map's centre, and **Zoom to ‹County› County**.
+
+## Injection wells
+
+With the **Injection Wells** layer on, click an injection well for its record: **Permits**, **Sources**, **Integrity** and **Compliance**. See [Layers](/maps/layers#injection-wells).
+
+## Well logs
+
+With the **Logs** layer on, click a mark to open the log. **Open log** opens the original file in a new tab. See [Well logs](/maps/layers#well-logs).
+
+## Land and owners
+
+Right-click anywhere on the map to see the land at that spot.
+
+A small box opens at your pointer with:
+
+- The survey abstract (*A-1234 · Midland County*) and its legal description, such as *Section 12, Block 34, T&P RR Co Survey*, with its acres. If abstracts overlap there, it says so.
+- **SURFACE OWNER**: the owner on the county appraisal roll, their mailing address, and the parcel's acres, appraisal district and tax year. When parcels stack at one spot, it says how many.
+- **Copy description** copies the legal description.
+- **Land record →** opens the full land record.
+
+The abstract is outlined on the map while the box is open. <kbd>Esc</kbd> or a click elsewhere closes it.
+
+Right-clicking a well, permit, completion or spike shows that feature's popup instead. **Land & owners here →** in the popup opens the same box.
+
+### The land record
+
+The land record drawer has **Zoom to abstract** and **Copy description**, then:
+
+- **Original Texas Land Survey**: abstract, survey (the original grantee), block, section, county and mapped area.
+- **Surface owner at this spot**: owner, care of, mailing address, legal description, property and geo IDs, appraisal district and tax year.
+- **Surface owners on this abstract**: every owner on the abstract with their acres and share.
+- **Leases & mineral owners**: each lease with wells on the abstract. **Open lease** opens it, and **Show owners** lists its mineral owners with their interest type, value and decimal interest.
+- **Wells** and **Drilling permits** on the abstract. Click one to open it.
+
+<Note>
+  Mineral owners come from the county appraisal rolls, which list interests on producing leases only. Unleased or non-producing minerals aren't on them. Survey lines are an approximation, **not a title opinion**.
+</Note>
 
 ## Heatmap cells
 

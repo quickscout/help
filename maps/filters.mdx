@@ -33,6 +33,7 @@ Some rows are left out by default. A pill with a **+** count brings them back:
 | Tab | Pill |
 |---|---|
 | **Wells** | **Include historic wells** |
+| **Operators** | **No live lease** |
 | **P-4** | **Renames** |
 | **Frac** | **Include flagged rows** |
 | **Pads** | **Include ponds and roads** |
@@ -46,19 +47,37 @@ With an Enterprise [project](/enterprise/projects) active, the project pill in t
 */}
 
 <Tip>
-  Once the table lists what you want, **Export** downloads exactly those rows. See [Export data](/maps/exports#export-many-wells-or-leases).
+  Once the table lists what you want, **Export** downloads exactly those rows. See [Export data](/maps/exports#export-from-the-data-tables).
 </Tip>
 
 ## The map follows your filters
 
-On **Wells** and **Leases**, once a filter is on, **Filtered set** sets where it applies:
+Once a filter or search is on, **Filtered set** sets where it applies:
 
-- **Table + map**: the map shows only matching wells or leases. This stays on even after you close the tables.
+- **Table + map**: the map shows only what matches. This stays on even after you close the tables.
 - **Table only**: the map is left alone.
 
 When the tables are narrow, these read **Both** and **Table**.
 
-A badge at the bottom of the map tells you what's happening:
+What the map narrows to depends on the tab:
+
+| Tab | On the map |
+|---|---|
+| **Wells** | The matching wells. |
+| **Leases** | The matching leases' footprints, and their wells. |
+| **Operators** | Those operators' lease footprints, and their wells. |
+| **Fields** | Those fields' lease footprints. |
+| **Pads** | The matching detections on the **Satellite Pads** layer. |
+| **Rigs** | The matching sites on the **Rig Watch** layer. |
+| **P-4**, **Frac** | Nothing: **Filtered set** stays on **Table only**. A transfer is an event, not a place; filter the Leases tab to put leases on the map. |
+
+### One tab shapes the map at a time
+
+Only the tab you're on puts its filters on the map. Switch from Wells to Leases, and the map follows the Leases filters instead. Switch back, and the Wells filters return. Nothing is forgotten. With the tables closed, the last tab you had open keeps the map.
+
+### The badge on the map
+
+A badge at the bottom of the map tells you what's happening, with a count beside it (for example *wells 188 · leases 1*):
 
 | Badge | Meaning |
 |---|---|
@@ -67,11 +86,13 @@ A badge at the bottom of the map tells you what's happening:
 | **Map filtered · zoom in** | Too many rows match to filter the map at this zoom. |
 | **Filters not on the map** | You chose **Table only**. |
 
+Filters on Operators and Fields show in the badge as leases. Filters on Pads and Rigs don't show in it.
+
 ### When the map can't follow
 
 The map can filter up to **100,000** matches at once. If more match, you'll see **too many to filter the map here**. Zoom in, or narrow the filter. When you're zoomed in, the map filters just the area around your view.
 
-To filter leases on the map, the **Lease Footprints** layer must be on. If it's off, the footer offers **Turn on**. Footprints draw from zoom 10, so zoom in to see them.
+Lease filters are drawn as lease footprints. If footprints aren't on, the footer says *Lease Footprints is off — the map has no leases to filter* and offers **Turn on**. Footprints turned on this way go off again with the filter; **Turn off** removes them sooner. Footprints draw from zoom 10, so zoom in to see them.
 
 ## Show only your selection
 

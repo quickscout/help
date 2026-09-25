@@ -38,6 +38,7 @@
         "group": "Data tables",
         "pages": [
           "maps/data-panel",
+          "maps/operators-fields",
           "maps/filters",
           "maps/row-cards",
           "maps/charts",

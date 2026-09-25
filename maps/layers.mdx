@@ -1,40 +1,73 @@
 ---
 title: "Layers, heatmaps & basemaps"
 sidebarTitle: "Layers & heatmaps"
-description: "Turn map layers on and off, read heatmaps, and change the background map."
+description: "Turn map layers on and off, read heatmaps and allocated production, and change the background map."
 ---
 
-Hover the top icon on the right side of the map (the small map thumbnail) to open the layer list. **Permits**, **Completions**, **Texas Counties** and **Texas Basemap** (survey lines) are on from the start.
+Hover the top icon on the right side of the map to open the **Layers** card. **Wells**, **Permits**, **Completions**, **Texas Counties** and **Texas Basemap** (survey lines) are on from the start.
 
 <Frame>
-  <img src="/images/maps-layers.webp" alt="The layer list, grouped into Wells, Analytics and Reference" />
+  <img src="/images/maps-layers.webp" alt="The Layers card, grouped into Wells, Analytics and Reference" />
 </Frame>
+
+## Using the Layers card
+
+- The header says how many layers are on (*3 on*). **Clear** turns every layer off, apart from **Wells**.
+- **Filter layers** narrows the list as you type.
+- Each group (**WELLS**, **ANALYTICS**, **REFERENCE**) shows how many of its layers are on.
+- Once a layer is on, a **gear** appears on its row. The gear opens the layer's options and legend in a panel to the left. Close it with **×**.
+- The chips at the bottom of the card name everything that's drawn. Click a chip's **×** to turn that layer off. With nothing on, the card reads *Nothing drawn — the map is basemap only.*
 
 ## Wells
 
 | Layer | Shows |
 |---|---|
+| **Wells** | Every RRC well. Switch it off for a map of just your other layers. **Clear** leaves it alone. |
 | **Permits** | New drilling permits. |
 | **Completions** | Recently completed wells. |
 | **Well Pads** | Wells grouped by the pad they were drilled from. |
-| **Injection Wells** | Underground injection wells: Disposal, EOR, Storage and Other. |
-| **Satellite Pads** | New ground cleared, detected from satellite imagery. Colors show whether there is a permit, a spud, older wells only, or nothing on record. |
-| **Rig Watch** | Watched sites, tagged by what the radar sees: rig on site, frac spread, equipment, facility, or nothing on site. |
+| **Injection Wells** | Underground injection wells: Disposal, EOR, Storage and Other. See [below](#injection-wells). |
+| **Logs** | Where a well log is on record. See [Well logs](#well-logs). |
+| **Satellite Pads** | New ground cleared, detected from satellite imagery. Colored by what's on RRC record within 150 m: **Permit, no spud**, **Spudded**, **Older wells only** or **Nothing on record**. |
+| **Rig Watch** | Permitted pads watched by radar, colored by what the latest look saw: **Rig on site**, **Frac spread**, **Equipment**, **Facility** or **Nothing on site**. |
 
-**Satellite Pads** and **Rig Watch** cover only the counties being watched. The list of counties is under each switch.
+**Satellite Pads** and **Rig Watch** cover only the counties being watched. The Satellite Pads gear lists them. Outside those counties, no mark means *not watched*, not *no pad* or *no rig*.
+
+### Injection Wells
+
+The gear has two choices:
+
+- **SIZE BY**: **Uniform**, or **Rate** (the default), which sizes each well by its injection rate in bbl/d.
+- **COLOR BY**: **Purpose** (the default: Disposal, EOR, Storage, Other), **Pressure** (as a share of permitted pressure) or **Utilization** (as a share of permitted rate). Wells that aren't reporting are grey.
+
+Rates are averaged over the months each permit actually reported. A permit whose last report is stale draws at the smallest size.
+
+Click an injection well for its record: **Permits**, **Sources**, **Integrity** and **Compliance**.
+
+### Well logs
+
+**Logs** marks each place where a well log is on record. Most logs are scanned images, not digital curves. A ringed mark is a **LAS** file; switch on **LAS logs only** in the gear to see only those.
+
+Hover a mark to see the well and the log's format. Click it to open the log's record:
+
+- **Open log** opens the original file in a new tab, where you can save it. Formats include TIFF, PDF, LAS and Word.
+- Where several logs sit at one spot, **Logs at this location** lets you pick one.
+- The **Log** section has the format, logged interval, total depth, surface elevation and KB height.
+- When the log belongs to a known well, **Open well** opens its record, with the API, operator, lease, field and dates listed below.
+
+Open a log zoomed in (zoom 10 or closer) to see its depths and datum.
 
 ## Analytics
 
 | Layer | Shows |
 |---|---|
 | **Production Spikes** | Leases whose production jumped. |
-| **Producing Zones** | Producing formations. **Producing wells only** is on; switch it off to show every well. |
+| **Allocated Production** | Each well's lifetime production and the reservoir it came from. See [below](#allocated-production). |
 | **Well Heatmap** | 12 well metrics, including infill opportunity, well density, lateral spacing, production, IP, completion intensity and vintage. |
 | **Injection Heatmap** | 11 injection metrics: volumes, pressures, EOR share, permit density and capacity. |
 | **Lease Valuation** | 9 lease metrics, including PV-10, net asset value, PDP reserves, production, producing wells and lease counts. |
-| **Lease Footprints** | Lease outlines drawn on the survey grid. **Label** them by net asset value, PV-10, production, wells or footprint acres, and pick a **Bench**, or leave it on **All benches (stacked)**. |
 | **Well Tests** | 26 metrics from well test filings, grouped into screening, oil, gas & BOE, trend, fluid quality, shut-in, allowable and coverage. |
-| **Frac Disclosures** | 24 metrics from FracFocus, such as proppant intensity, job size, water and chemistry. |
+| **Frac Disclosures** | 23 metrics from FracFocus, such as proppant intensity, job size, water and chemistry. |
 
 Valuation metrics (net asset value, PV-10 and PDP reserves) appear only when your account includes lease valuation.
 
@@ -44,21 +77,37 @@ Valuation metrics (net asset value, PV-10 and PDP reserves) appear only when you
   <img src="/images/maps-heatmap.webp" alt="The Well Heatmap over the Midland Basin, with its metric menu and color legend" />
 </Frame>
 
-- Only one heatmap shows at a time. Turning one on turns the others off.
-- Once a heatmap is on, a menu under its switch picks the metric, and a legend shows what the colors mean. Long metric lists have a search box.
+- The five heatmaps are choices in the **SURFACE** box, marked *one at a time*. Picking one turns off any other. Pick it again, or click **None**, to turn it off.
+- Picking a heatmap opens its gear panel: a menu of metrics (long lists have a search box) and a legend of what the colors mean.
 - Click a hexagon to open what's inside it: the **Wells** (or **Leases**) and their **Aggregates**. On **Frac Disclosures**, a hexagon opens **Jobs**, **Chemistry** and **Aggregates**.
 
+### Allocated Production
+
+Allocated Production writes each well's lifetime production on the map: the amount in thousands **above** the well, and its reservoir **below**. For example, *50* over *STRAWN* is 50,000 BOE from the Strawn.
+
+- Each well is colored by its reservoir, which is the field of the lease it produces on. Laterals take the same color.
+- A well producing from several reservoirs is drawn as a **pie**, with a slice for each, largest first.
+- In the gear, **SHOW** switches between **BOE** (the default), **Oil** (bbl) and **Gas** (Mcf). **Oil** and **Gas** show only wells that made some.
+- **Size by amount** draws each well as a bubble sized by what it made. The key shows the scale.
+- Dots show from a statewide view, pies from zoom 10, and the numbers and reservoir names from zoom 13.
+
+Hover or click a well as usual; the layer doesn't change what opens. Switch the **Wells** layer off to see only the allocated wells.
+
 <Note>
-  Lease footprints are drawn on the survey grid. They are an approximation, **not a title opinion**. The legend shows how exact each outline is: real survey lines, an inferred interior split, or an approximate outline.
+  The RRC reports oil by lease, so each well's oil is split from the lease's well tests. It's an **estimate**. Gas wells report their own gas.
 </Note>
 
 ## Reference
 
 - **Texas Counties**
 - **Texas Basemap**: survey lines and abstracts
-- **RRC Districts**: each district is filled with its own color. Switch **Fill by district** off for outlines only.
+- **RRC Districts**: each district is filled with the color the RRC uses on its own district map. Districts that share an office share a color (01 & 02, 05 & 06), and 6E is drawn over 06. Switch **Fill by district** off in the gear for outlines only.
 - **Pipelines**
 - **Surface Tracts**
+
+<Tip>
+  Right-click anywhere on the map to see the survey abstract and the surface owner at that spot. See [Land & owners](/maps/records#land-and-owners).
+</Tip>
 
 ## Basemaps
 
@@ -66,12 +115,18 @@ Hover the second icon (the stack) to choose a background: **Default**, **Dark**,
 
 ## Well filters
 
-Hover the third icon (the funnel) to open **Filters**. Show only some **well types** (Permit, Oil Well, Gas Well, Dry, Injection, Shut-in Oil…) or a **wellbore**: **All**, **Vertical** or **Horizontal**. These apply at every zoom level. The icon lights up while a filter is on, and **Clear all filters** turns them off.
+Hover the third icon (the funnel) to open **Filters**. Show only some **Well Types** (Permit, Oil Well, Gas Well, Dry, Injection, Shut-in Oil…) or a **Wellbore**: **All**, **Vertical** or **Horizontal**. These apply at every zoom level. The icon lights up while a filter is on, and **Clear all filters** turns them off.
 
 <Tip>
   For richer filters, like operator, dates, production or depth, use the [data tables](/maps/filters). The map follows those filters too.
 </Tip>
 
-## Well labels and icon size
+## Settings
 
-Under **Settings** (the gear), choose **Well Labels** (operators, lease names, completion dates, total depth, well numbers) and **Well Icon Size**, from 0.5x to 2x.
+Hover the gear, the fourth icon, for **Settings**:
+
+- **APPEARANCE**: **Light**, **Dark** or **Auto**.
+- **WELL POPUP**: **On hover** or **On click**. See [Clicking and hovering](/maps/tour#clicking-and-hovering).
+- **WELL MARKS**: the size of well icons, from 0.5× to 2×. **Color by well type** colors wells as Oil, Gas, Oil & gas, Injection or Other; switch it off to draw every well in one tone.
+- **WELL LABELS**: **Operators**, **Lease names**, **Completion dates**, **Total depth** and **Well numbers**.
+- **KEEP ON THIS DEVICE**: [offline copies](/maps/offline) of the data tables.

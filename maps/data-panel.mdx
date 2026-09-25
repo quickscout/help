@@ -1,14 +1,14 @@
 ---
 title: "Data tables"
 sidebarTitle: "Data tables"
-description: "Browse every well, lease, P-4, frac job, satellite pad and rig site in Texas as a table."
+description: "Browse every well, lease, operator, field, P-4, frac job, satellite pad and rig site in Texas as a table."
 ---
 
 The data tables sit beside the map. You need to be signed in to use them.
 
 - Click the **Tables** handle on the map's right edge to open them. Drag the handle to resize.
 - **Fill the window**, at the top right, gives the tables the whole screen. **Show the map again** or <kbd>Esc</kbd> brings the map back.
-- The **×** hides the tables.
+- The **×** (**Hide the tables**) hides them.
 
 <Frame>
   <img src="/images/data-panel.webp" alt="The Wells table open beside the map, listing the wells in view by cumulative oil" />
@@ -24,13 +24,23 @@ The data tables sit beside the map. You need to be signed in to use them.
 |---|---|
 | **Wells** | A well. Historic wells can share an API number, so an API may appear more than once. |
 | **Leases** | A lease (district + lease number). For gas, one row is one well. |
+| **Operators** | An operator, totalled over its leases in view. See [Operators & Fields](/maps/operators-fields#operators). |
+| **Fields** | An RRC field, with its lifetime totals and how much the map can place. See [Operators & Fields](/maps/operators-fields#fields). |
 | **P-4** | An operator transfer. Switch **Rows** to see one row per **Transfers** or per **Filings**. |
 | **Frac** | A FracFocus treatment. |
 | **Pads** | New ground detected from satellite imagery. |
 | **Rigs** | A site watched by radar for rigs and frac spreads. |
 | **Deals** | Part of Enterprise, which is invite-only for now. |
 
-When the tables are wide enough, Wells, Leases, P-4 and Frac show their statewide row count. Pads and Rigs never show a count. A dot on a tab means it has filters on.
+When the tables are wide enough, every tab except Pads and Rigs shows its statewide row count. A dot on a tab means it has filters on.
+
+### Choose your tabs
+
+**Wells**, **Leases**, **Operators**, **Fields**, **P-4** and **Deals** are shown at first. To add **Frac**, **Pads** or **Rigs**, click **Add tab** at the end of the tab row and pick one under **Add a tab**.
+
+The same popover arranges your tabs: under **On the strip · drag to reorder**, drag a tab (or press <kbd>Alt</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd>) to move it, and click its **×** to remove it. Your tabs are remembered for your account.
+
+Each tab keeps its place when you switch away and come back: its scroll position and ticked rows, as long as its rows haven't changed. Its search, filters and sort are kept too.
 
 ## The top row
 
@@ -41,7 +51,7 @@ When the tables are wide enough, Wells, Leases, P-4 and Frac show their statewid
 Beside the tabs:
 
 - **A search box** for the tab you're on. For example, Wells searches API, well, operator, lease and field. Type at least two characters. Several words must all match; put a phrase in quotes to keep it together. A search counts as a filter.
-- **Charts** and **Export**. **Export** downloads what the table is listing, as CSV or as GeoGraphix, OpenWorks and DRI files. See [Charts](/maps/charts) and [Export data](/maps/exports#export-many-wells-or-leases).
+- **Export** downloads what the table is listing, as CSV, or as GeoGraphix, OpenWorks and DRI files. See [Export data](/maps/exports#export-from-the-data-tables).
 - **Fill the window** and **×**.
 
 ## The toolbar
@@ -49,9 +59,12 @@ Beside the tabs:
 From left to right:
 
 - **Filters**: narrow the rows. See [Filters & the map](/maps/filters).
+- **Filtered set**: once a filter is on, choose whether it applies to **Table + map** or **Table only**. See [The map follows your filters](/maps/filters#the-map-follows-your-filters).
 - **Scope**: **In view** shows only rows inside the map's visible area. **Statewide** shows everything the filters match across Texas, and dims the rows that are off the map. Wells starts on Statewide; the other tabs start on In view.
-- **Sort**: order rows by any column on screen, or choose **None**. Wells, Frac, Pads and Rigs can also sort by **Nearest the map centre**.
+- **Sort**: order rows by any column on screen, or choose **None**. Wells, Fields, Frac, Pads and Rigs can also sort by **Nearest the map centre**.
+- **Rows** (P-4 only): **Transfers** or **Filings**.
 - **Columns**, at the right: pick one of the **Views** (ready-made column sets, like *Screening*, or *Production* on Leases), or tick columns yourself. Each column shows how filled-in it is. **Row height** switches between **Compact** and **Roomy**.
+- **Analyze**, at the far right: charts, type curves and more over these rows. See [Analyze](/maps/charts).
 
 On P-4, a **Transfer window** band above the rows narrows transfers by date: **All**, **Since 2021**, **2011–2020**, **1993–2010** or **Pre-1993**.
 
@@ -64,6 +77,8 @@ On P-4, a **Transfer window** band above the rows narrows transfers by date: **A
 ## The footer
 
 The footer tells you which rows you're seeing (for example *1–50 of 12,345 wells*) and which filters are on. Click the filter summary to edit them. On the right, the **Snapshot** stamp shows how current the data is. Click it to [keep a copy on your device](/maps/offline).
+
+Exports report here too: while a file is written, and when it's done.
 
 ## Open a row
 
@@ -81,10 +96,14 @@ What you can do with the selection depends on the tab:
 |---|---|
 | **Wells** | **Show N on map**, **Export CSV**, **Add to watchlist**, **Copy APIs** |
 | **Leases** | **Export CSV**, **Export production**, **Compare production**, **Add to watchlist**, **Add to project scope**, **New project from these**, **Add to deal draft**, **Copy lease keys** |
+| **Operators** | **Export CSV**, **Chart production**, **Copy operator numbers** |
+| **Fields** | **Export CSV**, **Copy field numbers** |
 | **P-4** | **Export CSV**, **Copy filing ids** |
 | **Frac** | **Export CSV**, **Copy disclosure ids** |
 | **Pads** | **Export CSV**, **Copy detection ids** |
 | **Rigs** | **Export CSV**, **Copy site ids**, **Copy APIs** |
+
+**Clear**, at the end of the bar, unticks everything.
 
 <Note>
   **Add to watchlist**, **Add to project scope**, **New project from these** and **Add to deal draft** are greyed out. They belong to Enterprise, which is invite-only for now.
