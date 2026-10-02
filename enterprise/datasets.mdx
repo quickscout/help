@@ -1,0 +1,45 @@
+---
+title: "Work with your datasets"
+sidebarTitle: "Datasets"
+description: "Import local tables, map their columns, export them and sync them across devices."
+---
+
+Open a project, then **Datasets** in the rail. The page is titled **Data Sources**. Its tabs handle importing, mapping, querying and syncing your tables.
+
+## Import and export
+
+On **Local datasets**, drop a file into the importer, or use the paste button for GeoJSON, JSON or CSV. Imported tables are stored in this browser and linked to the project.
+
+- Each table has **Export as CSV**, **Export as JSON** and **Export as Parquet** controls.
+- **Table actions** lets you **Rename**, **Replace data**, **Append from file**, **Add row** or **Remove from project**. Removing a project link keeps the browser table; **Remove and delete data** deletes it and any synced copy.
+- Tables already in this browser but not in the project can be added from the available list.
+
+Export important work or sync it before moving to another browser or clearing browser storage.
+
+## Map columns
+
+**Connectors** maps a table's columns to a connector. **Schemas** maps them to a standard schema so other tools can understand the data.
+
+Choose a table and connector or schema, use **Auto-match** as a starting point, review the matches, then **Save mapping**. Mapping doesn't rewrite your original file.
+
+**Integrations** lists the available shared data sources and lets you enable them for the project.
+
+## Keep data across devices
+
+On **Cloud sync**, **Push to cloud** uploads a local table. **Restore to this browser** downloads a cloud-only table; **Re-download from cloud** replaces a local copy.
+
+<Warning>
+  Restoring over an existing local table replaces unsynced changes. Push or export the work you want to keep first.
+</Warning>
+
+**Delete from cloud** removes the cloud copy. Check which copy you are deleting before confirming.
+
+<Warning>
+  **Remove and delete data** and deleting selected tables also remove their synced cloud copies. Export anything you need before confirming; this cannot be undone.
+</Warning>
+
+## Query your tables
+
+**Shell** opens the SQL console. Use it to inspect and query the tables in this browser. Queries that change data also change your local tables; export or sync anything you need to keep first.
+
+These imported tables are separate from the statewide [Maps local copies](/maps/offline), which QuickScout publishes and refreshes for you.

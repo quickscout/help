@@ -1,51 +1,64 @@
 # QuickScout Help
 
-User documentation for QuickScout, published with [Mintlify](https://mintlify.com).
+User documentation for QuickScout, published with [Mintlify](https://mintlify.com). This repository contains public help content and capture tooling, never app code.
 
-This repo contains only the public help pages, never app code. Mintlify's GitHub app is granted access to this repository alone.
-
-## Preview locally
+## Preview and validate
 
 ```bash
-npx mint dev          # http://localhost:3000
-npx mint broken-links # before pushing
+npm install
+npm run dev -- --port 3333 --no-open
+npm run validate
+npm run check
 ```
 
-## Layout
+Reuse an existing preview if one is running. Strict validation must finish without warnings or errors; the link check must find no broken internal links. Also review changed pages at desktop and narrow widths.
 
-- `docs.json`: site config and navigation
-- `get-started/`, `maps/`, `tools/`, `enterprise/`, `owners/`: pages (MDX)
-- `images/`: screenshots
-- `logo/`, `favicon.svg`: brand assets
+## Keep guides useful
 
-Pages are written from the app's on-screen labels. When a label changes in the app, update the page that quotes it.
+- Start with the task, required access and shortest path to a result. Use the app's exact button labels.
+- Keep paragraphs short. Put optional controls after the main steps; use tables for comparisons and accordions for troubleshooting.
+- Verify behavior in the sibling `strawn` app. Its code is the source of truth; internal design documents and API contracts can lag implementation.
+- Check sign-in and plan gates, defaults, limits, saved settings and failure messages. Don't imply planned features are available.
+- Keep existing page paths and section anchors when editing: the app and customers link to them.
+- Add new pages to `docs.json` and link them from the related task guide.
+- Refresh screenshots only when they change what a reader needs to recognize. Review every image before committing it.
 
-## Enterprise is parked
+`AUDIT.md` records page coverage, source locations and verification gaps. It is a maintainer file, excluded from the published site. Update it when a feature or guide changes.
 
-The Enterprise workspace (Prospect) isn't open to users yet, so its pages are out of sight:
+## Enterprise stays hidden
 
-- The **Enterprise** group in `docs.json` has `"hidden": true`. Its pages are off the sidebar and out of search, but still load for anyone with the URL, which keeps the in-app Help link working for us. To unpublish them entirely, add `enterprise/` to `.mintignore`.
-- Everywhere else, what described Enterprise is commented out and tagged. `grep -rn "enterprise-hold" --include="*.mdx" .` lists every block, and each says where it goes.
-- What stays: the Enterprise row in the pricing table, **Prospect is invite-only**, and the short notes on the buttons every user sees greyed out (**Projects**, **Watchlist**, the **Deals** tab, **Add to watchlist**, **Watch**, **Deal draft**). Those notes link nowhere.
-- An MDX comment can't sit in the middle of a list or a table: it never closes and the page stops building. Put it after, with a blank line either side.
+The **Enterprise** navigation group has `"hidden": true`. Its guides remain available by URL for the in-app help link; they are not promoted in public navigation. Public pages retain short explanations of visible, disabled Enterprise controls without linking to hidden guides.
 
-To bring Enterprise back: drop the `hidden` flag, restore the tagged blocks, and re-run the `enterprise-*` shots.
+`enterprise-hold` MDX comments preserve launch copy. Find them with:
+
+```bash
+rg -n enterprise-hold --glob '*.mdx' --glob '!node_modules/**'
+```
+
+Keep MDX comments outside lists and tables, with blank lines on either side. Before making Enterprise public, verify the deployed feature set, remove the hidden flag, review the held copy and refresh its screenshots. Hiding navigation is not access control; never put private information in a guide.
 
 ## Screenshots
 
-Screenshots are captured from the live app by `screenshots/shots.mjs` (Playwright).
+`screenshots/shots.mjs` captures the running app with Playwright and writes WebP images at 2× resolution. Controls are opened by their accessible button names.
 
 ```bash
-npm install && npx playwright install chromium   # once
-npm run shots:login        # once: sign in; the window closes by itself
-npm run shots              # every shot → images/<name>.webp
-npm run shots -- row-card  # just the shots whose name contains "row-card"
+npx playwright install chromium
+BASE_URL=http://localhost:3004 npm run shots:login
+BASE_URL=http://localhost:3004 npm run shots -- maps-layers maps-printing maps-well-labels
 ```
 
-- **Your own account works, but the pictures are public.** The script never loads or writes the account's saved map workspace. It does show what the account holds, so it keeps that out of frame: the Enterprise shots open one project and take the account's other projects off the rail, the Owner Portal shot stops above the property rows, and the Filters shot leaves out the My Data layer names. Look at every new image before you commit it.
-- **The Enterprise shots open one project**, `PROJECT` at the top of `shots.mjs` (or `SHOTS_PROJECT` / `SHOTS_PROJECT_ALSO`). Opening it makes it the account's active project.
-- Images are WebP at 2x. A map is a photograph to a compressor: the same shots as PNG ran to 5 MB each.
-- A page marks where a shot goes with `{/* screenshot: <name> — note */}`. The first capture swaps the marker for a `<Frame>`; later runs only replace the image.
-- To add a shot, add an entry to `SHOTS` in `shots.mjs` and a marker on the page.
-- A failed shot saves what the browser saw to `screenshots/.auth/FAILED-<name>.png`.
-- `BASE_URL=http://localhost:3004` runs against a local app, which signs in against the DEV Clerk instance, so it needs its own `shots:login`.
+Use the existing local app server to capture checkout behavior. Without `BASE_URL`, captures use `https://quickscout.io`; its login is separate. Login sessions and failure images live in ignored `screenshots/.auth/`. Never commit them.
+
+A `{/* screenshot: <name> — note */}` marker is replaced with a `<Frame>` when its capture succeeds. Later runs replace only the image. A missing demo fixture is a reason to leave a marker, not invent a screenshot.
+
+The capture script blocks saved map-workspace reads and writes. It can still display private information: keep account email, property rows, uploaded layer names and other projects out of frame. Enterprise captures open one demo project, which changes the account's active project. Use an account and project suitable for public screenshots.
+
+Inspect new images for loading placeholders, clipped controls and private data. If capture fails, remove an obsolete image from its guide until it can be replaced; document the gap in `AUDIT.md`.
+
+## Layout
+
+- `docs.json`: site configuration and navigation.
+- `get-started/`, `maps/`, `tools/`, `enterprise/`, `owners/`: MDX guides.
+- `images/`: reviewed screenshots.
+- `logo/`, `favicon.svg`: brand assets.
+- `AUDIT.md`: maintainer coverage and verification record.

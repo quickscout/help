@@ -4,7 +4,7 @@ sidebarTitle: "Layers & heatmaps"
 description: "Turn map layers on and off, read heatmaps and allocated production, and change the background map."
 ---
 
-Hover the top icon on the right side of the map to open the **Layers** card. **Wells**, **Permits**, **Completions**, **Texas Counties** and **Texas Basemap** (survey lines) are on from the start.
+Click **Layers**, the top icon on the right side of the map, to open its card. **Wells**, **Permits**, **Completions**, **Texas Counties** and **Texas Basemap** (survey lines) are on from the start.
 
 <Frame>
   <img src="/images/maps-layers.webp" alt="The Layers card, grouped into Wells, Analytics and Reference" />
@@ -23,6 +23,7 @@ Hover the top icon on the right side of the map to open the **Layers** card. **W
 | Layer | Shows |
 |---|---|
 | **Wells** | Every RRC well. Switch it off for a map of just your other layers. **Clear** leaves it alone. |
+| **Drilling Timeline** | Replay wells in drilling-date order. See [Drilling timeline](/maps/drilling-timeline). |
 | **Permits** | New drilling permits. |
 | **Completions** | Recently completed wells. |
 | **Well Pads** | Wells grouped by the pad they were drilled from. |
@@ -63,11 +64,11 @@ Open a log zoomed in (zoom 10 or closer) to see its depths and datum.
 |---|---|
 | **Production Spikes** | Leases whose production jumped. |
 | **Allocated Production** | Each well's lifetime production and the reservoir it came from. See [below](#allocated-production). |
-| **Well Heatmap** | 12 well metrics, including infill opportunity, well density, lateral spacing, production, IP, completion intensity and vintage. |
-| **Injection Heatmap** | 11 injection metrics: volumes, pressures, EOR share, permit density and capacity. |
-| **Lease Valuation** | 9 lease metrics, including PV-10, net asset value, PDP reserves, production, producing wells and lease counts. |
-| **Well Tests** | 26 metrics from well test filings, grouped into screening, oil, gas & BOE, trend, fluid quality, shut-in, allowable and coverage. |
-| **Frac Disclosures** | 23 metrics from FracFocus, such as proppant intensity, job size, water and chemistry. |
+| **Well Heatmap** | Well metrics including infill opportunity, well density, lateral spacing, production, IP, completion intensity and vintage. |
+| **Injection Heatmap** | Injection metrics: volumes, pressures, EOR share, permit density and capacity. |
+| **Lease Valuation** | Lease metrics including PV-10, net asset value, PDP reserves, production, producing wells and lease counts. |
+| **Well Tests** | Well test metrics grouped into screening, oil, gas & BOE, trend, fluid quality, shut-in, allowable and coverage. |
+| **Frac Disclosures** | FracFocus metrics such as proppant intensity, job size, water and chemistry. |
 
 Valuation metrics (net asset value, PV-10 and PDP reserves) appear only when your account includes lease valuation.
 
@@ -111,11 +112,11 @@ Hover or click a well as usual; the layer doesn't change what opens. Switch the 
 
 ## Basemaps
 
-Hover the second icon (the stack) to choose a background: **Default**, **Dark**, **Light**, **Streets**, **Satellite** or **Topo**. There are also six plain backgrounds, from **White** to **Charcoal**, for a map with nothing but your data on it.
+Click **Map style**, the second icon (the stack), to choose a background: **Default**, **Dark**, **Light**, **Streets**, **Satellite** or **Topo**. There are also six plain backgrounds, from **White** to **Charcoal**, for a map with nothing but your data on it.
 
 ## Well filters
 
-Hover the third icon (the funnel) to open **Filters**. Show only some **Well Types** (Permit, Oil Well, Gas Well, Dry, Injection, Shut-in Oil…) or a **Wellbore**: **All**, **Vertical** or **Horizontal**. These apply at every zoom level. The icon lights up while a filter is on, and **Clear all filters** turns them off.
+Click **Filters**, the third icon (the funnel), to open the panel. Show only some **Well Types** (Permit, Oil Well, Gas Well, Dry, Injection, Shut-in Oil…) or a **Wellbore**: **All**, **Vertical** or **Horizontal**. These apply at every zoom level. The icon lights up while a filter is on, and **Clear all filters** turns them off.
 
 <Tip>
   For richer filters, like operator, dates, production or depth, use the [data tables](/maps/filters). The map follows those filters too.
@@ -123,10 +124,10 @@ Hover the third icon (the funnel) to open **Filters**. Show only some **Well Typ
 
 ## Settings
 
-Hover the gear, the fourth icon, for **Settings**:
+Click **Settings**, the gear on the right rail:
 
 - **APPEARANCE**: **Light**, **Dark** or **Auto**.
 - **WELL POPUP**: **On hover** or **On click**. See [Clicking and hovering](/maps/tour#clicking-and-hovering).
 - **WELL MARKS**: the size of well icons, from 0.5× to 2×. **Color by well type** colors wells as Oil, Gas, Oil & gas, Injection or Other; switch it off to draw every well in one tone.
-- **WELL LABELS**: **Operators**, **Lease names**, **Completion dates**, **Total depth** and **Well numbers**.
+- **WELL LABELS**: **Operators**, **Lease names**, **Completion dates**, **Total depth** and **Well numbers**. **Edit labels…** opens the [label editor](/maps/well-labels) for more fields, presets and placement.
 - **KEEP ON THIS DEVICE**: [offline copies](/maps/offline) of the data tables.

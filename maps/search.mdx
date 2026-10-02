@@ -16,13 +16,15 @@ Type at least three letters. Suggestions show leases, fields, operators and well
 Press <kbd>Enter</kbd> to see every match in a results list, and on the map.
 
 <Frame>
-  <img src="/images/maps-search-results.webp" alt="The results list for Pioneer, with tabs, sort chips and the matching leases highlighted on the map" />
+  <img src="/images/maps-search-results.webp" alt="The Pioneer results list with tabs, sorting, facets and export controls" />
 </Frame>
 
 In the results list:
 
 - Tabs split the matches: **ALL**, **LEASES**, **WELLS**, **OPER.** and **FIELDS**.
-- **SORT** orders them by **Nearest**, **Oil**, **Gas** or **Name**. Untick **In view** to include matches that are off the map.
+- **SORT** changes the order; its choices depend on the result type. Untick **In view** to search all Texas. If no matches are in view, the search can widen automatically; check the scope shown.
+- **ALL** can list wells whose operator, lease, field or other information matches. **WELLS**, **OPER.** and **FIELDS** find records by their own names.
+- Use the **NARROW** chips to focus on counties, operators, fields or years. **Facets** / **ALL FACETS** shows the available filters with counts; **Ledger** returns to rows. Remove a filter with its **×**.
 - <kbd>Tab</kbd> moves, <kbd>Enter</kbd> opens, and <kbd>Space</kbd> selects.
 - **Export CSV** downloads the list. **Copy lease keys** (or **Copy APIs** on wells) copies the IDs. For production and industry formats, see [Export data](/maps/exports).
 
@@ -50,11 +52,22 @@ The results list understands these shortcuts:
 | `wells>10` | Leases with at least 10 wells |
 | `status:` and `depth>` | On the **WELLS** tab, wells by status or by depth |
 
-When the results list is open with nothing typed, **List everything in view** lists every lease on screen. Sort and narrow from there.
+When the results list is open with nothing typed, **List everything in view** browses the records on screen. With the wells copy ready, **ALL** lists wells; otherwise it can fall back to leases. Sort and narrow from there.
 
 <Note>
-  The tabs and search terms work from the lease copy [stored on your device](/maps/offline). Until that copy has downloaded, results come from the server, in sections and without tabs, and stop at 1,000 rows.
+  Local results use the search index and the well or lease copies [stored on your device](/maps/offline), depending on the query. Before the required copies are ready, server results can appear in sections without the full tabs and filters, capped at 1,000 rows. If a local search fails, **Try again** or **Search the server instead** provides a way forward.
 </Note>
+
+## Search results in the tables
+
+When the local search results are ready, the [data tables](/maps/data-panel) gain a temporary **Search** tab. If the tables are closed, click **Tables** to open them. A new search focuses its tab without opening a closed panel.
+
+- **Rows** switches between **Wells** and **Leases**, in sync with the search results list.
+- **Scope** and nearest sorting stay consistent between the list and table.
+- The Search tab has its own filters. Your existing Wells and Leases filters remain intact.
+- Clearing the search removes its temporary tab; it is not remembered for your next session.
+
+If the search is still using server fallback results, wait for the required [local copies](/maps/offline) before expecting the full table workflow.
 
 ## Search pills
 

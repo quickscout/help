@@ -1,12 +1,12 @@
 ---
 title: "Keep a copy on this device"
 sidebarTitle: "Offline copies"
-description: "QuickScout stores the statewide tables in your browser so they open and filter instantly."
+description: "Keep statewide table copies in this browser, manage downloads and recover from storage problems."
 ---
 
-The data tables keep a copy of each statewide dataset in your browser. With a copy stored, tables open and filter instantly. Without one, QuickScout reads over the network, which is slower.
+The data tables keep a copy of each statewide dataset in your browser. A stored copy reduces repeated downloads and usually makes tables faster. Without one, tables may read over the network or wait for a required dataset.
 
-You don't need to set anything up. **Keep a copy** is on from the start, copies download in the background when you open Maps, and a newer snapshot replaces the old one by itself.
+You don't need to set anything up. **Keep a copy** is on from the start, copies download in the background after giving the map priority. Opening a table gives its download priority. New snapshots can replace older copies automatically; if the panel says **newer published**, use **Download again** to fetch it now.
 
 ## Manage copies
 
@@ -31,8 +31,11 @@ The same controls are under **Settings** (the gear) → **KEEP ON THIS DEVICE**,
 | Status | Meaning |
 |---|---|
 | **On this device** | A current copy is stored. |
-| **On this device · newer published** | A newer snapshot is available, and will replace this one. |
-| **Downloading N%** | A download is in progress. **Downloading N% · stalled** means it has stopped making progress. |
+| **On this device · newer published** | A newer snapshot is available. **Download again** fetches it. |
+| **Downloading N%** | A download is in progress. |
+| **Downloading · waiting for the map** | Paused while the map or a table uses the connection; resumes automatically. A percentage may also appear. |
+| **Downloading · waiting its turn** | Another dataset is downloading first. |
+| **Downloading N% · stalled** | No bytes have arrived for a while. Use **Stop**, then **Download now** to resume. |
 | **Checking…** | QuickScout is looking at what's stored. |
 | **Not stored** / **Partly stored** | No copy, or an incomplete one. |
 | **No room** | Your browser doesn't have space for a copy. |
@@ -40,11 +43,15 @@ The same controls are under **Settings** (the gear) → **KEEP ON THIS DEVICE**,
 
 A dot on the Snapshot stamp means a copy couldn't be opened, or storage is full.
 
-While a copy downloads, the table footer reads *Saving a copy to this device · N%*, with **Stop**. Until it lands, the table reads over the network, so you can keep working.
+While a copy downloads, the table footer reads *Saving a copy to this device · N%*, with **Stop**. Some tables can keep reading over the network or from an older copy. Others wait for their required copy; follow the footer status.
 
 <Note>
-  - Copies run from under a megabyte to about 55 MB each, around 160 MB in all. The panel shows the exact sizes. They're stored per browser, so each computer keeps its own.
-  - Private or incognito windows can't store copies.
+  - Sizes change with each publication. The panel shows the current size of each copy. They're stored per browser, so each computer keeps its own.
+  - Browser settings and private windows may prevent storage. **Not stored** explains when this browser cannot keep a copy.
   - Your browser may clear copies if it needs the space. Nothing is lost: they download again.
-  - On a data-saver connection, copies don't download by themselves.
+  - On a data-saver connection, background copies don't download by themselves. **Download now** requests one explicitly.
 </Note>
+
+## Does this make QuickScout work offline?
+
+A local copy is a table dataset, not a copy of the whole app. Maps imagery, record details, sign-in, AI and other server features can still need a connection. Keep copies to reduce downloads; don't rely on them for a complete offline session.

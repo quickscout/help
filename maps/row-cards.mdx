@@ -65,8 +65,16 @@ The **Production** block charts the row's monthly oil, gas and water.
 
 - Pick the series at the top, then **Month**, **Day** or **Cum**, and **Log** or **Lin**. The **Oil**, **Gas** and **Water** chips turn each line on and off.
 - **Layers** adds **Events**, **Operator eras** (shading for who operated when; on at first), **Unreported months** and the **Valuation decline & forecast**.
-- On a lease's series, **Forecast** draws the valuation's decline curve ahead of the history. **Decline** then lets you adjust it: pick **Oil** or **Gas**, and set the **b-factor** and **Initial decline**. The lease is re-valued as you change them. **Reset to auto** goes back. Your adjustment lasts until you leave the page.
+- On a lease's series, **Forecast** draws the valuation's decline curve ahead of the history. **Decline** then lets you adjust it: pick **Oil** or **Gas**, and set the **b-factor** and **Initial decline**. The lease is re-valued as you change them. **Reset to auto** goes back. Your adjustment lasts for this app session; a reload returns to the automatic fit.
 - The block's **⋯** menu has **Download CSV** and **Save chart as PNG**. See [Export data](/maps/exports#from-a-row-card).
+
+## Decline workbench
+
+On a lease card, **Expand** the Production block (or double-click its header) to open the decline workbench. It gives you a larger chart, decline parameters and a comparison against the automatic fit.
+
+Change the oil or gas curve, terminal decline or economic limit and check the preview. **Apply to lease** shares your adjustment with the lease's valuation for this app session. **Reset** restores the automatic fit in the workbench. If the server cannot provide a live preview, the panel says so; **Apply to lease** requests a revaluation.
+
+Use the workbench's **Export** menu for its available chart and table downloads. **Restore** returns to the card. These changes are not permanent edits to the reported production.
 
 ## Card actions
 

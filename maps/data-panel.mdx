@@ -30,6 +30,7 @@ The data tables sit beside the map. You need to be signed in to use them.
 | **Frac** | A FracFocus treatment. |
 | **Pads** | New ground detected from satellite imagery. |
 | **Rigs** | A site watched by radar for rigs and frac spreads. |
+| **Search** | The active map search's wells or leases. It appears only while that search is active. |
 | **Deals** | Part of Enterprise, which is invite-only for now. |
 
 When the tables are wide enough, every tab except Pads and Rigs shows its statewide row count. A dot on a tab means it has filters on.
@@ -38,7 +39,9 @@ When the tables are wide enough, every tab except Pads and Rigs shows its statew
 
 **Wells**, **Leases**, **Operators**, **Fields**, **P-4** and **Deals** are shown at first. To add **Frac**, **Pads** or **Rigs**, click **Add tab** at the end of the tab row and pick one under **Add a tab**.
 
-The same popover arranges your tabs: under **On the strip · drag to reorder**, drag a tab (or press <kbd>Alt</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd>) to move it, and click its **×** to remove it. Your tabs are remembered for your account.
+The same popover arranges your tabs: under **On the strip · drag to reorder**, drag a tab (or press <kbd>Alt</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd>) to move it, and click its **×** to remove it. Your tabs are remembered for your account and project. The temporary **Search** tab is not saved.
+
+A new search can focus the temporary **Search** tab when its results are ready. It has its own filters, so searching does not replace the filters on Wells or Leases. Clearing the search removes the temporary tab. See [Search results in the tables](/maps/search#search-results-in-the-tables).
 
 Each tab keeps its place when you switch away and come back: its scroll position and ticked rows, as long as its rows haven't changed. Its search, filters and sort are kept too.
 
@@ -62,7 +65,7 @@ From left to right:
 - **Filtered set**: once a filter is on, choose whether it applies to **Table + map** or **Table only**. See [The map follows your filters](/maps/filters#the-map-follows-your-filters).
 - **Scope**: **In view** shows only rows inside the map's visible area. **Statewide** shows everything the filters match across Texas, and dims the rows that are off the map. Wells starts on Statewide; the other tabs start on In view.
 - **Sort**: order rows by any column on screen, or choose **None**. Wells, Fields, Frac, Pads and Rigs can also sort by **Nearest the map centre**.
-- **Rows** (P-4 only): **Transfers** or **Filings**.
+- **Rows**: on P-4, **Transfers** or **Filings**; on Search, **Wells** or **Leases**. Scope stays the same when you switch between the two row types.
 - **Columns**, at the right: pick one of the **Views** (ready-made column sets, like *Screening*, or *Production* on Leases), or tick columns yourself. Each column shows how filled-in it is. **Row height** switches between **Compact** and **Roomy**.
 - **Analyze**, at the far right: charts, type curves and more over these rows. See [Analyze](/maps/charts).
 

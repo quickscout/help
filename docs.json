@@ -17,11 +17,19 @@
     "groups": [
       {
         "group": "Get started",
-        "pages": ["index", "get-started/sign-in", "get-started/plans"]
+        "pages": [
+          "index",
+          "get-started/sign-in",
+          "get-started/plans",
+          "get-started/billing"
+        ]
       },
       {
         "group": "Exports",
-        "pages": ["maps/exports"]
+        "pages": [
+          "maps/exports",
+          "maps/printing"
+        ]
       },
       {
         "group": "Maps",
@@ -29,6 +37,8 @@
           "maps/tour",
           "maps/search",
           "maps/layers",
+          "maps/drilling-timeline",
+          "maps/well-labels",
           "maps/records",
           "maps/ask-the-map",
           "maps/alerts",
@@ -62,6 +72,7 @@
         "pages": [
           "enterprise/overview",
           "enterprise/projects",
+          "enterprise/wells",
           "enterprise/areas",
           "enterprise/home",
           "enterprise/activity",
@@ -71,12 +82,16 @@
           "enterprise/deals",
           "enterprise/well-logs",
           "enterprise/alerts",
-          "enterprise/credits"
+          "enterprise/credits",
+          "enterprise/files",
+          "enterprise/datasets"
         ]
       },
       {
         "group": "Mineral owners",
-        "pages": ["owners/overview"]
+        "pages": [
+          "owners/overview"
+        ]
       }
     ]
   },
@@ -94,6 +109,11 @@
     }
   },
   "contextual": {
-    "options": ["copy", "view", "chatgpt", "claude"]
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude"
+    ]
   }
 }

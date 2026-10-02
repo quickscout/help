@@ -61,19 +61,10 @@ async function mapSettled(page) {
     await page.waitForTimeout(6_000);
 }
 
-/** The right-side map controls are hover cards without labels: Layers, Basemap, Filters, Settings. */
-async function hoverMapControl(page, index) {
-    await page.locator('[class*="controlCapsule"] > *').nth(index).hover();
+/** Map controls open on click. Accessible names work in both dev and production. */
+async function openMapControl(page, name) {
+    await page.getByRole('button', { name, exact: true }).click();
     await page.waitForTimeout(1_000);
-}
-
-/** A row of the Layers card: the layer's name, then its switch. */
-function layerSwitch(page, name) {
-    return page
-        .locator('.mantine-Group-root')
-        .filter({ has: page.locator('.mantine-Switch-root') })
-        .filter({ hasText: new RegExp(`^${name}$`) })
-        .locator('.mantine-Switch-track');
 }
 
 // ─── helpers: data tables ────────────────────────────────────────────────────
@@ -320,6 +311,57 @@ async function openProject(page, path = '/prospect', ready = null, project = PRO
 // run         → drives the page; may return a clip `{ x, y, width, height }` in CSS px
 
 const SHOTS = [
+    {
+        name: 'maps-drilling-timeline',
+        alt: 'The drilling timeline paused over Midland with date, playback and blank-map controls',
+        auth: true,
+        path: `/maps?${box(-102.18, 31.98, -102.14, 32.015)}`,
+        run: async (page) => {
+            await mapSettled(page);
+            await openMapControl(page, 'Layers');
+            await page.getByText('Drilling Timeline', { exact: true }).click();
+            await page.getByRole('group', { name: 'Drilling timeline', exact: true }).waitFor({ timeout: 30_000 });
+            await page.getByRole('button', { name: 'Layers', exact: true }).click();
+            await page.waitForFunction(() => {
+                const group = document.querySelector('[aria-label="Drilling timeline"]');
+                return group?.querySelector('button[aria-label="Play"]:not(:disabled), button[aria-label="Pause"]:not(:disabled)');
+            }, null, { timeout: 180_000 });
+            const pause = page.getByRole('button', { name: 'Pause', exact: true });
+            if (await pause.isVisible()) await pause.click();
+            await page.mouse.move(20, 30);
+            await page.waitForTimeout(1_000);
+        },
+    },
+    {
+        name: 'maps-printing',
+        alt: 'Map Print Studio with a scaled Midland sheet, paper and export controls',
+        auth: true,
+        path: `/maps?${box(-102.18, 31.98, -102.14, 32.015)}`,
+        run: async (page) => {
+            await mapSettled(page);
+            await page.getByRole('button', { name: 'Print map', exact: true }).click();
+            await page.getByRole('button', { name: 'Export PDF', exact: true }).waitFor({ timeout: 60_000 });
+            await page.getByLabel('Feet per inch', { exact: true }).fill('2000');
+            await page.getByLabel('Feet per inch', { exact: true }).press('Enter');
+            await page.getByText('Loading map…', { exact: true }).waitFor({ state: 'hidden', timeout: 120_000 });
+            await page.mouse.move(720, 870);
+            await page.waitForTimeout(2_000);
+        },
+    },
+    {
+        name: 'maps-well-labels',
+        alt: 'The Well labels editor with presets, fields and label positions around the symbol',
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await mapSettled(page);
+            await openMapControl(page, 'Settings');
+            await page.getByRole('button', { name: 'Edit labels…', exact: true }).click();
+            await page.getByRole('button', { name: 'Apply to map', exact: true }).waitFor({ timeout: 30_000 });
+            await page.mouse.move(720, 870);
+            await page.waitForTimeout(1_000);
+        },
+    },
     // Maps
     {
         name: 'maps-overview',
@@ -341,13 +383,13 @@ const SHOTS = [
     },
     {
         name: 'maps-layers',
-        alt: 'The Layers card, grouped into Wells, Analytics and Reference',
+        alt: 'The Layers card with well layers, drilling timeline and one-at-a-time heatmap choices',
         auth: true,
         path: `/maps?${MIDLAND}`,
         run: async (page) => {
             await mapSettled(page);
-            await hoverMapControl(page, 0);
-            return { x: 640, y: 0, width: 800, height: 640 };
+            await openMapControl(page, 'Layers');
+            return { x: 640, y: 0, width: 800, height: VIEWPORT.height };
         },
     },
     {
@@ -357,7 +399,7 @@ const SHOTS = [
         path: `/maps?${MIDLAND_BASIN}`,
         run: async (page) => {
             await mapSettled(page);
-            await hoverMapControl(page, 0);
+            await openMapControl(page, 'Layers');
             // The heatmaps are radios in the Analytics group's SURFACE box, not switches.
             await page.getByText('Well Heatmap', { exact: true }).first().click();
             await page.waitForTimeout(8_000);
@@ -377,7 +419,7 @@ const SHOTS = [
     },
     {
         name: 'maps-search-results',
-        alt: 'The results list for Pioneer, with tabs, sort chips and the matching leases highlighted on the map',
+        alt: 'The Pioneer results list with tabs, sorting, facets and export controls',
         auth: true,
         path: `/maps?${MIDLAND}`,
         run: async (page) => {
@@ -386,7 +428,10 @@ const SHOTS = [
             await page.waitForTimeout(3_000);
             await page.keyboard.press('Enter');
             await page.getByText('Export CSV').first().waitFor({ timeout: 60_000 });
+            await page.getByRole('button', { name: 'Hide the search summary', exact: true }).click();
+            await page.mouse.move(20, 30);
             await page.waitForTimeout(6_000);
+            return { x: 0, y: 0, width: 480, height: VIEWPORT.height };
         },
     },
     {

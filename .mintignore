@@ -10,3 +10,6 @@ drafts/
 screenshots/
 package.json
 package-lock.json
+
+# Maintainer coverage record, not a help page
+AUDIT.md
