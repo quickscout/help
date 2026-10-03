@@ -219,12 +219,12 @@ A well card's **Filings & documents** block (also under **Blocks**) lists the we
 
 ### The production chart
 
-Leases, operators, fields and counties each open with a production chart in their record drawer. To open a county, click the place name in the top bar, then **Open ‹County› County**.
+Leases, operators, fields and counties each open with a production chart in their record drawer. To open a county, click the place control (📍) in the command bar, then **Open ‹County› County**.
 
 Click the gear, the right-most of the small icons at the top right of the chart. **Download Image** and **Download CSV** are at the bottom of the menu.
 
 <Frame>
-  <img src="/images/chart-download.webp" alt="The gear menu on a lease's production chart, ending in Download Image and Download CSV" />
+  <img src="/images/chart-download.webp" alt="The gear menu on a lease's production chart, with Download Image near the bottom" />
 </Frame>
 
 - **Download CSV** has a row per month: `Date`, `Oil`, `Gas` and `Water`. With decline curves showing, it adds `Oil Decline` and `Gas Decline`.
@@ -276,7 +276,7 @@ In a DRI file, months before the start aren't lost. They're rolled into each lea
 - The header row uses column keys, such as `cum_oil_bbl`, not the on-screen labels. Under [**Columns**](/maps/data-panel#the-toolbar), each column's key is shown beside its label.
 - Numbers are plain: `1234`, not `1,234`. A blank cell means there's no value.
 - When a Wells CSV has a cumulative in it, `cum_basis` comes with it, even if you've hidden that column. It says how the per-well figure was worked out. The RRC reports oil by lease, so many per-well cumulatives are allocated.
-- The file name says what's inside: the table, the place in the top bar, the date, and the table's row count. For example, `wells-midland-county-2026-09-19-3885-rows.csv`. The count is the whole view's, even when you exported ticked rows. A Production CSV's count is its monthly rows.
+- The file name says what's inside: the table, the place shown in the command bar, the date, and the table's row count. For example, `wells-midland-county-2026-09-19-3885-rows.csv`. The count is the whole view's, even when you exported ticked rows. A Production CSV's count is its monthly rows.
 
 **Production CSV** has these columns: `district_name`, `lease_no`, `lease_name`, `month`, `oil_bbl`, `gas_mcf`, `wells`, `lateral_ft` and `months_online`.
 
@@ -327,7 +327,7 @@ In a DRI file, months before the start aren't lost. They're rolled into each lea
 
 | What | Where |
 |---|---|
-| Search results | In the [results list](/maps/search#search-by-name), on the **LEASES** and **WELLS** tabs: **Export CSV**, and **Copy lease keys** or **Copy APIs** |
+| Search results | The [Search tab](/maps/search#the-search-tab) in the data tables: switch to **Table**, then **Export** |
 | A land description | Right-click the map → **Copy description**. See [Land and owners](/maps/records#land-and-owners) |
 | A scaled map sheet | [Print a map](/maps/printing): **Print map** → PDF, PNG or GeoTIFF |
 | A printable well report | [Well report](/tools/well-report): **Print** → **Save as PDF** |

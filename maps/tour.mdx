@@ -5,12 +5,12 @@ description: "What each part of the Maps screen does."
 ---
 
 <Frame>
-  <img src="/images/maps-overview.webp" alt="The Maps screen over Midland County: the rail on the left, search and the place name at the top, map controls on the right" />
+  <img src="/images/maps-overview.webp" alt="The Maps screen over Midland County: the rail on the left, the command bar at the top, map controls on the right" />
 </Frame>
 
 ## Left rail
 
-The rail on the left opens drawers over the map:
+The rail on the left opens drawers. A drawer is a card floating on the left of the map; its header has **‹** and **›** to step back and forward through what you've opened (<kbd>⌘</kbd> <kbd>[</kbd> and <kbd>⌘</kbd> <kbd>]</kbd> work from anywhere), and **✕** to close it.
 
 | Button | Opens |
 |---|---|
@@ -19,7 +19,7 @@ The rail on the left opens drawers over the map:
 | **My Data** | Your own uploaded and drawn layers. See [My Data](/maps/my-data). |
 | **Owner Portal** | Properties you own. See [Owner Portal](/owners/overview). |
 | **Projects** / **Watchlist** | Part of Enterprise, which is invite-only for now. |
-| **Production** | Production for the leases in the current map view. Search the list by lease, operator or field name. |
+| **Production** | Production for the leases in the current map view, every operator and field ranked. Search the list by lease, operator or field name. |
 | **Operators** / **Fields** | Put operator or field outlines on the map. |
 | **Alerts** | Your alerts: create them, and see what they found. See [Alerts in Maps](/maps/alerts). |
 | **Profile** | Your account, and a link to this help site. See [Sign in](/get-started/sign-in#your-account-menu). |
@@ -35,45 +35,48 @@ The start drawer opens by itself the first time you load Maps in a session. Clic
 - **GO TO — PLACE**: a county, an abstract within it, or a latitude and longitude.
 - **GO TO — RRC RECORD**: an API, lease, field or operator number. This needs a [plan](/get-started/plans).
 - **BASINS**: click a basin to frame it. **Show counties** lists the counties in each one.
-- **SAVED SCOPES**: destinations you've bookmarked on this device.
-- At the bottom: **New leases** lists leases that recently started producing, **Surface tracts** turns that layer on or off, and **Alerts** opens your alerts.
+- **SAVED SCOPES**: destinations you've bookmarked on this device. The bookmark button beside **Go to …** saves one.
+- **RECENT**: once you've opened records, the last few of them, and **See all**.
+- At the bottom: the **Go to …** button names where it will take you. **New leases** lists leases that recently started producing, **Surface tracts** turns that layer on or off, and **Alerts** opens your alerts.
 - At the top: links to the **Homepage**, the **Dashboard** and **Maps (previous)**, the earlier version of Maps.
 
-See [Search](/maps/search#advanced-search) for more on looking things up here.
+To find something by name, use [Search](/maps/search) instead.
 
-## Top bar
+## Command bar
 
-- **Search**: find wells, leases, operators, fields and places. See [Search](/maps/search).
-- **Place name**: the county you're looking at, or the play or basin when you're zoomed out. Hover it for a summary of what's in view, and to [ask about the view](/maps/ask-the-map).
-- **Production counter**: oil (bbl/d) and gas (mcf/d) produced by the wells in view. Hover it to see the top operators and fields.
-- **Search pills**: one for each search you've run. See [Search pills](/maps/search#search-pills).
+The bar at the top left of the map:
 
-On a narrow window, the top row folds into a single chip. Click it to see the rest.
+- **Search**: find wells, leases, operators, fields and places. Press <kbd>⌘</kbd> <kbd>K</kbd> to jump to it. See [Search](/maps/search). While a search is on, the bar gains a second row for it; see [While a search is on](/maps/search#while-a-search-is-on).
+- **Place** (📍): the county you're looking at, or the play or basin when you're zoomed out, with the oil (bbl/d) and gas (mcf/d) produced by the wells in view. Click it for the [place card](/maps/ask-the-map): a summary of the view, its busiest operators and fields, and questions to ask about it.
 
-{/* enterprise-hold: two rows for the Left rail table, in place of its "Projects / Watchlist" row, and a bullet for the Top bar list, after Search.
+On a narrow window, the place control drops its production numbers, then shrinks to its 📍 pin. Click the pin for the same card.
+
+{/* enterprise-hold: two rows for the Left rail table, in place of its "Projects / Watchlist" row, and a bullet for the Command bar list, before Search.
 | **Projects** | Find and switch projects (Enterprise). |
 | **Watchlist** | The active project's watchlist (Enterprise). |
 
-- **Project pill**: appears when a project is active (Enterprise). Its menu has **Only this project's wells**.
+- **Project pill**: appears before the search box when a project is active (Enterprise). Its menu has **Only this project's wells**.
 */}
 
 ## Right side controls
 
-Click an icon to open its panel; click it again, click outside or press <kbd>Esc</kbd> to close it. From the top:
+Click an icon to open its card; click it again, click outside or press <kbd>Esc</kbd> to close it. One card is open at a time. From the top:
 
 - **Layers**: turn map layers and heatmaps on and off. See [Layers & heatmaps](/maps/layers), including the [drilling timeline](/maps/drilling-timeline).
-- **Map style** (the stack): choose the background map, including Satellite and Topo.
-- **Filters** (the funnel): show only certain well types (Oil Well, Gas Well, Permit…) or wellbores (**Vertical** / **Horizontal**). The icon lights up while a filter is on.
+- **Filters**: show only certain well types (Oil Well, Gas Well, Permit…), wellbores (**Vertical** / **Horizontal**), or wells matching a filter on any column. The icon lights up while a filter is on. See [Well filters](/maps/layers#well-filters).
 - **Settings** (the gear): appearance (light or dark), well popups, well marks and colors, well labels, and [offline copies](/maps/offline). See [Settings](/maps/layers#settings).
-- **Print map** (the printer): make a scaled sheet and save it as PDF, PNG or GeoTIFF. See [Print a map](/maps/printing).
+- **Print**: make a scaled sheet and save it as PDF, PNG or GeoTIFF. See [Print a map](/maps/printing).
+- **Ask**, on its own below the others: ask about what's in view. See [Ask about the map](/maps/ask-the-map).
 
-## Bottom right tools
+On a short window, the labels under the icons give way to tooltips.
 
-- **The ruler** measures distance. Click to add points, double-click to finish, and press <kbd>Esc</kbd> to stop.
-- **The point, line and area buttons** sketch notes on the map. A line shows its length, and an area shows its acres. To delete a shape, select it and click the trash button. These sketches aren't saved; to keep a shape, draw it in [My Data](/maps/my-data).
+## Bottom of the map
+
+- **Map style**, the thumbnail at the bottom left: choose the background map, including Satellite and Topo. See [Basemaps](/maps/layers#basemaps).
+- Beside it, a scale bar, the latitude and longitude under your pointer, and the zoom level.
+- At the bottom right, the ruler (**Measure distance**) measures distance: click to add points, double-click to finish, and press <kbd>Esc</kbd> to stop.
+- **Drop pin**, **Draw line** and **Draw polygon** sketch notes on the map. A line shows its length, and an area shows its acres. **Clear drawings** removes them. These sketches aren't saved; to keep a shape, draw it in [My Data](/maps/my-data). On a short window they fold into one **Draw tools** button.
 - **+** and **−** zoom.
-
-Along the bottom of the map are a scale bar and the latitude and longitude under your pointer.
 
 ## Data tables
 
@@ -84,7 +87,7 @@ The tables are also where you export wells, leases and production in bulk. To ex
 ## Clicking and hovering
 
 - **Hover a well** to see its operator, lease, field, daily volumes and status. Click the operator, lease or field to open it. Click the API to copy it.
-- **Click a well** to open its record. See [Record drawers](/maps/records). While it's open, the well is marked in amber on the map, and a chip at the map's edge points to it when it's out of sight.
+- **Click a well** to open its record. See [Record drawers](/maps/records). While it's open, the well is marked in amber on the map, and a chip at the map's edge points to it when it's out of sight. Clicking the map doesn't close the drawer; use its **✕**.
 - **Right-click** anywhere for the survey abstract and surface owner at that spot. See [Land and owners](/maps/records#land-and-owners).
 - **Shift + drag** a box to compare the wells inside it side by side. Keep the box small: a box holding more than about 1,000 wells is refused.
 

@@ -97,14 +97,17 @@ async function wellsInViewByCumOil(page) {
     await rowsSteady(page);
 }
 
-/** Rows on screen and the footer done "Updating…" — held for 3 s, because the table swaps
+/** Rows on screen and the footer done "Updating…" — held for 3 s. Not the stand-in either: while the
+ *  wells copy downloads, the table shows the file's first rows unsorted ("The first 1,000 wells in
+ *  the file, unsorted and unfiltered…"), which is not the view the shot sets up. Held for 3 s, because the table swaps
  *  back to skeletons when its source changes (network read → the copy on this device). */
 async function rowsSteady(page) {
-    const deadline = Date.now() + 120_000;
+    // Long enough for a fresh browser to download the wells copy.
+    const deadline = Date.now() + 300_000;
     let steadySince = 0;
     while (Date.now() < deadline) {
         const ready = await page.evaluate(
-            (find) => !!new Function(`return (${find})`)()() && !/Updating for this view/.test(document.body.innerText),
+            (find) => !!new Function(`return (${find})`)()() && !/Updating for this view|in the file, unsorted and unfiltered|rows appear when it lands/.test(document.body.innerText),
             findFirstRow.toString(),
         );
         if (!ready) steadySince = 0;
@@ -124,6 +127,14 @@ function findFirstRow() {
     return [...document.querySelectorAll('[class]')].find(
         (el) => [...el.classList].some(isRow) && ![...el.classList].some(isSkeleton),
     ) ?? null;
+}
+
+/** The table's Filters button. The map's control rail has a "Filters" button too (the map's own
+ *  filter card), and both say "Filters"; the table's is the one furthest right. */
+async function tableFilters(page) {
+    const buttons = page.getByRole('button', { name: /^Filters/ });
+    const lefts = await buttons.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().left));
+    return buttons.nth(lefts.indexOf(Math.max(...lefts)));
 }
 
 async function clickFirstRow(page) {
@@ -406,49 +417,71 @@ const SHOTS = [
         },
     },
     {
-        name: 'maps-search',
-        alt: 'Search suggestions for Pioneer, each with its operator, field, county and daily production',
+        name: 'maps-filters-card',
+        alt: 'The Filters card on the right side of the map: well types, wellbore, Any column and the saved filters line',
         auth: true,
         path: `/maps?${MIDLAND}`,
         run: async (page) => {
             await mapSettled(page);
-            await page.getByPlaceholder('Search QuickScout Maps...').fill('Pioneer');
-            await page.waitForTimeout(3_000);
-            return { x: 0, y: 0, width: 900, height: 640 };
+            await openMapControl(page, 'Filters');
+            await page.getByText('Any column', { exact: true }).waitFor({ timeout: 30_000 });
+            await page.mouse.move(1400, 880);
+            await page.waitForTimeout(1_500);
+            return { x: 600, y: 0, width: 840, height: 640 };
+        },
+    },
+    {
+        name: 'maps-search',
+        alt: 'The search panel for Pioneer: the Search row, then matching operators, leases and wells, each lease with its current rate',
+        auth: true,
+        path: `/maps?${MIDLAND}`,
+        run: async (page) => {
+            await mapSettled(page);
+            // The panel opens on a click in the field (focus alone never opens it).
+            const field = page.getByRole('combobox', { name: 'Search the map' });
+            await field.click();
+            await field.pressSequentially('Pioneer', { delay: 40 });
+            // Groups land one after another (operators, leases, wells) once the copies open.
+            await page.getByText('Wells', { exact: true }).first().waitFor({ timeout: 60_000 }).catch(() => {});
+            await page.waitForTimeout(4_000);
+            return { x: 0, y: 0, width: 900, height: VIEWPORT.height };
         },
     },
     {
         name: 'maps-search-results',
-        alt: 'The Pioneer results list with tabs, sorting, facets and export controls',
+        alt: 'The Search tab for Pioneer: the match count, the top match with its production chart, and cards for leases, wells, operators and fields',
         auth: true,
         path: `/maps?${MIDLAND}`,
         run: async (page) => {
             await mapSettled(page);
-            await page.getByPlaceholder('Search QuickScout Maps...').fill('Pioneer');
-            await page.waitForTimeout(3_000);
-            await page.keyboard.press('Enter');
-            await page.getByText('Export CSV').first().waitFor({ timeout: 60_000 });
-            await page.getByRole('button', { name: 'Hide the search summary', exact: true }).click();
-            await page.mouse.move(20, 30);
+            const field = page.getByRole('combobox', { name: 'Search the map' });
+            await field.click();
+            await field.pressSequentially('Pioneer', { delay: 40 });
+            await page.waitForTimeout(1_500);
+            await field.press('Enter');
+            // The heading ("N wells match “pioneer”") and the top match's chart are the slowest parts.
+            await page.getByText(/^Top match/i).first().waitFor({ timeout: 120_000 });
+            await page.getByText(/boe\/d/i).first().waitFor({ timeout: 60_000 }).catch(() => {});
+            // Over the rail, where nothing hovers: a pointer over the map draws a well popup.
+            await page.mouse.move(40, 960);
             await page.waitForTimeout(6_000);
-            return { x: 0, y: 0, width: 480, height: VIEWPORT.height };
         },
     },
     {
         name: 'place-panel',
-        alt: 'The place panel for Midland County: the In this view digest, suggested questions, and the Ask about this view box',
+        alt: 'The place card for Midland County: production in view, suggested questions, and the busiest operators and fields',
         auth: true,
         path: `/maps?${MIDLAND}`,
         run: async (page) => {
             await mapSettled(page);
-            await page.getByRole('button', { name: /Midland County/ }).hover();
-            const ask = page.getByPlaceholder('Ask about this view…');
-            await ask.waitFor({ timeout: 30_000 });
-            // The digest lands after the panel opens, and pushes the ask box down.
-            await page.getByText('In this view').first().waitFor({ timeout: 20_000 }).catch(() => {});
-            await page.waitForTimeout(3_000);
-            const bottom = (await ask.boundingBox()).y + 70;
-            return { x: 380, y: 0, width: 760, height: Math.min(Math.ceil(bottom), VIEWPORT.height) };
+            await page.getByRole('group', { name: 'Map place context' }).getByRole('button').first().click();
+            const card = page.getByRole('dialog', { name: 'This view' });
+            await card.waitFor({ timeout: 30_000 });
+            await card.getByText('Busiest here').waitFor({ timeout: 30_000 }).catch(() => {});
+            await page.waitForTimeout(4_000);
+            const box = await card.boundingBox();
+            const x = Math.max(0, Math.floor(box.x - 420));
+            return { x, y: 0, width: Math.min(VIEWPORT.width - x, Math.ceil(box.x + box.width + 40) - x), height: Math.min(VIEWPORT.height, Math.ceil(box.y + box.height + 30)) };
         },
     },
     {
@@ -505,16 +538,17 @@ const SHOTS = [
 
     {
         name: 'chart-download',
-        alt: "The gear menu on a lease's production chart, ending in Download Image and Download CSV",
+        alt: "The gear menu on a lease's production chart, with Download Image near the bottom",
         auth: true,
         path: `/maps?${SAMPLE_WELL}&api=${SAMPLE_API}`,
         run: async (page) => {
             await openSampleLease(page);
-            // Three unlabelled icons sit at the chart's top right; the gear is the last of them.
+            // Three unlabelled icons sit at the chart's top right; the gear is the last of them. The
+            // drawer is a card floating under the command bar, so they sit about 135px down.
             const icons = await page.evaluate(() =>
                 [...document.querySelectorAll('button')]
                     .map((b) => b.getBoundingClientRect())
-                    .filter((r) => r.top > 60 && r.top < 110 && r.left > 370 && r.left < 470 && r.width < 30)
+                    .filter((r) => r.top > 100 && r.top < 170 && r.left > 370 && r.left < 470 && r.width < 30)
                     .map((r) => [r.left + r.width / 2, r.top + r.height / 2])
                     .sort((a, b) => a[0] - b[0]),
             );
@@ -573,14 +607,14 @@ const SHOTS = [
     },
     {
         name: 'data-filters',
-        alt: 'The Filters popover on the Wells tab, with quick filter pills and their counts',
+        alt: 'The Filters popover on the Wells tab: the Saved line, a blank filter row, and quick filter pills with their counts',
         auth: true,
         path: `/maps?${MIDLAND}`,
         run: async (page) => {
             await mapSettled(page);
             await openTables(page);
             await wellsInViewByCumOil(page);
-            await page.getByRole('button', { name: /^Filters/ }).first().click();
+            await (await tableFilters(page)).click();
             await page.getByText('Include historic wells').waitFor({ timeout: 30_000 });
             await page.waitForTimeout(1_500);
             // "Inside a My Data layer" lists the account's own file names. Without it this is the
@@ -609,7 +643,7 @@ const SHOTS = [
             await openTables(page);
             await wellsInViewByCumOil(page);
             // A horizontal well: every block of the card has something in it.
-            await page.getByRole('button', { name: /^Filters/ }).first().click();
+            await (await tableFilters(page)).click();
             await page.getByRole('button', { name: /horizontal$/ }).first().click();
             await page.keyboard.press('Escape');
             await clickFirstRow(page);
@@ -776,6 +810,9 @@ const SHOTS = [
             // The Spraberry, first in the list, has thousands of leases in view and charts slowly.
             await page.getByText('PARKS (CONSOLIDATED)', { exact: true }).first().click();
             await cardSettled(page, 'RRC field file');
+            // The production chart and its lease list land after the card's facts.
+            await page.getByText(/in view · field/).first().waitFor({ timeout: 120_000 }).catch(() => {});
+            await page.waitForTimeout(3_000);
         },
     },
 

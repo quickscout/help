@@ -11,13 +11,13 @@ description: "Filter the tables, and have the map show only what matches."
     It's the first button above the table. A badge shows how many filters are on.
 
     <Frame>
-      <img src="/images/data-filters.webp" alt="The Filters popover on the Wells tab, with quick filter pills and their counts" />
+      <img src="/images/data-filters.webp" alt="The Filters popover on the Wells tab: the Saved line, a blank filter row, and quick filter pills with their counts" />
     </Frame>
   </Step>
   <Step title="Use a quick filter, or build your own">
     **Quick** pills are one-click filters, with a count of how many rows each would match. For example, on Wells: *horizontal*, *vertical*, *producing*, *has W-10*, *has survey*.
 
-    For anything else, click **+ Add filter**. Choose a **Column**, then an operator (is, between, contains…) and a value. Common values appear as chips you can click. While you edit, the popover shows how many rows would match.
+    For anything else, use the blank row at the top (once a filter is on, **+ Add filter** adds another). Choose a **Column**, then an operator (is, between, contains…) and a value. Common values appear as chips you can click. While you edit, the popover shows how many rows would match.
   </Step>
   <Step title="Edit or remove">
     Every filter stays in the list, where you can change it or remove it with **×**. **Clear all** removes them all.
@@ -25,6 +25,17 @@ description: "Filter the tables, and have the map show only what matches."
 </Steps>
 
 The tab's search box counts as a filter too. It lights the dot on the tab, and the map follows it.
+
+### Saved filters
+
+Save a set of filters to switch back to it later. The **Saved** line sits at the top of the Filters popover.
+
+- Build your filters, then click **+ Save as…**, name it, and press <kbd>Enter</kbd>.
+- Click a saved filter to apply it. The one in effect is highlighted.
+- Change a filter you loaded, and it gets a dot: **Update “‹name›”** saves the change, **Save as new…** keeps both.
+- Hover a saved filter for its pencil (**Rename**) and **×** (**Delete**). **Undo** brings back a deleted one.
+
+A saved filter belongs to one tab, and keeps that tab's search, filters and hidden-row pills. It doesn't keep **Scope** or the sort. Saved filters are yours: they follow your account to every project and device, and other people don't see them. You need to be signed in to save one.
 
 ### Rows that are hidden until you ask
 
@@ -43,7 +54,7 @@ Some rows are left out by default. A pill with a **+** count brings them back:
 On Wells, **Inside a My Data layer** keeps only wells inside one of your [uploaded or drawn areas](/maps/my-data). Choose **Wellbore** to match any part of the well path, or **Surface hole** to match the surface location. It appears once you have an area layer in My Data.
 
 {/* enterprise-hold:
-With an Enterprise [project](/enterprise/projects) active, the project pill in the top bar has **Only this project's wells**. While that's on, the Filters list has a *project is ‹name›* row. Remove it with **×**, or choose **Show all wells again** on the pill.
+With an Enterprise [project](/enterprise/projects) active, the project pill in the command bar has **Only this project's wells**. While that's on, the Filters list has a *project is ‹name›* row. Remove it with **×**, or choose **Show all wells again** on the pill.
 */}
 
 <Tip>

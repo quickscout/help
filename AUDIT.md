@@ -1,8 +1,8 @@
-# Help coverage audit — 2026-10-02
+# Help coverage audit — 2026-10-03
 
 Maintainer record; excluded from publishing by `.mintignore`.
 
-Source: sibling `strawn` checkout at `0e2ad0d6`, including its uncommitted Maps work. Existing app changes were preserved. The review compares primary workflows, on-screen labels, access, persistence and limits with implementation; it does not certify every backend response or deployed behavior.
+Source: sibling `strawn` checkout at `69cf7f04` (2026-10-03 search and chrome pass; the 2026-10-02 audit used `0e2ad0d6`). The review compares primary workflows, on-screen labels, access, persistence and limits with implementation; it does not certify every backend response or deployed behavior.
 
 ## Source paths
 
@@ -22,19 +22,19 @@ Source references are in `strawn`, not this help repository:
 | `get-started/sign-in` | MapsShell.tsx; controls/dropdowns/settings-dropdown.tsx | Updated: billing fallback for accounts without a subscription. |
 | `get-started/plans` | src/lib/auth/entitlements.ts; components/auth/PlanSelection.tsx; components/auth/SubscriptionOffer.tsx | Updated: distinguish signed-in tables from paid drawers; first-time trial and billing recovery. |
 | `get-started/billing` | A/billing/page.tsx; components/auth/BillingStatePanel.tsx; src/lib/stripe/rules.ts | Added: current subscription states and recovery actions. |
-| `maps/tour` | MapsShell.tsx; controls/main.control.tsx; page.tsx | Updated: click controls, Map style, printing and timeline links. |
-| `maps/search` | components/drawer-contexts/search/SearchLedger.tsx; search/local/queryTokens.ts; data-table/datasets/tabs.ts | Updated: facets, scope widening, local/server fallback and temporary Search table. |
-| `maps/layers` | controls/dropdowns/layer-dropdown.tsx; controls/dropdowns/settings-dropdown.tsx; config/ | Updated: click behavior, timeline, label editor; remove brittle catalog counts. |
+| `maps/tour` | MapsShell.tsx; controls/main.control.tsx; controls/command-bar/CommandBar.tsx; controls/DrawerNav.tsx; controls/basemap/BasemapThumb.tsx; map-controls/MapActionControls.tsx | Updated 10-03: command bar replaces the top bar (no production counter, no search pills); floating drawer card ‹ › ✕ and ⌘[ ⌘]; Map style moved to the bottom-left thumbnail; Ask capsule; draw tools. |
+| `maps/search` | controls/search.control.tsx; controls/command-bar/; controls/components/map-context/SearchCard.tsx; data-table/datasets/search/; components/drawer-contexts/search/identifiers.ts; search/local/queryTokens.ts | Rewritten 10-03: search panel in the drawer column (Back to…), Texas/county scope, lit Search row, ↵ / ⇧↵ / ⌘↵, identifiers, plain-word readings, live-search bar row, Search tab overview (top match, cards), server fallback. Advanced Search retired: ⌘⇧K opens Filters; old anchors `#search-pills`, `#advanced-search`, `#search-results-in-the-tables` kept as span ids. |
+| `maps/layers` | controls/dropdowns/layer-dropdown.tsx; controls/dropdowns/filter-dropdown.tsx; controls/dropdowns/settings-dropdown.tsx; config/ | Updated 10-03: Map style thumbnail; Filters card gains Any column, Clear and ⌘⇧K. |
 | `maps/drilling-timeline` | timeline/DrillingTimeline.tsx; timeline/timelineStore.ts; timeline/timelineLabels.ts | Added: replay, labels, estimated/undated records and saved choices. |
 | `maps/well-labels` | controls/well-style/WellStyleModal.tsx; workspace/wellLabelsPref.ts; docs/maps-well-labels.md | Added: presets, fields, placement, Apply and lease-rate interpretation. |
 | `maps/printing` | print/PrintStudio.tsx; print/printModel.ts; docs/maps-print-studio.md | Added: sheet setup, scale, output formats, marks and fit rules. |
 | `maps/records` | components/drawer-contexts/map-item/; components/drawer-contexts/land-abstract/; components/drawer-contexts/uic/ | Reviewed: record navigation, production downloads, logs, UIC and land. |
-| `maps/ask-the-map` | controls/components/map-context/MapContextPill.tsx; controls/components/map-context/PlacePanel.tsx | Reviewed: hover/click place panel is still distinct from click-only rail controls. |
+| `maps/ask-the-map` | controls/components/map-context/MapContextPill.tsx; controls/components/map-context/PlaceHere.tsx | Updated 10-03: place card opens on click of 📍 (no hover); Busiest here; Ask from the rail capsule and from search. Digest renders only when the view has items. |
 | `maps/alerts` | components/drawer-contexts/alerts/; A/alerts/ | Reviewed: three-step editor, hourly checks, replay and source-specific filters. |
 | `maps/my-data` | components/drawer-contexts/my-data/; my-data/ingest/formats.ts | Reviewed: import formats, placement, drawing and layer downloads. |
 | `maps/data-panel` | data-table/components/DataTablePanel.tsx; data-table/components/DataTableWorkspace.tsx; data-table/datasets/tabs.ts | Updated: temporary Search tab, two row types and per-project strip persistence. |
 | `maps/operators-fields` | data-table/datasets/operators/; data-table/datasets/fields/; docs/maps-fields-tab.md | Reviewed: in-view semantics, production basis, field coverage and local-copy dependencies. |
-| `maps/filters` | data-table/engine/useMapFollow.ts; layers/well-isolation.ts; layers/lease-isolation.ts | Updated: Search table; reviewed 100,000-match map-follow limit and single active-tab behavior. |
+| `maps/filters` | data-table/components/SavedFilters.tsx; data-table/engine/savedFilters.ts; data-table/engine/useMapFollow.ts; layers/well-isolation.ts; layers/lease-isolation.ts | Updated: Search table; reviewed 100,000-match map-follow limit and single active-tab behavior. 10-03: Saved filters. |
 | `maps/row-cards` | data-table/inspector/RowInspector.tsx; data-table/inspector/production/; src/lib/economics/declineOverrideStore.ts | Updated: expanded decline workbench, Apply and session lifetime. |
 | `maps/charts` | data-table/components/AnalysisSlot.tsx; data-table/datasets/registry.ts; data-table/engine/chart/ | Reviewed: recipes, chart selection, type curves, midstream and comparisons. |
 | `maps/offline` | local-data/registry.ts; local-data/rowState.ts; data-table/components/SnapshotWarmers.tsx | Updated: map/download priority, waiting/stalled states, version refresh and offline limits. |
@@ -74,11 +74,12 @@ Source references are in `strawn`, not this help repository:
 - `npm run check`: Mintlify found no broken links.
 - `node --check screenshots/shots.mjs`: capture script syntax passed.
 - Existing Mintlify preview: all 24 new or edited guides returned HTTP 200 and rendered their titles. Printing, labels, timeline, search, billing and datasets were checked at 1440 px and 390 px with no broken visible images or page overflow; desktop and phone screenshots were visually reviewed.
-- Seven refreshed local-app images were visually reviewed: Maps overview, Layers, heatmap, search results, Print Studio, well labels and drilling timeline. These captures verify the pictured controls; the coverage table also includes source-only reviews.
+- 2026-10-03: every non-Enterprise screenshot was re-captured against the local app at `69cf7f04` and visually reviewed (command bar, floating drawer card, control rail). New: `maps-filters-card`. Shot script fixes: search/place-card flows, the table's Filters button picked by position (the rail has one too), chart icons lower under the bar, and table shots wait past the wells file's first-rows stand-in. Enterprise shots were not re-run (they switch the account's active project).
+- 2026-10-02: seven refreshed local-app images were visually reviewed: Maps overview, Layers, heatmap, search results, Print Studio, well labels and drilling timeline. These captures verify the pictured controls; the coverage table also includes source-only reviews.
 
 ## Publication and remaining checks
 
-1. Confirm checkout-only features are deployed before publishing their instructions: click-only control rail, Print Studio, label editor, drilling timeline and current Search-table behavior.
+1. Confirm checkout-only features are deployed before publishing their instructions. As of 2026-10-03 strawn `main` is 7 commits ahead of `origin` (deployed = `0e2ad0d6`): the command bar, search panel, Search tab overview, place card, control rail, Map style thumbnail, saved filters and retired Advanced Search are all undeployed. Push this repo only after those ship.
 2. Billing state actions are checked against implementation. The available screenshot account cannot exercise every first-time, failed-payment or lapsed-subscriber state; no real payment or cancellation was submitted.
 3. Backend contracts live in a separate repository. Delivery timing, current data freshness, valuations and third-party records still depend on the service; the guides avoid stronger guarantees than the UI supports.
 4. Hidden log-analysis and deal-curation screenshot markers still need suitable demo fixtures. Do not create user data merely to replace these markers.
