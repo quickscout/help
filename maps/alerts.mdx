@@ -1,82 +1,159 @@
 ---
 title: "Alerts in Maps"
 sidebarTitle: "Alerts"
-description: "Watch an area for new permits, completions or rig activity, get an email or text when one lands, and see what each alert found on the map."
+description: "Get an email or a text when a permit, completion or rig activity shows up in a place, or on an operator, field, lease or well, and see what each alert found on the map."
 ---
 
-An alert watches an area and tells you when something new happens inside it: a permit is filed or approved, a well is completed, or a rig shows up. It checks every hour, and sends you an email, a text, or both.
+An alert tells you when something new is filed: a permit is applied for or issued, a completion report comes in, or satellite radar sees equipment arrive on a well site. You choose what you want to hear about, and where or who it's about. We check every hour from 6:30 am to 5:30 pm Central, and tell you by email, by text, or both.
 
 Alerts are part of the [paid plans](/get-started/plans). Click **Alerts** at the bottom of the left rail, just above **Profile**, to open the Alerts drawer. Without a plan, the drawer offers **View plans** instead.
 
 <Frame>
-  <img src="/images/alerts-drawer.webp" alt="The Alerts drawer: each alert with its source, recent matches and Active switch, one expanded with its run history and matches" />
+  <img src="/images/alerts-drawer.webp" alt="The Alerts drawer: each alert with its type, recent matches and Active switch, one expanded with its check history and matches" />
 </Frame>
 
-## Create an alert
+## Alert from a record
 
-Click **New alert** at the top of the drawer, or under *No alerts yet* if you have none.
-
-The editor takes three steps: **Area**, **Source** and **Review**. **Continue** moves on once a step is complete, and **Back** goes back. To leave without saving, click **Alerts** at the top left, the **✕** at the top right, or **Cancel** on the first step.
-
-You can also start an alert from a selected area: on its card, **Alert me about new activity here** opens the editor with that area already drawn and named after the card. See [Select an area](/maps/selection).
+The quickest way to set an alert is from the record you care about. The cards for a county, operator, field, lease, well and [selected area](/maps/selection) have an **Alert** button.
 
 <Steps>
-  <Step title="Area: where should this alert watch?">
-    Add one or more areas. They're watched together as one.
-
-    - **Draw on map**: click to place each corner, then double-click to close the shape. To change a shape afterwards, click it on the map and drag its corners.
-    - **Use current map view**: adds the part of the map you can see, a little inside its edges, as an area named *Map view*. Frame the map first.
-    - **Or whole counties**: search for counties and pick them. Use this instead of drawing to watch a county line exactly.
-
-    While you draw, **Cancel** stops drawing and keeps nothing.
-
-    Each area is listed with its name (*Area 1*, *Map view*) and its corners. **Remove** takes it off. Underneath, QuickScout estimates how many active wells the area holds.
-
-    <Frame>
-      <img src="/images/alert-area.webp" alt="The Area step: Draw on map, Use current map view and whole counties, with the map view added" />
-    </Frame>
+  <Step title="Click Alert on the card">
+    A panel opens, titled *Alert me about ‹name›*, listing what this record can tell you about. **Last 12 months** shows how many of each there were.
   </Step>
-  <Step title="Source: what should it watch for?">
-    Pick one source:
-
-    | Source | Watches for | Filters |
-    |---|---|---|
-    | **TX Permit Reports** | New drilling permits, once the RRC approves them. | **Well Type** (Oil Well, Gas Well, Injection…) and **Completion Type** (Drill, Recompletion, Re-enter…) |
-    | **TX Pending Permit Reports** | Permit applications that have been filed but not yet approved: the earliest sign of a new well. | **Well Type** (Horizontal, Vertical, Directional, and their sidetracks) |
-    | **TX Completion Reports** | New well completions, including initial potential tests. | **Purpose of Filing** (Initial Potential, Retest, reclassifications…), **Completion Type** (New Well, Deepening, Sidetrack…) and **Wellbore Profile** (Horizontal, Vertical…) |
-    | **TX Rig Watch** | What satellite radar sees at permitted sites: equipment arriving, drilling reported, equipment gone. Covers the counties [Rig Watch](/maps/layers#wells) watches. | **Event** (`arrived`, `drilling_reported`, `gone`), **Only when the records back it** (`drilling`, `drilling_likely`, `frac`) and **Minimum new metal (pixels)** |
-
-    Click the chips under a filter to choose values. A filter with nothing chosen *matches all*; **Clear** empties it.
-
-    Below the filters, a line checks your choices against filings already on record: *These filters match existing filings*, or *No filings match these filters yet*. The second isn't an error; it means nothing like that has been filed in the past, so the alert may be quiet.
-
-    <Frame>
-      <img src="/images/alert-source.webp" alt="The Source step: the four sources, and the Purpose of Filing, Completion Type and Wellbore Profile filters for completions" />
-    </Frame>
+  <Step title="Tick what you want to hear about">
+    **New permits** and **Completions** start ticked.
   </Step>
-  <Step title="Review: name it and choose where it goes">
-    - **Alert name**: starts as the source's name, such as *Completions*. Give it a name you'll recognize in your inbox, like *Martin County horizontal permits*.
-    - **Deliver to**: **Email** (on at first), **SMS**, or both. Texts go to the phone number on your QuickScout account.
-
-    The summary shows the **Source**, **Where** (for example *1 area · 3 counties*), how many **Filters** are set, and **Checks**: **Hourly**.
-
-    Click **Create alert**. The alert starts checking right away, and its first run lands within the hour.
-
-    <Frame>
-      <img src="/images/alert-review.webp" alt="The Review step: the alert name, Email and SMS, and the summary ending in Checks: Hourly" />
-    </Frame>
+  <Step title="Choose how often, and how">
+    **How often** and **Tell me by** work as they do [in the form](#how-should-we-tell-you).
+  </Step>
+  <Step title="Click Create alert">
+    With two types ticked it reads **Create 2 alerts**: each is its own alert and its own email. **Undo** shows for a few seconds afterwards.
   </Step>
 </Steps>
 
+<Frame>
+  <img src="/images/alert-panel.webp" alt="The Alert panel on Jones County’s card: each type with its count in the last 12 months, How often, Tell me by, the sentence, Create 2 alerts and More options" />
+</Frame>
+
+**More options** opens the [whole form](#create-an-alert) with your choices in it, to add a place or a filter.
+
+Each kind of record offers what it can answer:
+
+| Card | Offers | Matches |
+|---|---|---|
+| County, or a selected area | All four types | Filings in that place. |
+| Operator | All four types | Anywhere in Texas. **More options** can narrow it to a place. |
+| Field | **New permits**, **Completions** | By field number. |
+| Lease | **Completions**, **New permits**, **Pending permits** | Completions go by lease number. A permit has no lease number until the lease exists, so permits match the lease's name in the counties it lies in. One under the same name in another county won't be told. |
+| Well, or wells you selected one by one | **New permits**, **Completions**, **Pending permits** | By API. A new permit on an API means a re-entry or a recompletion. |
+
+The button is off when it can't be used, and hovering it says why: you need to sign in or have a paid plan, or a well you added yourself has no RRC number to file against.
+
+**Alert** is also in a well's popup and under **Land & owners**. Those open the form with the well or survey tract filled in. On a selected area's **Activity** block, **Alert me about new activity here** does the same for the area.
+
+If you already have an alert on the record, the button is lit, and pressing it lists them as *Your alerts on ‹name›*, each with its **Active** switch and **Edit**. **Add another** sets one more type, and **All alerts** opens the drawer. The button never deletes anything.
+
+## Create an alert
+
+Click **New alert** at the top of the drawer. If you have no alerts yet, it's also under *No alerts yet*.
+
+The form is one screen with three questions. Filters and delivery details stay folded until you open them, and a section with something set in it opens by itself. To leave without saving, click **‹ Alerts** at the top or **Cancel** at the foot.
+
+<Frame>
+  <img src="/images/alert-form.webp" alt="The alert form: New permits and Completions ticked, Jones County picked and outlined on the map, As they come in by email, and the sentence at the foot above Create 2 alerts" />
+</Frame>
+
+### What do you want to hear about?
+
+Tick one or more. Each type you tick becomes its own alert, with its own email.
+
+| Type | Tells you when |
+|---|---|
+| **New permits** | The RRC issued a permit to drill, re-enter or recomplete. |
+| **Completions** | A completion report was filed for a well. |
+| **Pending permits** | A permit was applied for and isn't approved yet: the earliest sign of a new well. |
+| **Rig activity** | Satellite radar saw equipment arrive on, or leave, a well site. Covers the counties [Rig Watch](/maps/layers#wells) watches. |
+
+A type that can't answer what you've picked is greyed out and says why, such as *Pending permits can't be told by a field number.*
+
 <Tip>
-  One alert watches one source. To follow a well from application to completion, create an alert for each source over the same area: **TX Pending Permit Reports**, **TX Permit Reports**, **TX Rig Watch** and **TX Completion Reports**.
+  To follow a well from application to completion, tick all four over the same place.
 </Tip>
+
+### Where, or who?
+
+Add a place, someone or something to follow, or both.
+
+Search the box for a county, district, operator, field, lease or well. Click into it with nothing typed to choose an RRC district or **All of Texas**. For a place without a name, use the buttons below it:
+
+| Button | Adds |
+|---|---|
+| **Draw on the map** | A shape. Click the map to drop corners, then double-click to finish. To change it afterwards, drag its corners on the map. **Cancel** stops drawing and keeps nothing. |
+| **Pick survey tracts** | Tracts. Click one to add it and again to drop it, then click **Done**. The survey lines show when you zoom in closer, and **Zoom in** takes you there. |
+| **This map view** | The part of the map you can see, a little inside its edges, named *Map view*. Frame the map first. |
+| **All of Texas** | Every county. |
+| **A basin or a file** | Opens **Add from library**, with **Counties**, **Basins**, **Districts** and **File**. A file can be GeoJSON, GeoPackage, KML, FlatGeobuf or a shapefile. |
+
+{/* enterprise-hold: a row for the table above, after "A basin or a file".
+    | **Your areas** | The open project's areas (Enterprise, when the project has areas). |
+*/}
+
+What you add shows as a chip, and its **✕** takes it off. Here's how they combine:
+
+- **Places add up.** A county and a drawn shape mean either one.
+- **An operator, field, lease or well narrows the places.** An operator and a county means that operator, in that county. Any of them also works alone, with no place at all.
+
+On a phone, **Draw on the map**, **Pick survey tracts** and **A basin or a file** aren't offered. Use a computer or an iPad for those.
+
+### Narrow further
+
+**Narrow further** opens every filter the ticked types have, in the RRC's own words. A filter you leave empty matches everything.
+
+| Type | Filters |
+|---|---|
+| **New permits** | **Well Type**, **Completion Type** (Drill, Recompletion, Re-enter…), **Permit date**, **Total Depth (Ft)**, **Lateral Length (Ft)** and **Operator name contains** |
+| **Completions** | **Purpose of Filing** (Initial Potential, Retest, reclassifications…), **Completion Type** (New Well, Deepening, Sidetrack…), **Wellbore Profile** (Horizontal, Vertical…), **Completion date**, **Lateral Length**, **Daily Oil (Bbls/d)**, **Daily Gas (Mcf/d)**, **Daily Water (Bbls/d)** and **Forms in the filing** |
+| **Pending permits** | **Well Type** (Horizontal, Vertical, Directional, and their sidetracks), **Filing Purpose**, **Filed date** and **Total Depth (Ft)** |
+| **Rig activity** | **Event** (`arrived`, `drilling_reported`, `gone`), **Only when the records back it** (`drilling`, `drilling_likely`, `frac`) and **Minimum new metal (pixels)** |
+
+**Forms in the filing** matches any of the forms you pick. **P-4** also finds *P-4 Data* and *P-4(2)*, and **G-1** doesn't find **G-10**.
+
+<Frame>
+  <img src="/images/alert-narrow.webp" alt="Narrow further open for Completions: Purpose of Filing, Completion Type, Wellbore Profile, the date and rate filters and Forms in the filing, with Initial Potential and Horizontal chosen" />
+</Frame>
+
+### How should we tell you?
+
+| Choice | What you get |
+|---|---|
+| **As they come in** | We check every hour, 6:30 am to 5:30 pm Central, and email you when something new is there. |
+| **Every morning** | One email about 6:30 am Central for each alert, on days something new was filed. |
+| **Monday mornings** | One email Monday about 6:30 am Central for each alert, if something new was filed. |
+
+Tick **Email**, **Text**, or both. **Text** shows the number on your account. If there isn't one, type it under **Mobile number**. We keep one number for all your alerts, and texts wait until 8 am if something comes in overnight.
+
+**Delivery** opens the rest:
+
+- **Monthly**, or **Choose days and hours**: pick the **Days**, and a time under **At the check of (Central)**.
+- **Only tell me when at least this many are new**: starts at 1.
+- **Email**: **Full report** (a summary, a map and every filing), **Summary** (totals and charts) or **Short** (a line or two).
+- **Name**: an alert is named for you after what it watches, such as *New permits in Jones County*. Type your own here. This only shows with one type ticked.
+
+<Frame>
+  <img src="/images/alert-delivery.webp" alt="How should we tell you: As they come in, Every morning and Monday mornings, Email and Text ticks, and Delivery open with other schedules, a minimum count, the email format and a name" />
+</Frame>
+
+### Check the sentence, then create
+
+The foot of the form says what you're about to get in one sentence: *New permits in Jones County, as they come in, by email.* Under it is how many there were in the last 12 months, and the newest few filings. When **As they come in** would be a lot of email, the form says so and offers **Use every morning**.
+
+Click **Create alert**, or **Create 2 alerts** with two types ticked. We start checking within the hour. Your first email comes when something new is filed: what's already on file isn't sent. **Undo** shows for a few seconds afterwards.
 
 ## Your alerts
 
 The drawer lists every alert, most recently active first. Each row shows:
 
-- Its name, and a tag for its source, such as **Permits** or **Completions**.
+- Its name, and a tag for what it reads, such as **Permits** or **Completions**.
 - A 14-day chart of matches, how many it has found in the last 30 days, and when it last found something.
 - The **Active** switch. Switch it off to pause the alert: no more emails or texts until you switch it back on. A paused alert is dimmed and marked **PAUSED**.
 
@@ -86,9 +163,9 @@ A number on the **Alerts** button in the rail counts the alerts that have found 
 
 ### See what an alert found
 
-Click an alert to expand it. The map outlines its area in blue and flies there.
+Click an alert to expand it. If it watches a shape, the map outlines it in blue and flies there.
 
-- **Run history** has a bar for each of the last 30 runs, sized by how many matches it found. Click a bar to see that run. A run is **Delivered**, found **No matches**, or **Failed**.
+- **Check history** has a bar for each of the last 30 runs, sized by how many matches it found. Click a bar to see that run. A run is **Delivered**, found **No matches**, or **Failed**.
 - The run's matches are listed underneath: the lease and well number, API, operator and county. Click a match to open the well's [card](/maps/records).
 - **Plot *N*** puts the run's matches on the map as blue pins and frames them. Hover a pin for the well, or click it to open the well's card. The button then reads **Zoom to**, which frames them again after you've moved the map.
 - When a run found more than eight wells, click **View all**.
@@ -107,47 +184,55 @@ Replay shows the results stored when the alert ran. It doesn't run the search ag
 
 On an expanded alert, the buttons under its matches:
 
-- **Edit** reopens the three steps. You can change the name, areas, counties, filters and where it's delivered. The **source** can't be changed; create a new alert for that.
-- **Zoom to** frames the alert's area. It's greyed out when there's no area to zoom to.
+- **Edit** opens the form with the alert filled in. Change its places, filters, delivery or name, then click **Save changes**. If you add a place, you're told only about what's new from then on, not what's already on file there.
+- **Zoom to** frames the alert's shape. It's greyed out when the alert goes by county, district or operator and has no shape.
 - **Duplicate** and **Delete**.
 
-**Duplicate** makes an active copy named *‹name› (copy)*. Change its area or filters: two identical alerts aren't allowed.
+An alert can't change type, because that would send you everything already on file. To hear about something else, create a new alert.
 
-**Delete** asks first, then gives you about six seconds to **Undo**. The alert's run history is kept.
+**Duplicate** tries to make an active copy named *‹name› (copy)*. Two identical alerts aren't allowed, so if the settings match you'll see *An identical alert already exists — tweak a filter and try again.* To watch something similar, use **New alert**.
+
+**Delete** asks first, then gives you about six seconds to **Undo**. The alert's run history is kept. **Edit** has its own **Delete** at the foot of the form, which asks *Delete this alert?* with **Keep it** to back out, and has no **Undo**.
 
 ## Limits
 
 - Up to **50** active alerts. Pause or delete one to make room.
-- Alerts check **hourly**. That can't be changed.
-- Operator transfers (P-4s), frac jobs and satellite pads aren't sources yet.
+- We check at half past each hour from 6:30 am to 5:30 pm Central, every day.
+- Each alert sends its own email. There's no combined digest.
+- Operator transfers (P-4s), frac jobs and satellite pads aren't types of alert yet.
 
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="Continue is greyed out">
-    Each step needs something before you can move on:
+  <Accordion title="Create alert is greyed out">
+    The line above the button says what's missing:
 
-    - **Area**: at least one area or county.
-    - **Source**: a source.
-    - **Review**: a name (*Give this alert a name*) and at least one of **Email** or **SMS** (*Pick at least one way to be notified*).
+    - *Tick what you want to hear about.*
+    - *Pick a place, an operator, a field or a well.*
+    - *Choose email or text.*
+
+    With **Text** ticked and no number on your account, it also needs a **Mobile number**.
   </Accordion>
-  <Accordion title="Use current map view did nothing">
-    The visible part of the map is too narrow, usually because the data tables are wide open. Close or narrow the tables, then try again.
+  <Accordion title="You already have this alert">
+    One of the types you ticked matches an alert you already have, so nothing can be created until that changes, even with other types ticked. **Open it** takes you to that alert. Otherwise untick that type, or change the place or a filter.
   </Accordion>
-  <Accordion title="An identical alert already exists">
-    You already have an alert with the same source, area and filters. Change a filter or the area.
+  <Accordion title="One alert saved and another didn't">
+    The form says which is set and which wasn't saved. **Try again** only tries the ones that didn't land, so nothing is made twice.
   </Accordion>
-  <Accordion title="Active-alert limit reached (50)">
-    Pause or delete an alert you no longer need, then save again.
+  <Accordion title="You have the most alerts one account can hold">
+    The limit is 50 active alerts, and **Duplicate** words it as *Active-alert limit reached (50)*. Pause or delete an alert you no longer need, then save again.
   </Accordion>
   <Accordion title="My alert hasn't sent anything">
-    - Expand it and look at **Run history**. *No runs yet* means the first run is still due, within the hour.
-    - Runs marked **No matches** mean nothing new was filed in the area. Widen the area, or clear a filter.
+    - Expand it and look at **Check history**. *No runs yet* means the first check is still due, within the hour.
+    - Runs marked **No matches** mean nothing new was filed. Widen the area, or clear a filter.
+    - An alert only tells you about new filings. What was on file when you set it isn't sent.
+    - **Every morning** and **Monday mornings** only send at their time.
+    - Under **Delivery**, check **Only tell me when at least this many are new**.
     - Check it isn't **PAUSED**.
-    - Texts go to the phone number on your QuickScout account. If none is on file, choose **Email**.
+    - Texts go to the one number on your QuickScout account, and wait until 8 am if something comes in overnight.
   </Accordion>
-  <Accordion title="Editing an old alert shows no area">
-    Some older alerts were saved in a format the editor can't redraw. Draw the area again, then **Save changes**.
+  <Accordion title="An older alert says it has both a county and a drawn area">
+    Alerts saved before places added up only tell you about filings inside both, and the form says so. Nothing changes unless you change it. **Tell me about either place** switches it to the way places work now.
   </Accordion>
 </AccordionGroup>
 

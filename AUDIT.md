@@ -1,6 +1,22 @@
-# Help coverage audit — 2026-10-15, brought forward 2026-10-22 and 2026-10-24
+# Help coverage audit — 2026-10-15, brought forward 2026-10-22, 2026-10-24 and 2026-11-02
 
 Maintainer record. It is excluded from publishing by `.mintignore`.
+
+## 2026-11-02: `maps/alerts`
+
+**What was checked.** Production strawn `5aeed82` (from `/api/health`), against `maps/alerts` as written for the old three-step editor. `3ded8220` (2026-10-31) replaced that editor with one form on every surface, and an **Alert** button on the record cards. The page is rewritten; strawn's rules are in its `docs/alerts.md`.
+
+- **Filter labels are the server's.** They aren't in strawn's source, so `maps/alerts` lists what the form showed on 2026-11-02, opened on :3004 with writes blocked. That form reads a local prod-data-api (`127.0.0.1:8000`), not `api.quickscout.io`, and templates come from the metrics DB. Its `METRICS_DB_NAME` is `next_postgres` on a private VPC host, and the account's alerts show scheduler runs from that day, so this reads as production's data, though it wasn't confirmed through the deployed API. **Forms in the filing**, the date labels and Rig activity by county then show rig's migration 021 is applied. Re-read them if a template changes.
+- **The record table is from the code.** The **Alert** panel was opened on a county's card only. What fields, leases and wells offer comes from `lib/alerts/subject.ts`.
+- **Duplicate looks broken, and the page says what it does.** It posts the same template, filters, `min_results`, frequency and preferences under a new name (`toAddRequest`), and `unique_task_configuration` (prod-data-api 238) ignores the name, so an alert with preferences gets a 409 and *An identical alert already exists*. Read from the code. It wasn't run, because that writes to the account. The page should change if the button does.
+- **Not updated, and now out of step:** `tools/alerts` still describes the three steps, **Run history**, and the Table and Cards views, and `alerts-page.webp` shows the old page. `/alerts` was rebuilt by the same commit.
+
+**Screenshots, 2026-11-02.** Against :3004 at strawn `8a52528b` plus its working tree. Between that tree and `5aeed82`, alert code differs only in what `useAlertUser` returns.
+
+- `alert-form`, `alert-narrow`, `alert-delivery` and `alert-panel` replace `alert-area`, `alert-source` and `alert-review`. `alerts-drawer` is re-shot.
+- **The account's mobile number** shows in the form as **Text to ‹number›**. `maskPhones` swaps it for the form's example number and throws if one remains.
+- **The projects an alert belongs to** come off its row in the drawer (`hideAlertProjects`).
+- Every frame was looked at. The only non-GET requests were reads, including `user/notifications/preview`, and nothing was saved.
 
 ## 2026-10-24 pass
 
@@ -174,7 +190,7 @@ Source references are in `strawn`, not in this repository:
 | `maps/production-panel` | components/drawer-contexts/production/ProductionDrawer.tsx | Added. |
 | `maps/operator-field-layers` | components/drawer-contexts/polygon-layers/; docs/maps-polygon-layers.md | Added: Operators and Fields panels, colours, stripes, Add top 5, field measures. |
 | `maps/plats` | plats/; data-table/inspector/report/documentsModel.ts | Added: **Add plat**, the Documents Map column, Layers → W-1 plats. |
-| `maps/alerts` | components/drawer-contexts/alerts/ | Reviewed: a well now opens as its card. |
+| `maps/alerts` | A/alerts/composer/ (AlertComposer, AlertQuickPanel, WherePicker, NarrowFields); lib/alerts/; components/drawer-contexts/alerts/; data-table/inspector/verbs/AlertVerb.tsx | Rewritten for the one form and the **Alert** button (2026-11-02). Filter labels read from the live form. |
 | `maps/records` | utils/open-map-record.ts; data-table/inspector/ (SoloInspector, PendingCardView, inspectorStore, cardSide, synopsis/); datasets/*/inspector/ | Rewritten as "Record cards": the left drawer's record views were deleted 2026-10-06. Covers card side, Back/Esc, the placeholder, Synopsis, each card's verbs, what still opens in drawers, land. Anchors kept. |
 | `maps/compare` | compare/; data-table/compare/; docs/maps-compare.md | Added. |
 | `maps/my-wells` | my-wells/ (WellEditor, BulkWellEditor, import/ImportWizard); components/drawer-contexts/my-data/MyWellsHome.tsx; data-table/datasets/wells/ownRows.ts | Added: editor, Add a well, scout-ticket import, grid, export, entry points. |
@@ -221,7 +237,7 @@ Source references are in `strawn`, not in this repository:
 
 ## Screenshots
 
-There are 146 images, all referenced from a page. The drawer-era images were removed: `well-drawer`, `lease-drawer`, `lease-export-production`, `operator-wells-export` and `offline-copies`.
+There are 157 images. Three aren't referenced from any page: `card-production-more`, `chart-download` and `lease-card-claim`. The drawer-era images were removed: `well-drawer`, `lease-drawer`, `lease-export-production`, `operator-wells-export` and `offline-copies`.
 
 **How they were captured.** Against `next dev` on :3004, signed in as the shots account (Enterprise tier, no project).
 

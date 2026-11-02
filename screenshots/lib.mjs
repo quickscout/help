@@ -248,15 +248,28 @@ export async function openAlerts(page) {
     await page.waitForTimeout(3_000);
 }
 
-/** The new-alert editor, on its Area step with the map view added. Nothing is saved: the shots
- *  never press Create alert. */
-export async function newAlertWithMapView(page) {
+/** The alert form, new, with Jones County picked and these types ticked (New permits starts ticked).
+ *  Nothing is saved: the shots never press Create alert. Jones, because the account has no alert
+ *  there, so the form doesn't stop on "You already have this alert". */
+export async function newAlertForm(page, types = ['New permits']) {
     await openAlerts(page);
     await page.getByRole('button', { name: /^New( alert)?$/ }).first().click();
-    await page.getByText('Where should this alert watch?').waitFor({ timeout: 30_000 });
-    await page.getByRole('button', { name: 'Use current map view' }).click();
-    await page.waitForTimeout(4_000);
+    await page.getByText('What do you want to hear about?').waitFor({ timeout: 30_000 });
+    // The form's own example: the map's place control can read Jones County too.
+    await page.getByText('For example').locator('..').getByRole('button', { name: 'Jones County' }).click();
+    for (const type of ['New permits', 'Completions', 'Pending permits', 'Rig activity']) {
+        const tick = page.getByRole('checkbox', { name: new RegExp(`^${type}`) });
+        if ((await tick.isChecked()) !== types.includes(type)) await tick.click();
+    }
+    // The count under the sentence asks the server, and the first answer can take a while.
+    await page.getByText(/in the last 12 months/).waitFor({ timeout: 60_000 });
+    await page.waitForTimeout(2_000);
 }
+
+/** The Jones County map: the county clear of the drawer, for the alert form's outline. */
+export const JONES_BESIDE_DRAWER = box(-100.9, 32.2, -99.2, 33.3);
+/** The same, with the map's centre, so its place control, on the county. */
+export const JONES = box(-100.15, 32.51, -99.61, 32.96);
 
 export const ALERT_CLIP = { x: 0, y: 0, width: 1000, height: 900 };
 
@@ -547,6 +560,30 @@ export async function maskEmails(page) {
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
         for (let n = walker.nextNode(); n; n = walker.nextNode()) {
             if (/[\w.+-]+@[\w-]+\.[\w.]+/.test(n.nodeValue)) n.nodeValue = n.nodeValue.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, 'you@company.com');
+        }
+    });
+}
+
+/** The alert form's "Text to ‹number›" reads the form's own example number: the account's is never
+ *  published. Call it last in a shot, so nothing redraws it, and it throws rather than let one through. */
+export async function maskPhones(page) {
+    const left = await page.evaluate(() => {
+        const phone = /\+\d{10,15}/g;
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+            if (phone.test(n.nodeValue)) n.nodeValue = n.nodeValue.replace(phone, '(432) 555-0100');
+        }
+        return (document.body.innerText.match(phone) ?? []).length;
+    });
+    if (left) throw new Error(`${left} phone numbers still on screen`);
+}
+
+/** The projects an alert in the drawer belongs to come off its row: other projects are the account's business. */
+export async function hideAlertProjects(page) {
+    await page.evaluate(() => {
+        for (const icon of document.querySelectorAll('.tabler-icon-folder')) {
+            const chip = icon.closest('span[title]');
+            if (chip) chip.style.display = 'none';
         }
     });
 }

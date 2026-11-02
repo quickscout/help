@@ -11,7 +11,9 @@ import {
     H,
     hideOwnData,
     hoverRow,
+    JONES,
     mapSettled,
+    maskPhones,
     MIDLAND,
     openTables,
     parkPointer,
@@ -652,6 +654,34 @@ export default [
             { at: '[aria-label="Row detail"] [data-block-frame="overview"]', n: 2, side: 'left' },
             { at: '[data-shot="county-foot"]', n: 3, side: 'top' },
         ],
+    },
+    // Jones, where the account has no alert: elsewhere the panel lists its alerts instead.
+    {
+        name: 'alert-panel',
+        alt: 'The Alert panel on Jones County’s card: each type with its count in the last 12 months, How often, Tell me by, the sentence, Create 2 alerts and More options',
+        auth: true,
+        path: `/maps?${JONES}`,
+        run: async (page) => {
+            await ready(page);
+            await page.locator(H.place).click();
+            await page.getByRole('button', { name: 'View county' }).first().click();
+            await cardReady(page, 3_000);
+            await card(page).getByRole('button', { name: 'Alert', exact: true }).first().click();
+            const panel = page.locator('section[aria-label^="Alert me about"]');
+            await panel.waitFor({ timeout: 60_000 });
+            // The counts ask the server; each row holds a placeholder until its answer lands.
+            await page.waitForFunction(() => !document.querySelector('section[aria-label^="Alert me about"] [class*="bone"]'), null, { timeout: 60_000 }).catch(() => {});
+            await page.waitForTimeout(2_000);
+            await parkPointer(page);
+            await maskPhones(page);
+            const p = await panel.boundingBox();
+            const c = await card(page).boundingBox();
+            const x = Math.max(0, Math.floor(Math.min(p.x, c.x) - 16));
+            const right = Math.min(VIEWPORT.width, Math.ceil(Math.max(p.x + p.width, c.x + c.width) + 16));
+            const y = Math.max(0, Math.floor(Math.min(p.y, c.y) - 16));
+            const bottom = Math.min(VIEWPORT.height, Math.ceil(Math.max(p.y + p.height, 560) + 16));
+            return { x, y, width: right - x, height: bottom - y };
+        },
     },
 
     // ─── W-1 plats (maps/plats.mdx) ──────────────────────────────────────────────

@@ -6,12 +6,15 @@ import {
     around,
     box,
     H,
+    hideAlertProjects,
     hideOwnData,
+    JONES_BESIDE_DRAWER,
     mapIdle,
     mapSettled,
+    maskPhones,
     MIDLAND,
     MIDLAND_BASIN,
-    newAlertWithMapView,
+    newAlertForm,
     noOwnWells,
     onPage,
     openAlerts,
@@ -544,61 +547,70 @@ export default [
     // Alerts in Maps
     {
         name: 'alerts-drawer',
-        alt: 'The Alerts drawer: each alert with its source, recent matches and Active switch, one expanded with its run history and matches',
+        alt: 'The Alerts drawer: each alert with its type, recent matches and Active switch, one expanded with its check history and matches',
         auth: true,
         path: `/maps?${MIDLAND}`,
         run: async (page) => {
             await openAlerts(page);
             await hideOwnData(page);
-            // Expand the first alert: its run history, matches, and its area outlined on the map.
+            // Expand the first alert: its check history, matches, and its area outlined on the map.
             await page.getByRole('button', { name: /^Pause alert|^Resume alert/ }).first().waitFor({ timeout: 30_000 }).catch(() => {});
             // A row's second line ("198 matches · 2h ago") expands it; the name pill up top is the place panel.
             await page.getByText(/^\d[\d,]* matches$/).first().click();
             await page.waitForTimeout(8_000);
+            await hideAlertProjects(page);
             return ALERT_CLIP;
         },
     },
     {
-        name: 'alert-area',
-        alt: 'The Area step: Draw on map, Use current map view and whole counties, with the map view added',
+        name: 'alert-form',
+        alt: 'The alert form: New permits and Completions ticked, Jones County picked and outlined on the map, As they come in by email, and the sentence at the foot above Create 2 alerts',
         auth: true,
-        path: `/maps?${MIDLAND}`,
+        path: `/maps?${JONES_BESIDE_DRAWER}`,
         run: async (page) => {
-            await newAlertWithMapView(page);
+            // Tall enough for the whole form: it's one screen, and the picture should be too.
+            await page.setViewportSize({ width: 1440, height: 1420 });
+            await newAlertForm(page, ['New permits', 'Completions']);
             await hideOwnData(page);
-            return ALERT_CLIP;
+            await mapIdle(page);
+            const cancel = await page.getByRole('button', { name: 'Cancel', exact: true }).last().boundingBox();
+            await maskPhones(page);
+            return { x: 0, y: 0, width: 1120, height: Math.min(1420, Math.ceil(cancel.y + cancel.height + 62)) };
         },
     },
     {
-        name: 'alert-source',
-        alt: 'The Source step: the four sources, and the Purpose of Filing, Completion Type and Wellbore Profile filters for completions',
+        name: 'alert-narrow',
+        alt: 'Narrow further open for Completions: Purpose of Filing, Completion Type, Wellbore Profile, the date and rate filters and Forms in the filing, with Initial Potential and Horizontal chosen',
         auth: true,
-        path: `/maps?${MIDLAND}`,
+        path: `/maps?${JONES_BESIDE_DRAWER}`,
         run: async (page) => {
-            await newAlertWithMapView(page);
-            await hideOwnData(page);
-            await page.getByRole('button', { name: 'Continue' }).click();
-            await page.getByText('What should it watch for?').waitFor({ timeout: 30_000 });
-            await page.waitForFunction(() => !/Loading (templates|filters|options)/.test(document.body.innerText), null, { timeout: 60_000 }).catch(() => {});
-            await page.waitForTimeout(4_000);
-            return ALERT_CLIP;
-        },
-    },
-    {
-        name: 'alert-review',
-        alt: 'The Review step: the alert name, Email and SMS, and the summary ending in Checks: Hourly',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await newAlertWithMapView(page);
-            await hideOwnData(page);
-            await page.getByRole('button', { name: 'Continue' }).click();
-            await page.getByText('What should it watch for?').waitFor({ timeout: 30_000 });
+            await page.setViewportSize({ width: 1440, height: 1900 });
+            await newAlertForm(page, ['Completions']);
+            await page.getByRole('button', { name: /^Narrow further/ }).click();
+            await page.getByRole('button', { name: 'INITIAL POTENTIAL' }).click({ timeout: 60_000 });
+            await page.getByRole('button', { name: 'HORIZONTAL' }).click();
             await page.waitForTimeout(3_000);
-            await page.getByRole('button', { name: 'Continue' }).click();
-            await page.getByText('Name it and choose where it goes').waitFor({ timeout: 30_000 });
-            await page.waitForTimeout(3_000);
-            return ALERT_CLIP;
+            const top = await page.getByRole('button', { name: /^Narrow further/ }).boundingBox();
+            const end = await page.getByText('Any of those you pick.').boundingBox();
+            await maskPhones(page);
+            return { x: Math.floor(top.x - 18), y: Math.floor(top.y - 12), width: 396, height: Math.ceil(end.y + end.height + 14 - (top.y - 12)) };
+        },
+    },
+    {
+        name: 'alert-delivery',
+        alt: 'How should we tell you: As they come in, Every morning and Monday mornings, Email and Text ticks, and Delivery open with other schedules, a minimum count, the email format and a name',
+        auth: true,
+        path: `/maps?${JONES_BESIDE_DRAWER}`,
+        run: async (page) => {
+            await page.setViewportSize({ width: 1440, height: 1700 });
+            await newAlertForm(page, ['New permits']);
+            await page.getByRole('button', { name: /^Delivery/ }).click();
+            await page.getByRole('button', { name: 'Choose days and hours' }).click();
+            await page.waitForTimeout(1_500);
+            const top = await page.getByRole('heading', { name: 'How should we tell you?' }).boundingBox();
+            const end = await page.getByPlaceholder('Named for you').boundingBox();
+            await maskPhones(page);
+            return { x: Math.floor(top.x - 18), y: Math.floor(top.y - 14), width: 396, height: Math.ceil(end.y + end.height + 16 - (top.y - 14)) };
         },
     },
 ];
