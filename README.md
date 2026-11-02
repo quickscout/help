@@ -49,9 +49,27 @@ BASE_URL=http://localhost:3004 npm run shots -- maps-layers maps-printing maps-w
 
 Use the existing local app server to capture checkout behavior. Without `BASE_URL`, captures use `https://quickscout.io`; its login is separate. Login sessions and failure images live in ignored `screenshots/.auth/`. Never commit them.
 
-A `{/* screenshot: <name> — note */}` marker is replaced with a `<Frame>` when its capture succeeds. Later runs replace only the image. A missing demo fixture is a reason to leave a marker, not invent a screenshot.
+A `{/* screenshot: <name> — note */}` marker is replaced with a `<Frame>` when its capture succeeds. Later runs replace the image, and update the alt text if the shot's has changed. A missing demo fixture is a reason to leave a marker, not invent a screenshot.
 
-The capture script blocks saved map-workspace reads and writes. It can still display private information: keep account email, property rows, uploaded layer names and other projects out of frame. Enterprise captures open one demo project, which changes the account's active project. Use an account and project suitable for public screenshots.
+### Annotated walkthroughs
+
+A shot's `annotate` list draws a ring and a numbered badge on each control it names, just before the capture. On a walkthrough page, a step's number is its badge's number. Point at controls through the app's help anchors (`data-help="…"`, listed in strawn's `src/app/(app)/maps/help/anchors.ts` and mirrored as `H` in `shots.mjs`): the in-app Help points at the same ones, so a guide and the app agree. Rename an anchor in both repositories together.
+
+### Writes and demo fixtures
+
+The capture script blocks saved map-workspace reads and writes, and every other write a shot could make by walking through a feature (well edits, tops, depth records, Ask turns, synopses, pages, deals, claims, alerts). Any other non-GET request is printed once, so a new one gets noticed.
+
+A picture that needs something saved in the account (a well of your own, a correction, an Ask answer, a published page) makes it inside its own shot and takes it away again in the shot's `after`: the shot lets only that route through the write block (`allowWrites`), names what it makes **Help demo — …** (a well: lease *HELP DEMO*), and records it in `screenshots/.auth/fixtures.json` until it is gone. A run that dies part-way leaves the record behind: remove what it lists by hand (a trashed page stays in the account's Trash for 30 days). Ask turns use the account's credits, so the Ask shots spend one turn per run.
+
+The capture script can still display private information: keep account email, property rows, uploaded layer names and other projects out of frame. Enterprise captures open one demo project, which changes the account's active project. Use an account and project suitable for public screenshots.
+
+## Labels
+
+```bash
+npm run labels
+```
+
+lists every **bold** label on a page that the app's source (`../strawn`, or `STRAWN_DIR`) does not contain: a renamed button, a typo, or bold that was never a label. Run it after editing pages and before publishing; it is a report for review, not a gate.
 
 Inspect new images for loading placeholders, clipped controls and private data. If capture fails, remove an obsolete image from its guide until it can be replaced; document the gap in `AUDIT.md`.
 

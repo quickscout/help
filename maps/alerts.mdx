@@ -6,17 +6,19 @@ description: "Watch an area for new permits, completions or rig activity, get an
 
 An alert watches an area and tells you when something new happens inside it: a permit is filed or approved, a well is completed, or a rig shows up. It checks every hour, and sends you an email, a text, or both.
 
-Alerts are part of the [paid plans](/get-started/plans). Click **Alerts** at the bottom of the left rail, just above **Profile**, to open the Alerts drawer. Without a plan, the drawer offers **View Plans** instead.
+Alerts are part of the [paid plans](/get-started/plans). Click **Alerts** at the bottom of the left rail, just above **Profile**, to open the Alerts drawer. Without a plan, the drawer offers **View plans** instead.
 
 <Frame>
-  <img src="/images/alerts-drawer.webp" alt="The Alerts drawer: each alert with its source, recent matches and pause switch, one expanded with its run history and matches" />
+  <img src="/images/alerts-drawer.webp" alt="The Alerts drawer: each alert with its source, recent matches and Active switch, one expanded with its run history and matches" />
 </Frame>
 
 ## Create an alert
 
-Click **New** at the top of the drawer. If you have no alerts yet, click **New alert**.
+Click **New alert** at the top of the drawer, or under *No alerts yet* if you have none.
 
-The editor takes three steps: **Area**, **Source** and **Review**. **Continue** moves on once a step is complete, and **Back** goes back.
+The editor takes three steps: **Area**, **Source** and **Review**. **Continue** moves on once a step is complete, and **Back** goes back. To leave without saving, click **Alerts** at the top left, the **✕** at the top right, or **Cancel** on the first step.
+
+You can also start an alert from a selected area: on its card, **Alert me about new activity here** opens the editor with that area already drawn and named after the card. See [Select an area](/maps/selection).
 
 <Steps>
   <Step title="Area: where should this alert watch?">
@@ -26,7 +28,9 @@ The editor takes three steps: **Area**, **Source** and **Review**. **Continue** 
     - **Use current map view**: adds the part of the map you can see, a little inside its edges, as an area named *Map view*. Frame the map first.
     - **Or whole counties**: search for counties and pick them. Use this instead of drawing to watch a county line exactly.
 
-    Each area is listed with its name (*Area 1*, *Map view*) and its corners. The trash icon removes it. Underneath, QuickScout estimates how many active wells the area holds.
+    While you draw, **Cancel** stops drawing and keeps nothing.
+
+    Each area is listed with its name (*Area 1*, *Map view*) and its corners. **Remove** takes it off. Underneath, QuickScout estimates how many active wells the area holds.
 
     <Frame>
       <img src="/images/alert-area.webp" alt="The Area step: Draw on map, Use current map view and whole counties, with the map view added" />
@@ -74,9 +78,9 @@ The drawer lists every alert, most recently active first. Each row shows:
 
 - Its name, and a tag for its source, such as **Permits** or **Completions**.
 - A 14-day chart of matches, how many it has found in the last 30 days, and when it last found something.
-- A switch to pause it (**Pause alert**) or turn it back on (**Resume alert**). A paused alert is dimmed and marked **PAUSED**.
+- The **Active** switch. Switch it off to pause the alert: no more emails or texts until you switch it back on. A paused alert is dimmed and marked **PAUSED**.
 
-**Pause all**, at the top, pauses every alert without deleting any. When all of them are paused, it reads **Resume all**.
+**Pause all**, at the top, pauses every alert without deleting any. While all of them are paused, it stays lit; click it again to resume them all.
 
 A number on the **Alerts** button in the rail counts the alerts that have found something since you last opened the drawer.
 
@@ -85,13 +89,13 @@ A number on the **Alerts** button in the rail counts the alerts that have found 
 Click an alert to expand it. The map outlines its area in blue and flies there.
 
 - **Run history** has a bar for each of the last 30 runs, sized by how many matches it found. Click a bar to see that run. A run is **Delivered**, found **No matches**, or **Failed**.
-- The run's matches are listed underneath: the lease and well number, API, operator and county. **Click a match** to open the well's record.
-- **Plot N** puts the run's matches on the map as blue pins and frames them. Hover a pin for the well, or click it to open the record. **Re-frame** frames them again after you've moved the map.
-- When a run found more than eight wells, click **view all**.
+- The run's matches are listed underneath: the lease and well number, API, operator and county. Click a match to open the well's [card](/maps/records).
+- **Plot *N*** puts the run's matches on the map as blue pins and frames them. Hover a pin for the well, or click it to open the well's card. The button then reads **Zoom to**, which frames them again after you've moved the map.
+- When a run found more than eight wells, click **View all**.
 
 ### View all, and export
 
-**view all** opens the run's full results in **Replay**:
+**View all** opens the run's full results in **Replay**:
 
 - **MATCHES**, **EXECUTION** time and **STATUS** across the top.
 - Breakdowns **By operator**, **By field** and **By county**, and the average **Lateral length**.
@@ -101,11 +105,11 @@ Replay shows the results stored when the alert ran. It doesn't run the search ag
 
 ### Edit, duplicate and delete
 
-On an expanded alert:
+On an expanded alert, the buttons under its matches:
 
-- The pencil (**Edit alert**) reopens the three steps. You can change the name, areas, counties, filters and where it's delivered. The **source** can't be changed; create a new alert for that.
-- The crosshair zooms to the alert's area.
-- **⋯** has **Duplicate** and **Delete**.
+- **Edit** reopens the three steps. You can change the name, areas, counties, filters and where it's delivered. The **source** can't be changed; create a new alert for that.
+- **Zoom to** frames the alert's area. It's greyed out when there's no area to zoom to.
+- **Duplicate** and **Delete**.
 
 **Duplicate** makes an active copy named *‹name› (copy)*. Change its area or filters: two identical alerts aren't allowed.
 

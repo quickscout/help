@@ -1,0 +1,130 @@
+---
+title: "Present, print & share a workbook"
+sidebarTitle: "Present, print & share"
+description: "Share a workbook by email or by link, present it full screen, print it, and what the people you share it with can do."
+---
+
+Anyone you share a [workbook](/maps/workbooks) with can read it, present it and print it, with or without a plan. A workbook shared by link opens for anyone who has the link, without signing in. Sharing a workbook and changing it are part of the [paid plans](/get-started/plans).
+
+| | Signed out, with a link | Free account | Paid plan |
+|---|---|---|---|
+| Read it, sheet by sheet | Yes | Yes | Yes |
+| **Present** and **Print** | Yes | Yes | Yes |
+| **Open full screen** on a block | Yes | Yes | Yes |
+| **Download CSV** and **Open in Maps** | No | No | Yes |
+| **Make a copy** and **Use as template** | No | No | Yes |
+| Change it, as an editor | No | No | Yes |
+
+## Share a workbook
+
+In the editor, click **Share** at the top right, or the line beside the title that says who can see it, such as *Private · only you*.
+
+The dialog works as it does for pages from Ask: add people by email as a **Viewer** or an **Editor**, choose whether to notify them, and set **General access**. See [The Share dialog](/maps/pages#the-share-dialog).
+
+A few things are particular to workbooks:
+
+- If a block that readers will see has no data yet, the dialog warns you first, for example *2 blocks haven’t captured their data. People you share with will see “Data not captured yet” in their place on sheets 3 and 6.* **Capture data now** fetches it. **Show me** closes the dialog and selects the first of them. Blocks on hidden sheets don't count.
+- **Anyone with the link** lets anyone who has the link open the workbook, signed in or not. While it's chosen, the dialog warns: *Anyone on the internet with the link can view this workbook — including the data behind it — without signing in.*
+- Editors can change the workbook if they have a paid plan. Without one, they read it with **Upgrade to edit**. Only the owner can change who has access.
+- **Copy link**, in the dialog or under **More**, copies the workbook's own address.
+
+{/* screenshot: workbooks-share-dialog — The Share dialog of the Help demo workbook with the warning about blocks that haven’t captured their data, Capture data now and Show me above it, and General access set to Anyone with the link with its warning. Annotate: 1 = the no-data warning, 2 = Capture data now, 3 = the Anyone with the link warning */}
+
+Workbooks shared with you are listed on [Your pages](/maps/workbooks#your-pages), under **Shared with you**.
+
+<Warning>
+  A workbook shared with **Anyone with the link** shows its data to anyone the link reaches, including people outside your company. Use **Restricted** and add people by email for anything private.
+</Warning>
+
+## Present
+
+Click **Present** at the top of the editor, or of a workbook shared with you. The workbook fills the screen, one sheet at a time, starting from the sheet you're on. Hidden sheets are skipped, so the count reads *3 / 8* even when the workbook has 9 sheets.
+
+The controls show at the bottom of the screen and fade after two seconds. Move the mouse to bring them back:
+
+- **Previous** and **Next**.
+- **Notes (N)**, when you're an editor: the sheet's speaker notes in a column beside it, with *Only you see these* and the name of the next sheet. People you share with never see notes.
+- **Exit (Esc)**. You're back on the sheet you stopped on.
+
+| Key | Does |
+|---|---|
+| <kbd>→</kbd>, <kbd>Space</kbd> or <kbd>Page Down</kbd> | Next sheet |
+| <kbd>←</kbd> or <kbd>Page Up</kbd> | Previous sheet |
+| <kbd>Home</kbd> / <kbd>End</kbd> | First or last sheet |
+| <kbd>N</kbd> | Show or hide your notes (editors) |
+| <kbd>Esc</kbd> | Stop presenting |
+
+Between two sheets that both have a map, the map glides from one view to the next.
+
+Speaker notes are written in the editor, on the **Notes** tab. Only you and other editors see them: they show in Present when you press <kbd>N</kbd>, and on a notes page if you print with notes.
+
+{/* screenshot: workbooks-present — Present on a map sheet of the Help demo workbook with the notes column open beside the sheet and the controls showing: Previous, the 3 / 8 count, Next, Notes (N) and Exit (Esc). Annotate: 1 = Notes (N), 2 = the notes column */}
+
+## Print
+
+- In the editor, or in a workbook shared with you while you're signed in: **More**, then **Print**.
+- Signed out: **Print** under the workbook's title.
+
+The print page shows each sheet on its own page, Letter size, landscape. Above each sheet are the workbook's title and the page count, such as *3 / 8*; below it is *Data as of Aug 2026 · Source: Texas RRC*. Charts print with plain captions in place of their switches.
+
+Editors also choose:
+
+- **Add a notes page after each sheet with notes**. It's on at first. A notes page shows the sheet small, beside its notes.
+- **Include the hidden sheet**, or sheets. It's off at first.
+
+The maps are drawn one at a time first; the page says how far it has got, such as *Drawing maps · 2 of 5*. Then click **Print**. Your browser's print dialog opens: choose a printer, or **Save as PDF**. The file is named after the workbook. **Cancel** goes back to the workbook.
+
+{/* screenshot: workbooks-print — The print page of the Help demo workbook as its editor sees it: the options with Letter, landscape. One sheet per page., the notes page and hidden sheet options, Cancel and Print, and the page previews including a notes page. Annotate: 1 = the notes page option, 2 = Print */}
+
+## What readers see
+
+### Signed out
+
+A workbook shared by link opens without signing in. A slim bar at the top reads *Made with QuickScout*, with **Sign in**. Under it are the title, who shared it and the month of its data, such as *Shared by Dana Reyes · Data as of Aug 2026 · Source: Texas RRC*, with **Print** and **Present**.
+
+{/* screenshot: workbooks-viewer-signed-out — A link-shared Help demo workbook opened signed out: the slim bar with Made with QuickScout and Sign in, the title block with Print and Present, the sheets on the left, and Previous, the count and Next under the sheet. Annotate: 1 = Sign in, 2 = Print and Present */}
+
+### Signed in
+
+The header shows **Your pages**, the title, and your access, such as *Shared by Dana Reyes · You can view*. **Present** is on the right, and **More** has **Print** and **Copy link**. With a paid plan, you also get **Open in Maps**, **Make a copy** and **Use as template**.
+
+If you're an editor without a paid plan, the header reads *You can view · editing needs a plan with workbooks*, with **Upgrade to edit**, which opens the plans.
+
+### Reading the sheets
+
+- Click a sheet on the left, use **Previous** and **Next** under the sheet, or press <kbd>←</kbd> and <kbd>→</kbd>.
+- Drag a map to look around, and hold <kbd>⌘</kbd> or <kbd>Ctrl</kbd> while you scroll to zoom. Nothing you do is saved.
+- When the editor allows it, a production chart has **Month**, **Day** and **Cumulative**, and **Log** and **Linear**. They change only your view.
+- Under a table, a button such as *See all 48* opens every row.
+- Hold the pointer over a map, chart or table to show its **More**: **Open full screen** for anyone, plus **Download CSV** and **Open in Maps** with a paid plan. **Close (Esc)** leaves full screen.
+
+{/* screenshot: workbooks-viewer — A Help demo workbook shared with a paid reader as a viewer: the header with Shared by … · You can view, Open in Maps, Make a copy, Use as template, Present and More, and a production block’s More menu open with Download CSV, Open in Maps and Open full screen. Annotate: 1 = the header buttons, 2 = the block’s More menu */}
+
+## Take a shared workbook further
+
+With a paid plan:
+
+- **Make a copy** makes your own copy, which you can change and share.
+- **Use as template** opens **New workbook** with this workbook first under **1 · Start from**: *This workbook’s sheets and parameters, with your values.* Fill in your own values and click **Create workbook**. See [Start a workbook](/maps/workbooks#start-a-workbook).
+- **Open in Maps** puts the sheet's map on the live map, with its view, its highlighted wells and its marks. A row at the bottom of the map says *Showing Sheet 2 of ‘Q3 Ops’*, with **Open workbook** to go back. The row headed *Workbook*, with **Undo**, takes it all off the map again. Your filters and tables are left alone, though it may turn on a layer the sheet shows, such as pipelines or the land grid.
+- A block's **Open in Maps** does the same for that block. On a table of wells or leases, it opens the rows in a tab of their own in the [data tables](/maps/data-panel); on a chart, it opens the record's card.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The people I shared with see Data not captured yet">
+    Some blocks had no data when you shared. In the editor, click **Capture missing data** in the footer, or **Capture data now** in the **Share** dialog. They'll see the data the next time they open the workbook.
+  </Accordion>
+  <Accordion title="Print is greyed out">
+    The maps are still being drawn. Wait for *Drawing maps* to finish. If a map can't be drawn, its page says why.
+  </Accordion>
+  <Accordion title="My notes don't show in Present">
+    Only editors see notes. Press <kbd>N</kbd>, or click **Notes (N)**. The people you share with never see them.
+  </Accordion>
+  <Accordion title="Present doesn't fill the screen">
+    Some browsers refuse full screen; Present then runs in the window. Leaving full screen also ends Present.
+  </Accordion>
+  <Accordion title="Someone can't open my workbook">
+    Check **General access** in the **Share** dialog. With **Restricted**, only the people listed can open it, signed in with the address you added, so add the address they sign in with. Choose **Anyone with the link** only if the workbook and its data can be public.
+  </Accordion>
+</AccordionGroup>

@@ -1,42 +1,106 @@
 ---
 title: "Search"
-description: "Find wells, leases, operators, fields and places by name or number."
+description: "Find wells, leases, fields, operators and places by name or number, and open what you find."
 ---
 
-The search box is at the top left of the map, in the command bar. Click it, or press <kbd>⌘</kbd> <kbd>K</kbd> (<kbd>Ctrl</kbd> <kbd>K</kbd> on Windows) or <kbd>/</kbd>, to open the search panel. Searching by name is free with an account.
+The search box is at the top left of the map, beside the QuickScout logo. When it's empty, it reads *Search wells, leases, operators, fields…* Click it, or press <kbd>⌘</kbd> <kbd>K</kbd> (<kbd>Ctrl</kbd> <kbd>K</kbd> on Windows) or <kbd>/</kbd>, to open the search panel.
 
-The panel opens in the left drawer's column. If a record is open there, the panel covers it until you're done: **← Back to ‹name›** at the top, or <kbd>Esc</kbd>, brings the record back.
+When the map is narrow, for example with a card open beside it, the bar folds to the logo and a **Search** button. Click **Search** to open the bar.
+
+Anyone can type in the box and see suggestions. Searching by name and seeing the [results](/maps/search-results) needs a free account. Opening a record's card from the panel needs a [paid plan](/get-started/plans), unless the data tables are already open.
+
+The panel opens where the left drawer sits. If something is open there, such as a drawer or a card you've set to open on the left, the panel covers it until you're done. **Back to ‹name›** at the top of the panel, or <kbd>Esc</kbd>, brings it back.
+
+## Find a record and open its card
+
+<span id="find-a-record" />
+
+<Steps>
+  <Step title="Open the search panel">
+    Click the search box, or press <kbd>⌘</kbd> <kbd>K</kbd>. With nothing typed, the panel shows your recent searches and the records you opened recently.
+
+    <Frame>
+      <img src="/images/find-a-record-1.webp" alt="The search panel open with nothing typed: Recent searches, Recently opened, Ask about this view and the Narrow as you type terms" />
+    </Frame>
+  </Step>
+  <Step title="Type part of the name">
+    Three letters are enough, for example *kiker*. The panel lists the matching **LEASES**, **WELLS**, **FIELDS** and **OPERATORS**, nearest your view first.
+
+    <Frame>
+      <img src="/images/find-a-record-2.webp" alt="The search panel for kiker over Wise County: the lit Search “kiker” in Texas row, Search “kiker” on screen, then the Leases and Wells groups, every row on screen" />
+    </Frame>
+  </Step>
+  <Step title="Check it on the map">
+    Hover a row, or move to it with <kbd>↓</kbd>. The map lights that record in amber without moving, so you can tell which one you want.
+
+    <Frame>
+      <img src="/images/find-a-record-3.webp" alt="The pointer on the first KIKER lease in the panel, and that lease lit in amber with a pin on the map" />
+    </Frame>
+  </Step>
+  <Step title="Open its card">
+    Click the row, or press <kbd>Enter</kbd> once you've moved to it with <kbd>↓</kbd>. The record opens as its [card](/maps/records). <kbd>Esc</kbd> closes the card.
+
+    <Frame>
+      <img src="/images/find-a-record-4.webp" alt="The lease’s card open on the right of the map after clicking its row: KIKER-PERKINS, ET AL (SA), its verbs, Totals and Production" />
+    </Frame>
+  </Step>
+</Steps>
 
 ## Search by name
 
 Type at least three letters. The panel lists:
 
-- First, a lit row: **Search “‹text›” in Texas**. Press <kbd>Enter</kbd> to run it.
-- **Operators**, **Leases** and **Wells** that match, up to four of each, with a count and **See all**. Leases show their current rate (*4 bbl/d*, *27 mcf/d*, *no rate*), and wells their API. When a lease matched on something other than its name, its second line says why, like *Field · Iron Bridge*.
-- **Ask about “‹text›” in Texas**, to put the question to the [map assistant](/maps/ask-the-map).
+- First, a lit row: **Search “‹text›” in Texas**. Press <kbd>Enter</kbd> to run it. The results open in the data tables; see [Search results](/maps/search-results).
+- **Search “‹text›” on screen**: the same search, limited to the part of the map you can see. See [Statewide or on screen](#statewide-or-on-screen).
+- Four groups, always in this order: **LEASES**, **WELLS**, **FIELDS** and **OPERATORS**. Each shows how many match (*none* when nothing does). The four share twelve rows; when a group has more than it shows, **See all** runs the search and opens on that group's list.
+- **Ask about “‹text›”**, to put the question to the [map assistant](/maps/ask-the-map).
 
 <Frame>
-  <img src="/images/maps-search.webp" alt="The search panel for Pioneer: the Search row, then matching operators, leases and wells, each lease with its current rate" />
+  <img src="/images/maps-search.webp" alt="The search panel for Pioneer: the Search row and Search on screen, then the Leases, Wells, Fields and Operators groups with their counts, each row with its rate and how far it is from the view" />
 </Frame>
 
-Use <kbd>↑</kbd> <kbd>↓</kbd> to move through the list. Hovering a lease or well, or moving to it, outlines it on the map without moving the map. The keys at the bottom of the panel change with the row you're on.
+What each row tells you:
+
+- **LEASES**: the name; then where it is and who operates it (*NE Schleicher · QUESTA OIL & GAS CO.*), or why it matched when that isn't its name (*Field · Iron Bridge*). On the right, what it makes today (*4 bbl/d*, *27 mcf/d*, *no rate*) and how far it is from your view (*on screen*, *5 mi SW*).
+- **WELLS**: where the well is and its operator, rather than its API. A well you've corrected or added in [My Wells](/maps/my-wells) says **Yours**.
+- **FIELDS** and **OPERATORS**: how many leases they have, what those make today in boe/d, and how far their nearest lease is.
+
+Hovering a row, or moving to it with <kbd>↑</kbd> <kbd>↓</kbd>, lights it on the map in amber: a lease's outline and wells, a well's path, an operator's wells, or a field's leases and wells. The map doesn't move. When the record is out of sight, a chip at the edge of the map points to it, with its name and how far away it is.
+
+Clicking a row opens it. A lease, well, field or operator opens as its [card](/maps/records).
+
+The keys at the bottom of the panel change with the row you're on:
 
 | Key | Does |
 |---|---|
-| <kbd>Enter</kbd> | Runs the lit row: the search, or the record you moved to. |
-| <kbd>⇧</kbd> <kbd>Enter</kbd>, or <kbd>⌘</kbd>-click | Opens the record's card in the right panel and leaves the left drawer as it is, so you can compare two records. |
+| <kbd>↑</kbd> <kbd>↓</kbd> | Moves through the list. |
+| <kbd>Enter</kbd> | Runs the lit row: searches, opens the record, asks, or shows a number's wells. |
+| <kbd>⇧</kbd> <kbd>Enter</kbd> | On the **Search “‹text›” in Texas** row: searches only what's on screen. |
+| <kbd>⌥</kbd> <kbd>Enter</kbd> | Adds the lit record to [compare](/maps/compare), or takes it out. |
 | <kbd>⌘</kbd> <kbd>Enter</kbd> | Asks about what you typed. |
-| <kbd>Esc</kbd> | Closes the panel. |
+| <kbd>Esc</kbd> | Closes the panel, or goes back to what it was covering. |
 
-Clicking a lease or well opens its [record](/maps/records) in the left drawer. Clicking an operator runs the search narrowed to that operator.
+To add a record to compare with the mouse, hover its row and click **Add to compare** at the right end. The row then shows **In compare**, and the same spot reads **Remove from compare**.
 
-### Texas or one county
+Messages you may see:
 
-**Search in** at the top of the panel chooses **Texas** (the default) or the county the map is over. A county search follows the map: pan to another county and the chip changes with it. Your choice is remembered on this device.
+- *Three letters or more to search.*
+- *No leases or wells match.* Try fewer letters, or check the spelling.
+- *Downloading the wells — 42%. ↵ searches them now.* The **WELLS** group fills in once the wells have downloaded to this device. Press <kbd>Enter</kbd> to search them anyway.
+
+<span id="texas-or-one-county" />
+
+### Statewide or on screen
+
+A search looks at all of Texas. The panel lists what's near your view first, and each row says how far away it is.
+
+To search only the part of the map you can see, choose **Search “‹text›” on screen**, or press <kbd>⇧</kbd> <kbd>Enter</kbd> on the search row. The area is fixed when you choose it, so moving the map afterwards doesn't change it. On the [Search tab](/maps/search-results) it shows as a **Map area** chip. Click the chip's **×** to search all of Texas again.
+
+The Search tab's heading switches between the two as well. It reads *Searching Statewide*: click **Statewide** to search the map area, and click **the map area** to go back. To search a county, a circle around the map's center, or an area you draw, use the Search tab's [Filters](/maps/search-results#narrow-the-results).
 
 ## Search by number
 
-Type a number and QuickScout lists what it could be under **Interpret as**:
+Type a number and QuickScout lists what it could be under **INTERPRET AS**:
 
 | You type | Read as |
 |---|---|
@@ -45,15 +109,20 @@ Type a number and QuickScout lists what it could be under **Interpret as**:
 | Up to 8 digits | A **field** number |
 | A district and lease, like `08/12345` or `7C-4432` | A **lease** |
 
-A plain number is never read as a lease number; include the district. Pick a row, or press <kbd>Enter</kbd> to take the first one. An API opens that well. An operator, field or lease number puts every matching well on the map and opens the **Filters** card.
+A plain number is never read as a lease number; include the district. When an oil lease and a gas lease in that district share the number, both are listed. Pick a row, or press <kbd>Enter</kbd> to take the first one.
+
+- An API opens that well's card.
+- An operator, field or lease number opens a Record tab in the data tables, listing every well of that operator, field or lease. The map shows only those wells while you're on the tab. Your own tabs and their filters aren't touched; **Close** on the tab's band brings them back. See [The Record tab](/maps/data-panel#record-tab).
+
+If nothing has that number, the panel says *No well, operator, field or lease numbered “‹number›”.*
 
 ## Search in plain words
 
-Type a sentence, like *wells in the cisco field*, and **Interpret as** lists the ways QuickScout can read it: the search terms each becomes, and how many wells or leases match. The best reading comes first; <kbd>Enter</kbd> runs it. A note says when part of the sentence was ignored or isn't supported yet.
+Type a sentence, like *wells in the cisco field*, and **INTERPRET AS** lists the ways QuickScout can read it: the search terms each becomes, and how many wells or leases match. The best reading comes first; <kbd>Enter</kbd> runs it. A note says when part of the sentence was ignored or isn't supported yet. For example, *wells spudded since 2024* gets *can’t do “spudded since” yet — dates can’t be searched yet*.
 
 ## Search terms
 
-Type these yourself, or click one under **Narrow as you type** on the empty panel:
+Type these yourself, or click one under **NARROW AS YOU TYPE** on the empty panel:
 
 | Type | Finds |
 |---|---|
@@ -72,48 +141,41 @@ A term QuickScout doesn't know is searched as plain text.
 
 ## While a search is on
 
-A search you've run stays on the map. The command bar takes a violet edge and gains a second row:
+A search you've run stays on the map until you clear it.
 
-- **85 of 795 on screen**, with a meter. When none are in view, **Nearest** flies you to the closest one.
-- **Narrow to**: county chips with their counts. Click one to narrow the search and move the map there; fields in that county are offered next. Click a picked chip's **✕** to let it go.
-- **More**: narrow by several counties or fields, by the year a well last produced, or by a lease's current rate. **Reset all** undoes it.
-- **Hide other wells** draws only this search's wells. **Zoom to all** frames them. **Table** opens the results in the [data tables](/maps/data-panel). When the bar is narrow, these three are icons.
+- In the search box: your words, then how many of the search's wells are in view, such as *57 of 829 on screen* (or *all 12 on screen*, *none of 829 on screen*). Click that count to open the results.
+- On the map: the other wells dim, and the matching wells are drawn in violet under their usual symbols. Zoomed out below zoom 10, the matches show as violet survey tracts instead; click one to zoom in on it.
+- To end the search, click the **×** at the end of the search box (*Clear this search from the map*).
 
-To end the search, click the **⊗** in the search box (*Clear this search from the map*).
+<Frame>
+  <img src="/images/search-live-bar.webp" alt="The search box after searching pioneer: the words, how many of the search’s wells are on screen, and the clear button, over a map with the matching wells in violet and the rest dimmed" />
+</Frame>
+
+Narrowing a search, showing only its wells and framing them all are on the Search tab. See [Search results](/maps/search-results#on-the-map).
 
 <span id="search-results-in-the-tables" />
 
 ## The Search tab
 
-Running a search opens the right panel on a **Search** tab, named after what you searched.
-
-<Frame>
-  <img src="/images/maps-search-results.webp" alt="The Search tab for Pioneer: the match count, the top match with its production chart, and cards for leases, wells, operators and fields" />
-</Frame>
-
-- The heading counts the matches (*795 wells match “tucker”*) and says where most of them are. Buttons below it jump to **Wells**, **Leases**, **Operators** or **Fields**.
-- **Top match** is the record you were most likely after: a producing operator or field whose name starts with what you typed, or the nearest producing lease. It shows current oil and gas, 24 months of production and, for an operator, its P-5 status. **Show its wells** narrows the search to it.
-- Cards list the first few **Leases**, **Wells**, **Operators** and **Fields**, and **Wells by county**. Click a county's bar to narrow to it. **See all ›** opens the full list.
-- Clicking a well or lease opens its [card](/maps/row-cards) in the panel.
-
-In a full list, **‹ All results** goes back. Chips like **Operator: …** and **County: …** show what the list is narrowed to; click a chip's **×** to remove it. **List** and **Table** switch between a readable list and the full table, where you can sort, filter and [export](/maps/exports) what the search found. In the table, **Rows** switches between **Wells** and **Leases**.
+Running a search opens the data tables on a Search tab, named after your words, such as *“pioneer”*. It lists every lease, well, field and operator your words found, and marks the best match. From there you can drill into an operator or field, filter, sort, and show only the matches on the map. See [Search results](/maps/search-results).
 
 The Search tab has its own filters, so your Wells and Leases filters stay as they were. Clearing the search removes the tab, and it isn't kept for your next visit.
 
-<Note>
-  Search uses the well and lease copies [stored on your device](/maps/offline). Until they've downloaded, the server answers instead: the Search tab shows a plain list of up to 1,000 leases, and a note at the bottom says what's still downloading. The full Search tab takes over when the copies arrive.
-</Note>
-
 ## Recents
 
-Click the empty search box to see your **Recent searches** and **Recently opened** records, four of each. **Clear** empties the recent searches; **View all** opens **Recents**, which is also on the left rail. The empty panel also suggests questions under **Ask about this view**.
+Click the empty search box to see your **RECENT SEARCHES** and **RECENTLY OPENED** records, four of each. Click a record to open its [card](/maps/records) again. Counties you opened are listed too, and open the county's card.
+
+- **Clear** empties the recent searches. They're kept on this device.
+- **View all** opens **Recents**, which is also on the left rail and needs a [paid plan](/get-started/plans). **RECENTLY OPENED** follows your account to every project and device, and includes cards you stayed on for a moment.
+
+The empty panel also suggests two questions under **ASK ABOUT THIS VIEW**, plus **Ask anything about this view…**, and offers search terms under **NARROW AS YOU TYPE**.
 
 <span id="advanced-search" />
 
 ## Go to a place or RRC record
 
-To jump to a county, abstract, district, latitude and longitude or basin, or to look up an RRC record by number, click the QuickScout logo at the top of the left rail. See [The start drawer](/maps/tour#the-start-drawer).
+To jump to a county, an abstract, a latitude and longitude or a basin, or to look up an RRC record by number, click the QuickScout logo at the left end of the search bar (its tooltip says *Start panel*). See [The start drawer](/maps/tour#the-start-drawer).
 
 <Tip>
-  To filter the map by well type, wellbore or any well column, use the **Filters** card on the right side of the map. <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>K</kbd> opens it. See [Well filters](/maps/layers#well-filters).
+  To filter the map by well type, wellbore or any well column, use the **Filters** card on the right side of the map. <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>K</kbd> opens it. See [Well filters](/maps/layers#well-filters). It's separate from the Search tab's **Filters**, which narrow only a search.
 </Tip>

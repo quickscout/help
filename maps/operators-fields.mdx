@@ -10,21 +10,23 @@ The **Operators** and **Fields** tabs sit beside **Wells** and **Leases** in the
   Don't see a tab? If you've arranged your own tabs, click **Add tab** at the end of the tab row and pick it from **Add a tab**.
 </Tip>
 
+To put operators or fields on the map in colors of their own, use the **Operators** and **Fields** panels on the left rail. See [Operator and field layers](/maps/operator-field-layers).
+
 ## Operators
 
 One row is one operator, totalled over its leases in view. It answers *who operates here, and how big are they?*
 
 <Frame>
-  <img src="/images/operators-table.webp" alt="The Operators tab over Midland County: each operator totalled over its leases in view, biggest BOE/d first" />
+  <img src="/images/operators-table.webp" alt="The Operators tab over Midland County: each operator totalled over its leases in view, biggest boe/d first" />
 </Frame>
 
 The operator is the one on the lease's current **P-4**. When a lease has no P-4 operator, QuickScout uses the operator on its last production report. Every figure is added up from the [Leases](/maps/data-panel#tabs) data, so the tab needs no download of its own.
 
 ### What in view means
 
-**Scope** → **In view** lists operators with at least one lease in the map's visible area, and totals only those leases. Pan to Reeves County and *BOE/d* is each operator's production in Reeves. **Statewide** totals every lease in Texas.
+**Scope** → **In view** lists operators with at least one lease in the map's visible area, and totals only those leases. Pan to Reeves County and *boe/d* is each operator's production in Reeves. **All** lists every operator and totals all of its leases in Texas.
 
-Rows start sorted by **BOE/d**, highest first.
+Rows start sorted by **boe/d**, highest first.
 
 ### Views
 
@@ -32,7 +34,7 @@ Pick a view under **Columns**:
 
 | View | For |
 |---|---|
-| **Screening** (the default) | Who is here, and how big: live leases, active wells, BOE/d, oil and gas, trailing-12-month oil, share of Texas oil, pending P-4s, PV-10 and NAV. |
+| **Screening** (the default) | Who is here, and how big: live leases, active wells, boe/d, oil and gas, trailing-12-month oil, share of Texas oil, pending P-4s, PV-10 and NAV. |
 | **Here vs Texas** | Each in-view figure beside the operator's whole Texas book. |
 | **Production** | Rates, trailing twelve months and cumulative, in view. |
 | **Drilling** | Permits, spuds and completions in the last 12 months, here and statewide. |
@@ -41,7 +43,7 @@ Pick a view under **Columns**:
 
 A few columns worth knowing:
 
-- **BOE/d** is oil per day plus gas per day divided by 6.
+- **boe/d** is oil per day plus gas per day divided by 6.
 - **Share of TX oil** is how much of the operator's Texas oil comes from the leases in view. *80%* means this area is most of their business.
 - **Pending P-4** counts live leases where this operator has filed a P-4 but the production reports still name someone else. It's an early sign of an acquisition.
 - **Districts** are the operator's top three RRC districts statewide.
@@ -61,22 +63,30 @@ Hover a row to spotlight that operator: the rest of the map dims, and the operat
 
 ### The operator card
 
-Click a row to open its card.
-
+Click a row to open its card. The card covers the whole operator, all of Texas, whatever the table's **Scope** or the map's view. Only its **On the map** block follows the map.
 
 <Frame>
-  <img src="/images/operator-card.webp" alt="An operator's card beside the Operators table: Show leases, Show on map, and its production and footprint" />
+  <img src="/images/operator-card.webp" alt="An operator’s card beside the Operators table: Zoom to, Show on map, Add layer, Show leases, Show wells and Compare, then its Totals, Production and By lease blocks" />
 </Frame>
-- **Show leases** switches to the Leases tab, filtered to this operator.
-- **Show on map** keeps the operator's leases and wells colored on the map. **Hide on map** stops it.
-- The **⋯** menu has **Copy operator number** and **Copy operator name**.
+
+- **Zoom to** flies the map to where the operator works now: its live leases.
+- **Show on map** sets how the operator is drawn while its card is open. Its switch is on at first: the operator's leasehold and wells are lit on the map, and the rest of the map dims. Under it, **Wells**, **Polygons** (its leasehold) and **Dim the rest of the map** choose what's drawn. Your choices hold for every operator you open.
+- **Add layer** adds the operator to your **Operators** layer, so it stays colored on the map after the card closes, as the **Operators** panel has it. It's pressed while the operator is in the layer; click it again to take it out. See [Operator and field layers](/maps/operator-field-layers).
+- **Show leases** and **Show wells** list every one of the operator's leases or wells in a tab of their own, the [Record tab](/maps/data-panel#record-tab). The card stays open, and your own Leases and Wells tabs and their filters stay as they are.
+- **Compare** puts the operator in the [compare tray](/maps/compare), to set beside other operators.
+
+The Copy icon beside the operator number, under its name, copies the number.
 
 Its blocks:
 
-- **Production**: the operator's monthly production. **Total** charts it as one; **By lease** splits it by lease. Below, every lease is listed with its wells, last production month, BOE a month and cumulative BOE. Click a lease to take it out of the chart; **Show all** puts it back. Hover a lease to light its wells on the map.
-- **Footprint**: leases, live leases, active wells, BOE, oil and gas **IN VIEW**, across **TEXAS**, and the **SHARE** here.
-- **By district**: BOE/d or leases in each RRC district.
-- **Valuation**: needs the lease valuation add-on.
+- **Totals**: its leases, live leases and active wells, then its oil and gas to date, per day now and over the last 12 months.
+- **Production**: what it produced each month as the operator.
+- **By lease**: which leases make its oil or gas, a band each, with every lease listed under the chart: its wells, what it has made and its share. Pick **Oil** or **Gas**. Click a lease to open its card. Click a lease's color swatch to take it out of the chart; **Show all** puts it back. Pointing at a lease lights its wells on the map.
+- **On the map**: how many of its leases are in view, and their oil and gas.
+- **By district**: its Texas leases in each RRC district, with boe/d.
+- **Valuation**: PV-10, net asset value and PDP over its valued leases. It needs the lease valuation add-on. **Value this operator**, at its foot, starts a deal over every lease the operator operates, in the **Deals** tab beside the card; once there is one, it reads **Open valuation**.
+- **Deals**: the leases it took over or handed on, by year, then each deal by counterparty and month.
+- **Synopsis**, at the foot: **Write synopsis** writes a few sentences about the operator. See [Synopsis](/maps/records#synopsis).
 
 ## Fields
 
@@ -88,11 +98,11 @@ One row is one RRC field number. For each field, the tab shows what the **RRC** 
 
 ### What in view means
 
-A field is **in view** when at least one of its wells is on the map. A field with nothing in view shows up under **Statewide**, and so does a retired field number, which has no wells.
+A field is **in view** when at least one of its wells is on the map. A field with nothing in view shows up under **All**, and so does a retired field number, which has no wells.
 
 The Fields tab needs the Wells data on your device to decide what's in view. Until it's there, the footer reads *Waiting for the wells snapshot*.
 
-Rows start sorted by trailing-12-month oil, highest first. **Sort** also offers **Nearest the map centre**.
+Rows start sorted by trailing-12-month oil, highest first. **Sort** also offers **Nearest the map center**.
 
 ### Placed, and the gap
 
@@ -128,12 +138,13 @@ The search box finds a field by name, number or reservoir.
 Hover a row to see where the field is:
 
 <Frame>
-  <img src="/images/fields-hover.webp" alt="Hovering the Parks field: each of its leases a bubble sized by lifetime oil, the biggest labelled, and a chip summing up the field" />
+  <img src="/images/fields-hover.webp" alt="Hovering the Parks field: each of its leases a bubble sized by lifetime oil, the biggest labelled, and the readout at the bottom left summing up the field" />
 </Frame>
 
-- **Zoomed out** (below zoom 10): a box around the field's wells, with a pin at its centre.
-- **Zoomed in**: the field's leases, each in its own color, labeled with its lifetime and current oil (for example *1.2m bbl · 799 bopd*). Its wells are colored by their lease and sized by what they made. From zoom 12.5, each well shows its allocated cumulative oil above it, such as *~120k*. The *~* means the figure is an estimate.
-- **The biggest fields**, like the Spraberry Trend, have too many leases to draw one by one. Each lease becomes a bubble sized and shaded by its lifetime oil, and a chip at the bottom of the map sums up the field.
+- **Zoomed out.** The field's outline: the survey tracts its wells sit on, with a pin at its centre when you're zoomed far out. If the field is off screen, or behind the tables or a card, a chip at the edge of the map points to it.
+- **Zoomed in.** From zoom 10, the field's leases, each in its own color, labeled with what it has made and makes per day (for example *1.2m bbl · 799.4 bbl/d*). Its wells are colored by their lease and sized by what they made, and a horizontal is drawn as its lateral. From zoom 12.5, each well shows its allocated cumulative above it, such as *~120k bbl*. The *~* means the figure is an estimate.
+- The figures are in the field's main product, oil or gas, until you pick another under **Show on map** on its card.
+- The biggest fields, like the Spraberry Trend, have too many leases to draw one by one. Each lease becomes a bubble sized and shaded by its lifetime production, and a readout in the bottom-left corner of the map sums up the field.
 
 <Note>
   The RRC reports oil by lease, so a well's share of its lease's oil is **allocated** from well tests. Treat per-well figures as estimates.
@@ -141,30 +152,45 @@ Hover a row to see where the field is:
 
 ### The field card
 
-Click a row to open its card. While the card is open, its field stays drawn on the map.
+Click a row to open its card. The card covers the whole field, whatever the table's **Scope** or the map's view. Only its **On the map** block follows the map.
+
+While the card is open, or a lease you opened from it, the field stays drawn on the map, as it is when you hover its row. Under its name are its RRC district and the year it was found.
 
 <Frame>
-  <img src="/images/field-card.webp" alt="A field's card: production by lease In view or Whole field, what the map holds, and its coverage" />
+  <img src="/images/field-card.webp" alt="A field’s card beside the Fields table: Zoom to, Show on map, Add layer, Show leases, Show wells and Compare, then its Totals, Production and By lease blocks" />
 </Frame>
 
-- **Show leases** switches to the Leases tab, filtered to this field's leases.
-- **Show on map** draws the field's outline. **Hide on map** removes it.
-- The **⋯** menu has **Open field record**, **Copy field number** and **Copy field name**.
+- **Zoom to** flies the map to the field's wells.
+- **Show on map** sets how the field is drawn while its card is open. Its switch is on at first. Under it:
+  - **Oil**, **Gas** or **boe**: what the wells are sized by and the labels say. A field starts on what it mostly makes.
+  - **Wells**, each sized by what it has made, and **Polygons**, the survey tracts the field sits on and, zoomed in, its leases' outlines. Each has **Show** and **Labels**.
+- **Add layer** adds the field to your **Fields** layer, so its outline stays on the map after the card closes, as the **Fields** panel has it. It's pressed while the field is in the layer; click it again to take it out. See [Operator and field layers](/maps/operator-field-layers).
+- **Show leases** and **Show wells** list every one of the field's leases or wells in a tab of their own, the [Record tab](/maps/data-panel#record-tab). The card stays open, and your own Leases and Wells tabs and their filters stay as they are.
+- **Compare** puts the field in the [compare tray](/maps/compare), to set beside other fields.
+
+The Copy icon beside the field number, under its name, copies the number.
+
+What you choose under **Show on map** holds for every field you open, except **Oil**, **Gas** or **boe**, which each field keeps for itself until you reload.
 
 Its blocks:
 
-- **Production**: monthly production since 1993. **Oil** / **Gas** switches the product. **In view** charts only the leases on the map, one band each. **Whole field** charts the whole field, split into **In view** and **Rest of the field**. The lease list underneath works the same way.
-- **On the map**: oil and gas now, over 12 months and lifetime, and how many leases and wells the map holds.
-- **Record**: field number, district, reservoir, class, discovery date, counties and peak month.
-- **Coverage**: the field's RRC lifetime oil and the share the map can place, as a bar split into **Since 1993**, **Placed, before 1993**, **Lost leases** and **Older than the archive**.
+- **Totals**: the field's oil and gas to date, per day now and over the last 12 months.
+- **Production**: the whole field's monthly oil, gas and water.
+- **By lease**: which leases make the field's oil or gas, a band each, with every lease listed under the chart: its wells, what it has made and its share. Pick **Oil** or **Gas**. Click a lease to open its card.
+- **On the map**: how many of the field's leases are in view, and their oil and gas.
+- **Record**: the RRC field file: class, depth, counties and peak month. Click a county to open its card.
+- **Operators**: who operates the field, biggest today first. Click one to open its card.
+- **Coverage**, on an older field the map can't fully place: the field's RRC lifetime oil, as a bar split into **Since 1993**, **Placed, before 1993**, **Lost leases** and **Older than the archive**.
+- **Synopsis**, at the foot: **Write synopsis** writes a few sentences about the field. See [Synopsis](/maps/records#synopsis).
 
 ## Move between cards
 
 Cards link to each other, so you can follow a thread without leaving the table:
 
-- On a **field** card, click a lease in the **Production** list to open that lease's card. <kbd>↑</kbd> / <kbd>↓</kbd> step through the field's leases.
+- On a **field** card, click a lease under **By lease** to open that lease's card. <kbd>↑</kbd> / <kbd>↓</kbd> step through the field's leases. Click an operator under **Operators**, or a county under **Record**, to open its card.
+- On an **operator** card, click a lease under **By lease**, or a deal under **Deals** to open its P-4 filing.
 - On a **lease** card, click the field name to open the field's card, or the operator to open the operator's card.
-- The crumb at the top of the card (**‹ field name**) or <kbd>Esc</kbd> takes you back.
+- The name of the card you came from, above the card's name, or <kbd>Esc</kbd>, takes you back. See [Record cards](/maps/records#one-card-at-a-time).
 
 ## The map follows the table
 
@@ -174,7 +200,7 @@ Once a filter or search is on, **Filtered set** → **Table + map** narrows the 
 
 **Analyze** → **Charts** has recipes for both tabs.
 
-- **Operators**: *BOE/d by operator*, *PV-10 by operator*, *Leases × BOE/d*, *Here vs Texas* and *Share of TX oil in view*.
+- **Operators**: *Daily boe by operator*, *PV-10 by operator*, *Leases × daily boe*, *Here vs Texas* and *Share of TX oil in view*.
 - **Fields**: *RRC lifetime oil by field*, *Oil this year by field*, *RRC lifetime gas by field*, *Gas this year by field*, *How much the map can place*, *Lost oil by field*, *Older than the archive, by field* and *RRC lifetime × placed*.
 
 Tick operators and click **Chart production** to chart each one's monthly production side by side. See [Charts](/maps/charts).
@@ -186,11 +212,14 @@ Tick operators and click **Chart production** to chart each one's monthly produc
 | The operators or fields listed | **Export** → **Table CSV — the rows on screen** |
 | Only some of them | Tick rows, then **Export CSV** in the selection bar |
 | Their RRC numbers | Tick rows, then **Copy operator numbers** or **Copy field numbers** |
-| An operator's or field's leases, with production | **Show leases** on its card, then export from the Leases tab |
-| An operator's wells | **Show leases** on its card, or search the Wells tab for the operator, then export |
+| An operator's or field's leases, with production | **Show leases** on its card, then **Export** on the Record tab |
+| An operator's or field's wells | **Show wells** on its card, then **Export** on the Record tab |
+| An operator's or field's production chart | **Export CSV** or **Save PNG**, at the foot of the card's **Production** block |
 
 The CSV carries the columns you have showing, in their order, with no row limit. The file is named for the tab, the place and the date, for example `operators-reeves-county-2026-09-25-214-rows.csv`. See [Export data](/maps/exports).
 
-## Offline copies
+## Map data on this device
 
-**Fields** has its own [offline copy](/maps/offline). **Operators** is built from the **Leases** copy, so keeping Leases covers both.
+<span id="offline-copies" />
+
+**Fields** has a table of its own in **Map data**. **Operators** is built from the **Leases** table, so having Leases on this device covers both. See [Map data on this device](/maps/offline).

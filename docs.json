@@ -19,6 +19,7 @@
         "group": "Get started",
         "pages": [
           "index",
+          "whats-new",
           "get-started/sign-in",
           "get-started/plans",
           "get-started/billing"
@@ -36,13 +37,41 @@
         "pages": [
           "maps/tour",
           "maps/search",
+          "maps/search-results",
           "maps/layers",
+          "maps/settings",
           "maps/drilling-timeline",
           "maps/well-labels",
+          "maps/production-panel",
+          "maps/operator-field-layers",
+          "maps/plats",
+          "maps/alerts"
+        ]
+      },
+      {
+        "group": "Records",
+        "pages": [
           "maps/records",
-          "maps/ask-the-map",
-          "maps/alerts",
+          "maps/selection",
+          "maps/compare",
+          "maps/my-wells",
           "maps/my-data"
+        ]
+      },
+      {
+        "group": "Subsurface",
+        "pages": [
+          "maps/well-logs",
+          "maps/cross-section",
+          "maps/formation-tops",
+          "maps/depth-records"
+        ]
+      },
+      {
+        "group": "Ask and pages",
+        "pages": [
+          "maps/ask-the-map",
+          "maps/pages"
         ]
       },
       {
@@ -64,6 +93,14 @@
           "tools/wellbore-builder",
           "tools/dashboard",
           "tools/ask"
+        ]
+      },
+      {
+        "group": "Workbooks",
+        "hidden": true,
+        "pages": [
+          "maps/workbooks",
+          "maps/workbooks-share"
         ]
       },
       {

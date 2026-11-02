@@ -1,32 +1,55 @@
 ---
 title: "Replay drilling over time"
 sidebarTitle: "Drilling timeline"
-description: "Watch wells appear in drilling-date order, or pause on a date to inspect an area."
+description: "Watch wells appear in drilling-date order, choose which wells and operators to replay, or pause on a date to inspect an area."
 ---
 
-Frame your area in Maps, click **Layers**, and turn on **Drilling Timeline** in the **WELLS** group. A playback bar appears at the bottom of the map.
+Frame your area in Maps, click **Layers**, and turn on **Drilling Timeline** in the **WELLS** group. A playback bar appears at the bottom of the map. The timeline needs you to be signed in; a free account is enough.
 
-1. Click **Play** to watch wells appear in date order, or **Pause** to stop.
+1. Click **Play** to watch wells appear in date order, or **Pause** to stop. Each well glows amber as it's drilled.
 2. Click or drag along the date track to inspect a particular time. The bar shows the month and how many wells had been drilled by then.
 3. Choose **0.5×**, **1×** or **2×** for playback speed.
-4. Turn on **Blank map** to remove the ordinary well backdrop. Turn it off to keep later wells faint for context.
+4. Turn on **Blank map** to remove the ordinary well backdrop. Turn it off to keep the other wells faint for context.
+
+A vertical well appears as a dot. A horizontal well appears as its stick, a line from the surface location to the bottom hole, the way the map draws laterals.
 
 Pan or zoom to replay another area. Close the timeline with **×**, or switch its layer off, to return to the ordinary map.
 
 <Frame>
-  <img src="/images/maps-drilling-timeline.webp" alt="The drilling timeline paused over Midland with date, playback and blank-map controls" />
+  <img src="/images/maps-drilling-timeline.webp" alt="The drilling timeline over Midland, with playback, speed, labels and blank-map controls, the which-wells row with two operators picked in their own colors, and the date track" />
 </Frame>
+
+## Choose which wells
+
+The second row of the bar narrows what the timeline replays. These choices belong to the timeline: they don't change your well filters or tables.
+
+- **All**, **Vertical** or **Horizontal**: which wellbores to replay.
+- **From** and **To**: type a year in either box, or both, to replay only those years. An empty box means no limit; it reads *First* or *Today*. **Clear** empties both.
+- **Add operator**: pick up to 10 operators. The list starts with the operators who drilled the wells in view, most wells first. Type in **Find an operator** to search every operator.
+- **Zoom to**: once you've picked operators, frame the map on their wells, wherever they are in Texas. Nothing else on the bar moves the map.
+
+With operators picked, the timeline replays only their wells, each operator in its own color. Their chips show the colors, so they double as the legend; click a chip's **×** to remove it. With no operators picked, the row reads *All operators*.
+
+A well counts for the operator named on its completion report: the operator who drilled it.
+
+If no well in view was drilled in the years you chose, the track says *No well in view was drilled in these years.*
 
 ## Label the wells
 
-The label button beside playback speed opens **Label wells with**. Choose names, well numbers, operator, drilled date, depth, lateral length, field, API or cumulative BOE. **No labels** clears the choices.
+The labels button beside playback speed reads your choice, like *Labels: Well name + 2 more*. Click it to open **Label wells with**. Choose **Operator**, **Well name**, **Well number**, **Drilled date**, **Field**, **API**, **Cumulative boe**, **Total depth** or **Lateral length**. **No labels** clears the choices.
 
-Labels need a closer zoom; **Zoom in for labels** tells you when. During playback they label wells as they appear. When paused, labels are shown for the wells that fit without crowding.
+Labels appear from zoom 11. Until then the button is dimmed, and the bottom line of the bar says *Labels show from zoom 11*. During playback they label wells as they appear. When paused, labels are shown for the wells that fit without crowding.
+
+Labels sit around each well as they do on the map: the name above, the date below, the number to the right and the depth to the left. A horizontal well is labeled at its bottom hole, unless you've chosen another spot for horizontal labels in [Well labels](/maps/well-labels). A date marked *~* is estimated from completion records.
 
 ## Read the dates carefully
 
 The timeline uses reported spud dates when available, with drilling or completion records as fallbacks. The bar states how many dates are estimated. Wells without a dated record stay faint, or appear as rings on the blank map; they cannot be assigned a drilling date.
 
-The timeline needs the well snapshot. If it is loading, wait for the status in the bar. An older publication may not support drilling dates yet.
+While the wells data gets ready, the track says *Getting the wells ready…*; wait for it to finish.
 
-Playback speed, blank-map and label choices are remembered for your account and project. The timeline itself closes on a reload.
+While **My Wells** is on in Layers, the timeline replays your version of the wells you've corrected or added in [My Wells](/maps/my-wells): your dates, operators and locations.
+
+## What's remembered
+
+Playback speed, **Blank map**, your label choices and which wells to replay (the wellbore, the years and the operators) are remembered for your account and project. The timeline itself closes on a reload.

@@ -15,304 +15,18 @@
 // the Enterprise shots use one project (PROJECT below) and take the others off the rail,
 // the Owner Portal stops above the property rows, and the Filters popover leaves out the
 // My Data layer names. Keep to that when adding a shot.
+//
+// The shots live in shots/*.mjs, one module per group of pages; the shared helpers in lib.mjs.
+// `SHOTS_MODULE=search` loads only shots/search.mjs (several people can work on different groups
+// at once without one half-edited module stopping the others).
 
 import { chromium } from 'playwright';
 import sharp from 'sharp';
-import { existsSync, readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { AUTH_FILE, BASE_URL, ROOT, VIEWPORT, authState, blockWrites, clearAnnotations, drawAnnotations, embed } from './lib.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const BASE_URL = (process.env.BASE_URL ?? 'https://quickscout.io').replace(/\/$/, '');
-const AUTH_FILE = join(ROOT, 'screenshots', '.auth', `${new URL(BASE_URL).host.replace(':', '_')}.json`);
 const only = process.argv.slice(2);
-
-const VIEWPORT = { width: 1440, height: 900 };
-
-// Midland — dense enough that every layer and table has something to show. A box, not
-// lat/lng/zoom: /maps ignores those (Mapbox's `bounds` option wins over `center`/`zoom`).
-const box = (w, s, e, n) => 'box2d=' + encodeURIComponent(`BOX(${w} ${s},${e} ${n})`);
-const MIDLAND = box(-102.25, 31.88, -101.9, 32.12);
-// Heatmap cells are miles across, so that shot stands further back.
-const MIDLAND_BASIN = box(-102.7, 31.55, -101.3, 32.6);
-// The sample well, and a box that puts it right of the record drawer. `?api=` opens the record
-// but leaves the camera where it was.
-const SAMPLE_API = '4231740219';
-const SAMPLE_WELL = box(-102.31, 32.255, -102.12, 32.365);
-// The sample well's operator, Diamondback E&P: big enough that every tab has something in it.
-const SAMPLE_OPERATOR = '217012';
-
-// The Enterprise shots all show this project. `also` tells two projects with one name apart.
-const PROJECT = {
-    name: process.env.SHOTS_PROJECT ?? 'Midland 2026 Deal',
-    also: process.env.SHOTS_PROJECT_ALSO ?? 'PIONEER',
-};
-// An operator project has no areas of its own, so the Areas page is pictured from one that does.
-const AREAS_PROJECT = {
-    name: process.env.SHOTS_AREAS_PROJECT ?? PROJECT.name,
-    also: process.env.SHOTS_AREAS_PROJECT_ALSO ?? 'AREAS',
-};
-
-// ─── helpers: maps ───────────────────────────────────────────────────────────
-
-/** Mapbox paints after the canvas appears; tiles keep landing for a few seconds more. */
-async function mapSettled(page) {
-    await page.locator('canvas.mapboxgl-canvas').first().waitFor({ timeout: 60_000 });
-    await page.waitForTimeout(6_000);
-}
-
-/** Map controls open on click. Accessible names work in both dev and production. */
-async function openMapControl(page, name) {
-    await page.getByRole('button', { name, exact: true }).click();
-    await page.waitForTimeout(1_000);
-}
-
-// ─── helpers: data tables ────────────────────────────────────────────────────
-
-/** Opens the tables. `wide` drags them to their widest beside the map — at the default width the
- *  toolbar is icons only and a row shows four columns. */
-async function openTables(page, { wide = true } = {}) {
-    await page.getByRole('button', { name: 'Show data tables' }).click();
-    await rowsSteady(page);
-    if (!wide) return;
-    const handle = await page.getByRole('button', { name: 'Hide data tables' }).boundingBox();
-    await page.mouse.move(handle.x + handle.width / 2, 200);
-    await page.mouse.down();
-    await page.mouse.move(560, 200, { steps: 12 });
-    await page.mouse.up();
-    await page.waitForTimeout(1_500);
-}
-
-/** Wells in view, biggest producers first: rows a reader recognises, not the statewide list's
- *  first page of "%MARQUEE CORPORATION". */
-async function wellsInViewByCumOil(page) {
-    await page.getByRole('button', { name: /^Scope:/ }).click();
-    await page.getByText('In view', { exact: true }).first().click();
-    await page.keyboard.press('Escape');
-    await rowsSteady(page);
-    await page.getByRole('button', { name: /^Sort:/ }).click();
-    await page.getByText('Cum oil bbl', { exact: true }).first().click();
-    await page.getByText(/^Descending/).first().click();
-    await page.keyboard.press('Escape');
-    await rowsSteady(page);
-}
-
-/** Rows on screen and the footer done "Updating…" — held for 3 s. Not the stand-in either: while the
- *  wells copy downloads, the table shows the file's first rows unsorted ("The first 1,000 wells in
- *  the file, unsorted and unfiltered…"), which is not the view the shot sets up. Held for 3 s, because the table swaps
- *  back to skeletons when its source changes (network read → the copy on this device). */
-async function rowsSteady(page) {
-    // Long enough for a fresh browser to download the wells copy.
-    const deadline = Date.now() + 300_000;
-    let steadySince = 0;
-    while (Date.now() < deadline) {
-        const ready = await page.evaluate(
-            (find) => !!new Function(`return (${find})`)()() && !/Updating for this view|in the file, unsorted and unfiltered|rows appear when it lands/.test(document.body.innerText),
-            findFirstRow.toString(),
-        );
-        if (!ready) steadySince = 0;
-        else if (!steadySince) steadySince = Date.now();
-        else if (Date.now() - steadySince > 3_000) return;
-        await page.waitForTimeout(500);
-    }
-    throw new Error('table rows never settled');
-}
-
-/** A loaded table row (not a skeleton). CSS-module names differ between `next dev`
- *  (`data-table-module__x__row`) and the prod build (`data-table_row__x`), so match both. */
-function findFirstRow() {
-    // Only the data table's stylesheet: other modules (the top bar) have a `row` class too.
-    const isRow = (c) => /^data-table-module__\w+__row$|^data-table_row__/.test(c);
-    const isSkeleton = (c) => /^data-table-module__\w+__rowSkeleton$|^data-table_rowSkeleton__/.test(c);
-    return [...document.querySelectorAll('[class]')].find(
-        (el) => [...el.classList].some(isRow) && ![...el.classList].some(isSkeleton),
-    ) ?? null;
-}
-
-/** The table's Filters button. The map's control rail has a "Filters" button too (the map's own
- *  filter card), and both say "Filters"; the table's is the one furthest right. */
-async function tableFilters(page) {
-    const buttons = page.getByRole('button', { name: /^Filters/ });
-    const lefts = await buttons.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().left));
-    return buttons.nth(lefts.indexOf(Math.max(...lefts)));
-}
-
-async function clickFirstRow(page) {
-    await rowsSteady(page);
-    const row = (await page.evaluateHandle(findFirstRow)).asElement();
-    if (!row) throw new Error('no table row to click');
-    await row.click();
-}
-
-/** A table tab, rows loaded. */
-async function openTab(page, name) {
-    await page.getByRole('tab', { name: new RegExp(`^${name}`) }).click();
-    await page.waitForTimeout(3_000);
-    await rowsSteady(page);
-}
-
-const openLeasesTab = (page) => openTab(page, 'Leases');
-
-/** Opens the analysis panel (Analyze, at the end of the toolbar) on its Charts tab. */
-async function openAnalyze(page) {
-    await page.getByRole('button', { name: 'Analyze', exact: true }).click();
-    await page.waitForTimeout(2_000);
-    const charts = page.getByRole('tab', { name: 'Charts', exact: true });
-    if (await charts.isVisible().catch(() => false)) await charts.click();
-    await page.waitForTimeout(1_000);
-}
-
-/** A card has painted once its stamp line is there and its blocks have swapped their skeletons
- *  for rows — a big field's production takes a while. */
-async function cardSettled(page, text) {
-    await page.getByText(text).first().waitFor({ timeout: 90_000 });
-    await page
-        .waitForFunction(() => !document.querySelector('[class*="keleton"]'), null, { timeout: 180_000 })
-        .catch(() => {});
-    await page.waitForTimeout(4_000);
-}
-
-/** The tables filling the window, so a card opened from them is wide enough to read. */
-async function fillWindow(page) {
-    await page.getByRole('button', { name: 'Fill the window' }).click();
-    await page.mouse.move(720, 870);
-    await rowsSteady(page);
-}
-
-/** The tables alone, right of the map, once the footer has finished saving a copy to this device. */
-async function tablesOnly(page) {
-    await page
-        .waitForFunction(() => !/Saving a copy to this device|Totalling every lease/.test(document.body.innerText), null, { timeout: 240_000 })
-        .catch(() => {});
-    // Once the copy lands the table reads it afresh (and Operators re-totals Texas).
-    await rowsSteady(page);
-    await page.mouse.move(720, 870);
-    await page.waitForTimeout(1_500);
-    return { x: 600, y: 0, width: VIEWPORT.width - 600, height: VIEWPORT.height };
-}
-
-/** A fresh browser has no copies on this device: the field card's lease chart and the field hover
- *  read the Leases and Wells copies, so wait for the footer to stop saving them. */
-async function copiesSaved(page) {
-    await page.waitForTimeout(5_000);
-    await page
-        .waitForFunction(() => !/Saving a copy to this device|Waiting for the wells snapshot/.test(document.body.innerText), null, { timeout: 300_000 })
-        .catch(() => {});
-    await rowsSteady(page);
-}
-
-/** Hovers the table row whose first cell reads `name`. */
-async function hoverRow(page, name) {
-    await page.getByText(name, { exact: true }).first().hover();
-}
-
-/** The sample well's lease, open in its drawer. */
-async function openSampleLease(page) {
-    await mapSettled(page);
-    // The lease name in the well's header is the way through; "View lease" is its tooltip.
-    await page.getByTitle('View lease').first().click();
-    await page.getByRole('tab', { name: 'Owners' }).waitFor({ timeout: 30_000 });
-    await page.waitForTimeout(6_000);
-}
-
-/** The lease drawer from the bottom of its chart down: the title block, the two export buttons
- *  under it, and whichever export menu is open. */
-const LEASE_EXPORT_CLIP = { x: 0, y: 400, width: 640, height: 500 };
-/** Somewhere to leave the pointer: the operator's name, which has no hover of its own. The map
- *  beside the drawer answers a resting pointer with a well popup. */
-const LEASE_REST = [270, 466];
-
-/** The top of the first element showing `text`, in CSS px — where a clip should stop. */
-async function topOf(page, text) {
-    const at = await page.getByText(text, { exact: false }).first().boundingBox();
-    if (!at) throw new Error(`"${text}" is not on screen`);
-    return Math.floor(at.y);
-}
-
-
-/** The Alerts drawer, from the rail button just above Profile. */
-async function openAlerts(page) {
-    await mapSettled(page);
-    await page.getByRole('button', { name: /^Alerts/ }).last().click();
-    await page.getByRole('button', { name: /^New( alert)?$/ }).first().waitFor({ timeout: 60_000 });
-    await page.waitForTimeout(3_000);
-}
-
-/** The new-alert editor, on its Area step with the map view added. Nothing is saved: the shots
- *  never press Create alert. */
-async function newAlertWithMapView(page) {
-    await openAlerts(page);
-    await page.getByRole('button', { name: /^New( alert)?$/ }).first().click();
-    await page.getByText('Where should this alert watch?').waitFor({ timeout: 30_000 });
-    await page.getByRole('button', { name: 'Use current map view' }).click();
-    await page.waitForTimeout(4_000);
-}
-
-const ALERT_CLIP = { x: 0, y: 0, width: 1000, height: 900 };
-
-// ─── helpers: Enterprise ─────────────────────────────────────────────────────
-
-async function settle(page, ms = 4_000) {
-    await page.waitForLoadState('networkidle', { timeout: 60_000 }).catch(() => {});
-    await page.waitForTimeout(ms);
-}
-
-const onWelcome = (page) => page.getByText(/^Welcome back/).first().isVisible().catch(() => false);
-
-/** The project picker, whatever project the account last had open. */
-async function openWelcome(page) {
-    await settle(page);
-    if (await onWelcome(page)) return;
-    await page.keyboard.press('Control+Shift+Digit0');
-    await page.getByText(/^Welcome back/).first().waitFor({ timeout: 30_000 });
-    await settle(page, 2_000);
-}
-
-/** Opens PROJECT, then a page of it, with the workspace tidied for a picture: the account's other
- *  projects taken off the rail, and the docked Ask panel closed. `ready` is text the page shows
- *  once it has loaded. */
-async function openProject(page, path = '/prospect', ready = null, project = PROJECT) {
-    await openWelcome(page);
-    // The row is the innermost element holding both the name and what it covers.
-    await page.locator('div, li, a, button').filter({ hasText: project.name }).filter({ hasText: project.also }).last().click();
-    await page.getByRole('button', { name: 'Manage coverage' }).waitFor({ timeout: 60_000 });
-    if (path !== '/prospect') await page.goto(BASE_URL + path, { waitUntil: 'domcontentloaded', timeout: 60_000 });
-    if (ready) await page.getByText(ready).first().waitFor({ timeout: 90_000 });
-    await settle(page, 6_000);
-    const closeAsk = page.getByRole('button', { name: 'Close Ask' });
-    if (await closeAsk.isVisible().catch(() => false)) await closeAsk.click();
-    // The feed's sources load separately, and one of them failing leaves a "retry" in the panel.
-    const retry = page.getByText(/^retry$/i).first();
-    if (await retry.isVisible().catch(() => false)) {
-        await retry.click();
-        await page.waitForTimeout(4_000);
-        // Still failing is the local API's trouble, not something the help pages should picture.
-        await page.evaluate(() => {
-            // The smallest element holding the message — every ancestor up to <body> holds it too.
-            const holders = [...document.querySelectorAll('body *')].filter((el) => /did(n.t| not) load/i.test(el.textContent ?? ''));
-            let row = holders.sort((a, b) => a.textContent.length - b.textContent.length)[0] ?? null;
-            // Then out to the banner it sits in: wrappers that say nothing more than it does.
-            while (row?.parentElement && row.parentElement.textContent.trim().length <= row.textContent.trim().length + 8) row = row.parentElement;
-            if (row && row.textContent.length < 300) row.style.display = 'none';
-        });
-    }
-    // The rail lists the account's projects under PROJECTS; its sections don't fold. Leave only
-    // the one the pictures are of.
-    await page.evaluate((keep) => {
-        const heading = [...document.querySelectorAll('span')].find(
-            (el) => /^projects$/i.test(el.textContent.trim()) && !el.closest('a') && el.getBoundingClientRect().left < 60,
-        );
-        if (!heading) return;
-        const top = heading.getBoundingClientRect().top;
-        for (const button of document.querySelectorAll('button')) {
-            const at = button.getBoundingClientRect();
-            const inList = at.left < 220 && at.top > top && at.width > 100;
-            if (inList && button.textContent.trim() !== keep) button.style.display = 'none';
-        }
-    }, project.name);
-    await page.mouse.move(720, 450);
-    await page.waitForTimeout(2_500);
-}
 
 // ─── the shots ───────────────────────────────────────────────────────────────
 // name        → images/<name>.webp, and the marker it replaces
@@ -320,777 +34,28 @@ async function openProject(page, path = '/prospect', ready = null, project = PRO
 // auth        → needs the saved session
 // startDrawer → leave Maps' first-load start drawer open (every other Maps shot closes it)
 // run         → drives the page; may return a clip `{ x, y, width, height }` in CSS px
+// annotate    → what the picture points at (see "annotations" above); an array, or a function of
+//               the page that returns one
+// steps       → a walkthrough: `{ name, alt, run, annotate }` captured one after another in the same
+//               page, so step 3 sees what steps 1 and 2 did. The shot's own name only groups them.
+// allowWrites → a path pattern let through the write block, for the one shot that must (an Ask turn)
+// after       → tidies up after the captures (a thread the shot made), whether or not they worked
 
-const SHOTS = [
-    {
-        name: 'maps-drilling-timeline',
-        alt: 'The drilling timeline paused over Midland with date, playback and blank-map controls',
-        auth: true,
-        path: `/maps?${box(-102.18, 31.98, -102.14, 32.015)}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openMapControl(page, 'Layers');
-            await page.getByText('Drilling Timeline', { exact: true }).click();
-            await page.getByRole('group', { name: 'Drilling timeline', exact: true }).waitFor({ timeout: 30_000 });
-            await page.getByRole('button', { name: 'Layers', exact: true }).click();
-            await page.waitForFunction(() => {
-                const group = document.querySelector('[aria-label="Drilling timeline"]');
-                return group?.querySelector('button[aria-label="Play"]:not(:disabled), button[aria-label="Pause"]:not(:disabled)');
-            }, null, { timeout: 180_000 });
-            const pause = page.getByRole('button', { name: 'Pause', exact: true });
-            if (await pause.isVisible()) await pause.click();
-            await page.mouse.move(20, 30);
-            await page.waitForTimeout(1_000);
-        },
-    },
-    {
-        name: 'maps-printing',
-        alt: 'Map Print Studio with a scaled Midland sheet, paper and export controls',
-        auth: true,
-        path: `/maps?${box(-102.18, 31.98, -102.14, 32.015)}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await page.getByRole('button', { name: 'Print map', exact: true }).click();
-            await page.getByRole('button', { name: 'Export PDF', exact: true }).waitFor({ timeout: 60_000 });
-            await page.getByLabel('Feet per inch', { exact: true }).fill('2000');
-            await page.getByLabel('Feet per inch', { exact: true }).press('Enter');
-            await page.getByText('Loading map…', { exact: true }).waitFor({ state: 'hidden', timeout: 120_000 });
-            await page.mouse.move(720, 870);
-            await page.waitForTimeout(2_000);
-        },
-    },
-    {
-        name: 'maps-well-labels',
-        alt: 'The Well labels editor with presets, fields and label positions around the symbol',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openMapControl(page, 'Settings');
-            await page.getByRole('button', { name: 'Edit labels…', exact: true }).click();
-            await page.getByRole('button', { name: 'Apply to map', exact: true }).waitFor({ timeout: 30_000 });
-            await page.mouse.move(720, 870);
-            await page.waitForTimeout(1_000);
-        },
-    },
-    // Maps
-    {
-        name: 'maps-overview',
-        alt: 'The Maps screen over Midland County',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: mapSettled,
-    },
-    {
-        name: 'maps-start-drawer',
-        alt: 'The start drawer, with Go to place, Go to RRC record, Basins and Saved scopes',
-        auth: true,
-        startDrawer: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            return { x: 0, y: 0, width: 900, height: 900 };
-        },
-    },
-    {
-        name: 'maps-layers',
-        alt: 'The Layers card with well layers, drilling timeline and one-at-a-time heatmap choices',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openMapControl(page, 'Layers');
-            return { x: 640, y: 0, width: 800, height: VIEWPORT.height };
-        },
-    },
-    {
-        name: 'maps-heatmap',
-        alt: 'The Well Heatmap over the Midland Basin, with its metric menu and color legend',
-        auth: true,
-        path: `/maps?${MIDLAND_BASIN}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openMapControl(page, 'Layers');
-            // The heatmaps are radios in the Analytics group's SURFACE box, not switches.
-            await page.getByText('Well Heatmap', { exact: true }).first().click();
-            await page.waitForTimeout(8_000);
-        },
-    },
-    {
-        name: 'maps-filters-card',
-        alt: 'The Filters card on the right side of the map: well types, wellbore, Any column and the saved filters line',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openMapControl(page, 'Filters');
-            await page.getByText('Any column', { exact: true }).waitFor({ timeout: 30_000 });
-            await page.mouse.move(1400, 880);
-            await page.waitForTimeout(1_500);
-            return { x: 600, y: 0, width: 840, height: 640 };
-        },
-    },
-    {
-        name: 'maps-search',
-        alt: 'The search panel for Pioneer: the Search row, then matching operators, leases and wells, each lease with its current rate',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            // The panel opens on a click in the field (focus alone never opens it).
-            const field = page.getByRole('combobox', { name: 'Search the map' });
-            await field.click();
-            await field.pressSequentially('Pioneer', { delay: 40 });
-            // Groups land one after another (operators, leases, wells) once the copies open.
-            await page.getByText('Wells', { exact: true }).first().waitFor({ timeout: 60_000 }).catch(() => {});
-            await page.waitForTimeout(4_000);
-            return { x: 0, y: 0, width: 900, height: VIEWPORT.height };
-        },
-    },
-    {
-        name: 'maps-search-results',
-        alt: 'The Search tab for Pioneer: the match count, the top match with its production chart, and cards for leases, wells, operators and fields',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            const field = page.getByRole('combobox', { name: 'Search the map' });
-            await field.click();
-            await field.pressSequentially('Pioneer', { delay: 40 });
-            await page.waitForTimeout(1_500);
-            await field.press('Enter');
-            // The heading ("N wells match “pioneer”") and the top match's chart are the slowest parts.
-            await page.getByText(/^Top match/i).first().waitFor({ timeout: 120_000 });
-            await page.getByText(/boe\/d/i).first().waitFor({ timeout: 60_000 }).catch(() => {});
-            // Over the rail, where nothing hovers: a pointer over the map draws a well popup.
-            await page.mouse.move(40, 960);
-            await page.waitForTimeout(6_000);
-        },
-    },
-    {
-        name: 'place-panel',
-        alt: 'The place card for Midland County: production in view, suggested questions, and the busiest operators and fields',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await page.getByRole('group', { name: 'Map place context' }).getByRole('button').first().click();
-            const card = page.getByRole('dialog', { name: 'This view' });
-            await card.waitFor({ timeout: 30_000 });
-            await card.getByText('Busiest here').waitFor({ timeout: 30_000 }).catch(() => {});
-            await page.waitForTimeout(4_000);
-            const box = await card.boundingBox();
-            const x = Math.max(0, Math.floor(box.x - 420));
-            return { x, y: 0, width: Math.min(VIEWPORT.width - x, Math.ceil(box.x + box.width + 40) - x), height: Math.min(VIEWPORT.height, Math.ceil(box.y + box.height + 30)) };
-        },
-    },
-    {
-        name: 'well-drawer',
-        alt: 'A well record: satellite view, operator and lease, the Builder and Report buttons, and the Wellbore tab',
-        auth: true,
-        path: `/maps?${SAMPLE_WELL}&api=${SAMPLE_API}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await page.getByText('Report', { exact: true }).first().waitFor({ timeout: 30_000 });
-            // The satellite picture is the slowest thing in the drawer.
-            await page.waitForTimeout(12_000);
-        },
-    },
-    {
-        name: 'lease-drawer',
-        alt: 'A lease record: its production chart, the Production and Wells export buttons under its name, Claim Your Interest, and the Overview tab',
-        auth: true,
-        path: `/maps?${SAMPLE_WELL}&api=${SAMPLE_API}`,
-        run: openSampleLease,
-    },
-    {
-        name: 'lease-export-production',
-        alt: "A lease's Production export menu: the production window, Production CSV and DRI",
-        auth: true,
-        path: `/maps?${SAMPLE_WELL}&api=${SAMPLE_API}`,
-        run: async (page) => {
-            await openSampleLease(page);
-            await page.getByRole('button', { name: 'Export production' }).click();
-            await page.getByText('Production CSV — a row per month').waitFor({ timeout: 30_000 });
-            await page.mouse.move(...LEASE_REST);
-            await page.waitForTimeout(1_500);
-            return LEASE_EXPORT_CLIP;
-        },
-    },
-    {
-        name: 'lease-export-wells',
-        alt: "A lease's Wells export menu: Wells CSV, GeoGraphix ASCII4, OpenWorks OWX and Copy API numbers",
-        auth: true,
-        path: `/maps?${SAMPLE_WELL}&api=${SAMPLE_API}`,
-        run: async (page) => {
-            await openSampleLease(page);
-            await page.getByRole('button', { name: 'Export wells' }).click();
-            await page.getByText('Wells CSV — a row per bore').waitFor({ timeout: 30_000 });
-            // The options are greyed out until the lease's wells have been read.
-            await page
-                .waitForFunction(() => !/Reading the lease/.test(document.body.innerText), null, { timeout: 90_000 })
-                .catch(() => {});
-            await page.mouse.move(...LEASE_REST);
-            await page.waitForTimeout(1_500);
-            return LEASE_EXPORT_CLIP;
-        },
-    },
-
-    {
-        name: 'chart-download',
-        alt: "The gear menu on a lease's production chart, with Download Image near the bottom",
-        auth: true,
-        path: `/maps?${SAMPLE_WELL}&api=${SAMPLE_API}`,
-        run: async (page) => {
-            await openSampleLease(page);
-            // Three unlabelled icons sit at the chart's top right; the gear is the last of them. The
-            // drawer is a card floating under the command bar, so they sit about 135px down.
-            const icons = await page.evaluate(() =>
-                [...document.querySelectorAll('button')]
-                    .map((b) => b.getBoundingClientRect())
-                    .filter((r) => r.top > 100 && r.top < 170 && r.left > 370 && r.left < 470 && r.width < 30)
-                    .map((r) => [r.left + r.width / 2, r.top + r.height / 2])
-                    .sort((a, b) => a[0] - b[0]),
-            );
-            if (!icons.length) throw new Error("the chart's icons are not where they were");
-            await page.mouse.click(...icons[icons.length - 1]);
-            await page.getByText('Download CSV').waitFor({ timeout: 30_000 });
-            await page.getByText('Download CSV').scrollIntoViewIfNeeded();
-            // Left of the menu and still on the drawer: over the map, a resting pointer raises a well popup.
-            await page.mouse.move(120, 466);
-            await page.waitForTimeout(1_500);
-            return { x: 0, y: 0, width: 640, height: VIEWPORT.height };
-        },
-    },
-    {
-        name: 'operator-wells-export',
-        alt: "An operator's Wells tab: Export CSV beside the well count, above Plugging Liability Only",
-        auth: true,
-        path: `/maps?${SAMPLE_WELL}&operator_no=${SAMPLE_OPERATOR}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await page.getByRole('tab', { name: 'Wells' }).click();
-            await page.getByRole('button', { name: 'Export CSV' }).waitFor({ timeout: 60_000 });
-            await page.mouse.move(270, 466);
-            await page.waitForTimeout(4_000);
-            return { x: 0, y: 420, width: 640, height: 480 };
-        },
-    },
-
-    // Data tables
-    {
-        name: 'data-panel',
-        alt: 'The Wells table open beside the map, listing the wells in view by cumulative oil',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await wellsInViewByCumOil(page);
-        },
-    },
-    {
-        name: 'data-toolbar',
-        alt: 'The tables filling the window: tabs with their counts, the search box, and the toolbar with its labels',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page, { wide: false });
-            await wellsInViewByCumOil(page);
-            await page.getByRole('button', { name: 'Fill the window' }).click();
-            // The pointer is left over the top row's buttons, and their tooltip covers Columns.
-            await page.mouse.move(720, 620);
-            await rowsSteady(page);
-            return { x: 72, y: 0, width: VIEWPORT.width - 72, height: 330 };
-        },
-    },
-    {
-        name: 'data-filters',
-        alt: 'The Filters popover on the Wells tab: the Saved line, a blank filter row, and quick filter pills with their counts',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await wellsInViewByCumOil(page);
-            await (await tableFilters(page)).click();
-            await page.getByText('Include historic wells').waitFor({ timeout: 30_000 });
-            await page.waitForTimeout(1_500);
-            // "Inside a My Data layer" lists the account's own file names. Without it this is the
-            // popover an account with no area layers sees, so drop that section rather than crop it.
-            const bottom = await page.evaluate(() => {
-                const leaves = [...document.querySelectorAll('*')].filter((el) => el.children.length === 0);
-                const label = leaves.find((el) => /inside a my data layer/i.test(el.textContent ?? ''));
-                let section = label ?? null;
-                while (section?.parentElement && !/include historic wells/i.test(section.parentElement.textContent ?? '')) {
-                    section = section.parentElement;
-                }
-                const popover = section?.parentElement ?? leaves.find((el) => /include historic wells/i.test(el.textContent ?? ''));
-                if (section) section.style.display = 'none';
-                return popover.getBoundingClientRect().bottom;
-            });
-            return { x: 560, y: 0, width: VIEWPORT.width - 560, height: Math.ceil(bottom) + 90 };
-        },
-    },
-    {
-        name: 'row-card',
-        alt: "A well's row card open beside the Wells table, showing totals and production blocks",
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await wellsInViewByCumOil(page);
-            // A horizontal well: every block of the card has something in it.
-            await (await tableFilters(page)).click();
-            await page.getByRole('button', { name: /horizontal$/ }).first().click();
-            await page.keyboard.press('Escape');
-            await clickFirstRow(page);
-            await page.getByText('Open full well record').waitFor({ timeout: 30_000 });
-            await page.waitForTimeout(8_000);
-        },
-    },
-    {
-        name: 'data-chart',
-        alt: 'A scatter of lateral length against cumulative oil above the Wells table',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await wellsInViewByCumOil(page);
-            await openAnalyze(page);
-            await page.getByRole('button', { name: 'Lateral × cum oil' }).click();
-            await page.waitForTimeout(6_000);
-        },
-    },
-    {
-        name: 'data-export',
-        alt: 'The Export menu on the Wells tab, listing Table CSV, GeoGraphix ASCII4, OpenWorks OWX and DRI',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await wellsInViewByCumOil(page);
-            await page.getByRole('button', { name: 'Export', exact: true }).click();
-            await page.getByText('DRI v2.4 production (.dri)').waitFor({ timeout: 30_000 });
-            await page.waitForTimeout(1_000);
-            return { x: 560, y: 0, width: VIEWPORT.width - 560, height: 420 };
-        },
-    },
-    {
-        name: 'data-export-leases',
-        alt: 'The Export menu on the Leases tab: the production window, then Table CSV, Production CSV and DRI',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await openLeasesTab(page);
-            await page.getByRole('button', { name: 'Export', exact: true }).click();
-            await page.getByText('Production CSV — a row per lease-month').waitFor({ timeout: 30_000 });
-            await page.mouse.move(720, 700);
-            await page.waitForTimeout(1_500);
-            return { x: 560, y: 0, width: VIEWPORT.width - 560, height: 420 };
-        },
-    },
-    {
-        name: 'data-selection',
-        alt: 'Three leases ticked, and the bar above the table: Export CSV, Export production, Compare production and Copy lease keys, with the Enterprise actions greyed out',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await openLeasesTab(page);
-            const tick = page.getByRole('button', { name: 'Select lease', exact: true });
-            for (let i = 0; i < 3; i++) await tick.nth(i).click();
-            await page.getByText('3 selected').waitFor({ timeout: 30_000 });
-            // Pictured the way the readers of these pages see it: the Enterprise actions greyed out.
-            await page.evaluate(() => {
-                const enterprise = ['Add to watchlist', 'Add to project scope', 'New project from these', 'Add to deal draft'];
-                for (const button of document.querySelectorAll('button')) {
-                    if (enterprise.includes(button.textContent.trim())) button.disabled = true;
-                }
-            });
-            await page.mouse.move(720, 700);
-            await page.waitForTimeout(1_500);
-            return { x: 560, y: 0, width: VIEWPORT.width - 560, height: 380 };
-        },
-    },
-    {
-        name: 'offline-copies',
-        alt: 'The Local data panel listing each dataset, its size and whether it is stored on this device',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await wellsInViewByCumOil(page);
-            await page.getByRole('button', { name: /^Snapshot/ }).click();
-            await page.getByText('Remove everything stored on this device').waitFor({ timeout: 30_000 });
-            // A fresh browser has no copies: give the downloads time to land, so the panel shows
-            // "On this device" rather than six rows of "Downloading".
-            await page
-                .waitForFunction(() => !/Downloading/.test(document.body.innerText), null, { timeout: 240_000 })
-                .catch(() => {});
-            await page.waitForTimeout(2_000);
-            return { x: 560, y: 0, width: VIEWPORT.width - 560, height: VIEWPORT.height };
-        },
-    },
-
-    // Operators & Fields
-    {
-        name: 'operators-table',
-        alt: 'The Operators tab over Midland County: each operator totalled over its leases in view, biggest BOE/d first',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await openTab(page, 'Operators');
-            return tablesOnly(page);
-        },
-    },
-    {
-        name: 'operator-card',
-        alt: "An operator's card beside the Operators table: Show leases, Show on map, and its production and footprint",
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await openTab(page, 'Operators');
-            await fillWindow(page);
-            await clickFirstRow(page);
-            await cardSettled(page, 'rolled up by operator');
-        },
-    },
-    {
-        name: 'fields-table',
-        alt: 'The Fields tab over Midland County: RRC lifetime totals, the share the map can place, and the gap',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await openTab(page, 'Fields');
-            return tablesOnly(page);
-        },
-    },
-    {
-        name: 'fields-hover',
-        alt: 'Hovering the Parks field: each of its leases a bubble sized by lifetime oil, the biggest labelled, and a chip summing up the field',
-        auth: true,
-        // South-west Midland County, where the Parks field's leases are.
-        path: `/maps?${box(-102.2, 31.84, -102.02, 31.95)}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page, { wide: false });
-            await openTab(page, 'Fields');
-            await copiesSaved(page);
-            // Not the Spraberry, first in the list: it covers the whole view.
-            await hoverRow(page, 'PARKS (CONSOLIDATED)');
-            await page.waitForTimeout(15_000);
-        },
-    },
-    {
-        name: 'field-card',
-        alt: "A field's card: production by lease In view or Whole field, what the map holds, and its coverage",
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await mapSettled(page);
-            await openTables(page);
-            await openTab(page, 'Fields');
-            await copiesSaved(page);
-            await fillWindow(page);
-            // The Spraberry, first in the list, has thousands of leases in view and charts slowly.
-            await page.getByText('PARKS (CONSOLIDATED)', { exact: true }).first().click();
-            await cardSettled(page, 'RRC field file');
-            // The production chart and its lease list land after the card's facts.
-            await page.getByText(/in view · field/).first().waitFor({ timeout: 120_000 }).catch(() => {});
-            await page.waitForTimeout(3_000);
-        },
-    },
-
-    // Alerts in Maps
-    {
-        name: 'alerts-drawer',
-        alt: 'The Alerts drawer: each alert with its source, recent matches and pause switch, one expanded with its run history and matches',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await openAlerts(page);
-            // Expand the first alert: its run history, matches, and its area outlined on the map.
-            await page.getByRole('button', { name: /^Pause alert|^Resume alert/ }).first().waitFor({ timeout: 30_000 }).catch(() => {});
-            // A row's second line ("198 matches · 2h ago") expands it; the name pill up top is the place panel.
-            await page.getByText(/^\d[\d,]* matches$/).first().click();
-            await page.waitForTimeout(8_000);
-            return ALERT_CLIP;
-        },
-    },
-    {
-        name: 'alert-area',
-        alt: 'The Area step: Draw on map, Use current map view and whole counties, with the map view added',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await newAlertWithMapView(page);
-            return ALERT_CLIP;
-        },
-    },
-    {
-        name: 'alert-source',
-        alt: 'The Source step: the four sources, and the Purpose of Filing, Completion Type and Wellbore Profile filters for completions',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await newAlertWithMapView(page);
-            await page.getByRole('button', { name: 'Continue' }).click();
-            await page.getByText('What should it watch for?').waitFor({ timeout: 30_000 });
-            await page.waitForFunction(() => !/Loading (templates|filters|options)/.test(document.body.innerText), null, { timeout: 60_000 }).catch(() => {});
-            await page.waitForTimeout(4_000);
-            return ALERT_CLIP;
-        },
-    },
-    {
-        name: 'alert-review',
-        alt: 'The Review step: the alert name, Email and SMS, and the summary ending in Checks: Hourly',
-        auth: true,
-        path: `/maps?${MIDLAND}`,
-        run: async (page) => {
-            await newAlertWithMapView(page);
-            await page.getByRole('button', { name: 'Continue' }).click();
-            await page.getByText('What should it watch for?').waitFor({ timeout: 30_000 });
-            await page.waitForTimeout(3_000);
-            await page.getByRole('button', { name: 'Continue' }).click();
-            await page.getByText('Name it and choose where it goes').waitFor({ timeout: 30_000 });
-            await page.waitForTimeout(3_000);
-            return ALERT_CLIP;
-        },
-    },
-
-    // Tools
-    {
-        name: 'well-report',
-        alt: 'The cover page of a well report, with the Options and Print buttons above it',
-        auth: true,
-        path: `/wells/${SAMPLE_API}/report`,
-        run: async (page) => {
-            await page.getByRole('button', { name: 'Print' }).waitFor({ timeout: 60_000 });
-            await page.waitForTimeout(4_000);
-        },
-    },
-    {
-        name: 'well-report-options',
-        alt: 'The Options panel of the well report: pages, appendices, chart scale and months in table',
-        auth: true,
-        path: `/wells/${SAMPLE_API}/report`,
-        run: async (page) => {
-            await page.getByRole('button', { name: 'Print' }).waitFor({ timeout: 60_000 });
-            await page.getByRole('button', { name: 'Options' }).click();
-            await page.getByText('Months in table').waitFor({ timeout: 30_000 });
-            await page.mouse.move(1_100, 500);
-            await page.waitForTimeout(2_000);
-        },
-    },
-    {
-        name: 'wellbore-builder',
-        alt: 'The Wellbore Builder with a horizontal well loaded from the RRC record',
-        auth: true,
-        path: `/wellbore?api=${SAMPLE_API}`,
-        run: async (page) => {
-            await page.getByText(/Components \(\d+\)/).waitFor({ timeout: 60_000 });
-            // "Loaded from RRC" lands over the header's buttons.
-            const toast = page.getByText('Loaded from RRC').first();
-            await toast.waitFor({ timeout: 15_000 }).catch(() => {});
-            const close = page.locator('div').filter({ has: toast }).last().locator('button').first();
-            if (await close.isVisible().catch(() => false)) await close.click();
-            await toast.waitFor({ state: 'hidden', timeout: 15_000 }).catch(() => {});
-            await page.waitForTimeout(1_500);
-        },
-    },
-    {
-        name: 'alerts-page',
-        alt: 'The Alerts page in Table view: every match across your alerts, newest first',
-        auth: true,
-        path: '/alerts',
-        run: async (page) => {
-            await page.getByText('Every match across your alerts').waitFor({ timeout: 60_000 });
-            await page.waitForTimeout(3_000);
-        },
-    },
-    {
-        name: 'ask-ai',
-        alt: 'Ask QuickScout AI answering a question about transferring a lease, with the RRC and Geology modes beside the question box',
-        auth: true,
-        path: '/ask',
-        run: async (page) => {
-            // A real question, the one the page gives as its example, in place of the idle demo.
-            const ask = page.getByPlaceholder(/Ask about RRC/);
-            await ask.waitFor({ timeout: 60_000 });
-            // The box is in the server's HTML before React has hold of it; typing too soon is lost.
-            await page.waitForTimeout(4_000);
-            await ask.click();
-            await ask.pressSequentially('Which form do I file to transfer a lease to a new operator?', { delay: 15 });
-            await ask.press('Enter');
-            // Done when the answer has stopped growing for three seconds.
-            let last = '';
-            let stillFor = 0;
-            for (let i = 0; i < 180 && stillFor < 6; i++) {
-                await page.waitForTimeout(500);
-                const text = await page.locator('body').innerText();
-                stillFor = text === last && i > 10 ? stillFor + 1 : 0;
-                last = text;
-            }
-        },
-    },
-    {
-        name: 'dashboard',
-        alt: 'The statewide Dashboard: headline numbers, permit and completion activity, and initial potential',
-        auth: false,
-        path: '/dashboard',
-        run: async (page) => {
-            await page.getByText('Permit & completion activity').waitFor({ timeout: 60_000 });
-            await page.waitForTimeout(3_000);
-        },
-    },
-
-    // Owner Portal
-    {
-        name: 'owners-search',
-        alt: 'The Search tab of the Owner Portal, with the county and owner number search',
-        auth: true,
-        path: '/owners',
-        run: async (page) => {
-            await settle(page, 3_000);
-            await page.getByRole('tab', { name: /Search/ }).click();
-            await page.getByText('Search for Your Producing Mineral Properties').waitFor({ timeout: 30_000 });
-            await page.waitForTimeout(2_000);
-        },
-    },
-    {
-        name: 'owners-portal',
-        alt: 'The Properties tab of the Owner Portal: the tabs, your totals, and the downloads',
-        auth: true,
-        path: '/owners',
-        run: async (page) => {
-            await settle(page, 3_000);
-            // Stops under the column headings: the rows are the account's own interests.
-            const downloads = await topOf(page, 'Download Report');
-            return { x: 0, y: 0, width: VIEWPORT.width, height: downloads + 108 };
-        },
-    },
-
-    // Enterprise
-    {
-        name: 'enterprise-welcome',
-        alt: 'The welcome screen: your projects on the right, each with its recent events and production',
-        auth: true,
-        path: '/prospect',
-        run: async (page) => {
-            await openWelcome(page);
-            // Only the projects the pictures use, not the account's whole list.
-            await page.getByPlaceholder(/^Filter \d+ projects/).fill(PROJECT.name);
-            await page.waitForTimeout(2_000);
-        },
-    },
-    {
-        name: 'enterprise-home',
-        alt: "A project's Home board: overview totals, the daily brief, the activity map and the event feed",
-        auth: true,
-        path: '/prospect',
-        run: (page) => openProject(page, '/prospect', 'WELL RECORDS'),
-    },
-    {
-        name: 'enterprise-activity',
-        alt: 'The Activity page: the Summary band, then every event in the window',
-        auth: true,
-        path: '/prospect',
-        run: (page) => openProject(page, '/prospect/activity'),
-    },
-    {
-        name: 'enterprise-areas',
-        alt: "The Areas page: the project's areas listed beside the map they are drawn on",
-        auth: true,
-        path: '/prospect',
-        run: async (page) => {
-            await openProject(page, '/prospect/areas', null, AREAS_PROJECT);
-            // The map opens on all of Texas, where one county-sized area is a speck.
-            await page.getByRole('button', { name: 'Zoom to area' }).first().click();
-            await page.mouse.move(520, 600);
-            await page.waitForTimeout(6_000);
-        },
-    },
-    {
-        name: 'enterprise-economics',
-        alt: 'The Economics page: net asset value, the discount ladder, and where the value sits',
-        auth: true,
-        path: '/prospect',
-        run: (page) => openProject(page, '/prospect/analytics'),
-    },
-    {
-        name: 'enterprise-charts',
-        alt: 'An empty chart board, with starter questions and Build one from scratch',
-        auth: true,
-        path: '/prospect',
-        run: (page) => openProject(page, '/prospect/charts'),
-    },
-    {
-        name: 'enterprise-chart-builder',
-        alt: 'The chart builder in Guided mode: the three steps, the chart described in words, and a live preview',
-        auth: true,
-        path: '/prospect',
-        run: async (page) => {
-            await openProject(page, '/prospect/charts');
-            // Opening the builder saves nothing: a chart exists once "Add to board" is pressed.
-            await page.getByRole('button', { name: 'Build one from scratch' }).click();
-            await page.getByText('What are you looking at?').first().waitFor({ timeout: 30_000 });
-            await page.waitForTimeout(3_000);
-        },
-    },
-    {
-        name: 'enterprise-deal-new',
-        alt: 'Starting a deal: What are you buying? An operator, a lease collection, or an area of interest',
-        auth: true,
-        path: '/prospect',
-        run: (page) => openProject(page, '/prospect/deals/new', 'What are you buying?'),
-    },
-    // Not pictured yet, because PROJECT has none: a deal on its Curate tab, a log in Log Analysis,
-    // a cross section. Their markers are on the pages; give the project one of each, then add shots.
-];
-
-// ─── marker → <Frame> ────────────────────────────────────────────────────────
-
-function mdxFiles(dir) {
-    return readdirSync(dir).flatMap((f) => {
-        const p = join(dir, f);
-        if (f.startsWith('.') || f === 'node_modules' || f === 'screenshots') return [];
-        return statSync(p).isDirectory() ? mdxFiles(p) : p.endsWith('.mdx') ? [p] : [];
-    });
+const MODULES = join(ROOT, 'screenshots', 'shots');
+const pick = process.env.SHOTS_MODULE;
+const SHOTS = [];
+for (const file of readdirSync(MODULES).filter((f) => f.endsWith('.mjs')).sort()) {
+    if (pick && file !== `${pick}.mjs`) continue;
+    SHOTS.push(...(await import(join(MODULES, file))).default);
 }
-
-function embed(shot) {
-    // The marker's own indent carries onto every line of the frame, so one inside a <Step> stays there.
-    // `(?![\w-])`, not `\b`: "well-report" must not claim the "well-report-options" marker.
-    const marker = new RegExp(`^([ \\t]*)\\{/\\* screenshot: ${shot.name}(?![\\w-])[^*]*\\*/\\}`, 'm');
-    for (const file of mdxFiles(ROOT)) {
-        const text = readFileSync(file, 'utf8');
-        if (!marker.test(text)) continue;
-        const alt = shot.alt.replace(/"/g, '&quot;');
-        const frame = (pad) => `${pad}<Frame>\n${pad}  <img src="/images/${shot.name}.webp" alt="${alt}" />\n${pad}</Frame>`;
-        writeFileSync(file, text.replace(marker, (_, pad) => frame(pad)));
-        return file.slice(ROOT.length + 1);
-    }
-    return null;
-}
+const names = SHOTS.flatMap((s) => [s.name, ...(s.steps ?? []).map((step) => step.name)]);
+const twice = names.filter((n, i) => names.indexOf(n) !== i);
+if (twice.length) throw new Error(`shot names used twice: ${[...new Set(twice)].join(', ')}`);
 
 // ─── run ─────────────────────────────────────────────────────────────────────
 
-const todo = SHOTS.filter((s) => only.length === 0 || only.some((o) => s.name.includes(o)));
+const named = (s) => [s.name, ...(s.steps ?? []).map((step) => step.name)];
+const todo = SHOTS.filter((s) => only.length === 0 || only.some((o) => named(s).some((n) => n.includes(o))));
 const haveAuth = existsSync(AUTH_FILE);
 if (todo.some((s) => s.auth) && !haveAuth) {
     console.warn(`No saved session for ${BASE_URL} — signed-in shots will be skipped. Run: npm run shots:login\n`);
@@ -1102,6 +67,7 @@ const browser = await chromium.launch({
 });
 
 const failed = [];
+const writesSeen = new Set();
 for (const shot of todo) {
     if (shot.auth && !haveAuth) {
         console.log(`– ${shot.name} (skipped: not signed in)`);
@@ -1111,12 +77,13 @@ for (const shot of todo) {
         viewport: VIEWPORT,
         deviceScaleFactor: 2,
         colorScheme: 'light',
-        storageState: shot.auth ? AUTH_FILE : undefined,
+        storageState: shot.auth ? authState() : undefined,
     });
     // The account's saved map workspace (camera, open panels, tabs) is neither loaded nor
     // written: shots start from a clean map framed by their URL, and the account is untouched.
     await context.route('**/api/v1/core/map-state**', (route) => route.abort());
     await context.route(/sentry\.io|ingest\.sentry/, (route) => route.abort());
+    await blockWrites(context, writesSeen, shot.allowWrites ?? null);
 
     await context.addInitScript((startDrawer) => {
         // Maps opens its start drawer on a session's first load, and every shot is a first load.
@@ -1124,14 +91,25 @@ for (const shot of todo) {
         // `next dev` puts its dev-tools badge in the corner; it isn't part of the app.
         const hide = () => {
             const style = document.createElement('style');
-            style.textContent = 'nextjs-portal { display: none !important; }';
+            // And the left rail's counts (My Data, Owner Portal, …): they are the account's, not the help's.
+            style.textContent = 'nextjs-portal { display: none !important; } button[data-help^="nav."] span[aria-hidden] { display: none !important; }';
             document.head.appendChild(style);
         };
         if (document.head) hide();
         else document.addEventListener('DOMContentLoaded', hide);
+        // A development Clerk instance prompts over every page ("Organizations feature required");
+        // the live one does not. Dismiss that prompt, and no other Clerk modal, with its own button:
+        // it makes the rest of the page inert while open, so taking it out of the DOM is not enough.
+        new MutationObserver(() => {
+            for (const el of document.querySelectorAll('.cl-modalBackdrop')) {
+                if (!/feature required/i.test(el.textContent ?? '')) continue;
+                [...el.querySelectorAll('button')].find((b) => /remove it myself/i.test(b.textContent ?? ''))?.click();
+            }
+        }).observe(document, { childList: true, subtree: true });
     }, !!shot.startDrawer);
 
     const page = await context.newPage();
+    let current = shot.name;
     try {
         if (shot.auth) {
             // The saved __session cookie lives about a minute; a client page refreshes it before
@@ -1143,17 +121,26 @@ for (const shot of todo) {
         if (shot.auth && /\/sign-in/.test(page.url())) {
             throw new Error('redirected to sign-in — the saved session has expired; run npm run shots:login');
         }
-        const clip = (await shot.run(page)) ?? undefined;
-        // WebP, not PNG: a map is a photograph to a compressor, and a PNG of one runs to 5 MB.
-        const png = await page.screenshot({ clip });
-        await sharp(png).webp({ quality: 86 }).toFile(join(ROOT, 'images', `${shot.name}.webp`));
-        const placed = embed(shot);
-        console.log(`✓ ${shot.name}${placed ? `  → placed in ${placed}` : ''}`);
+        for (const step of shot.steps ?? [shot]) {
+            current = step.name;
+            const clip = (await step.run(page)) ?? undefined;
+            if (step.annotate) {
+                const marks = typeof step.annotate === 'function' ? await step.annotate(page) : step.annotate;
+                await drawAnnotations(page, marks);
+            }
+            // WebP, not PNG: a map is a photograph to a compressor, and a PNG of one runs to 5 MB.
+            const png = await page.screenshot({ clip });
+            await clearAnnotations(page);
+            await sharp(png).webp({ quality: 86 }).toFile(join(ROOT, 'images', `${step.name}.webp`));
+            const placed = embed(step);
+            console.log(`✓ ${step.name}${placed ? `  → placed in ${placed}` : ''}`);
+        }
     } catch (err) {
-        failed.push(shot.name);
-        await page.screenshot({ path: join(ROOT, 'screenshots', '.auth', `FAILED-${shot.name}.png`) }).catch(() => {});
-        console.log(`✗ ${shot.name}: ${err.message.split('\n')[0]}`);
+        failed.push(current);
+        await page.screenshot({ path: join(ROOT, 'screenshots', '.auth', `FAILED-${current}.png`) }).catch(() => {});
+        console.log(`✗ ${current}: ${err.message.split('\n')[0]}`);
     } finally {
+        if (shot.after) await shot.after(page).catch((err) => console.log(`  ! tidying after ${shot.name}: ${err.message.split('\n')[0]}`));
         await context.close();
     }
 }

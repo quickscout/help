@@ -6,8 +6,9 @@
 drafts/
 *.draft.mdx
 
-# Screenshot tooling, not pages
+# Screenshot and label-check tooling, not pages
 screenshots/
+scripts/
 package.json
 package-lock.json
 

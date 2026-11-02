@@ -7,7 +7,8 @@
     "check": "mint broken-links",
     "shots:login": "node screenshots/login.mjs",
     "shots": "node screenshots/shots.mjs",
-    "validate": "mint validate"
+    "validate": "mint validate",
+    "labels": "node scripts/check-labels.mjs"
   },
   "devDependencies": {
     "mint": "^4.0.0",
